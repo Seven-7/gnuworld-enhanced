@@ -3333,34 +3333,6 @@ for( uIterator = usersMap.begin();uIterator != usersMap.end();++uIterator)
 return true;
 }
 
-bool ccontrol::ConnChanLog(const char *Msg, ... )
-{
-if(!Network->findChannel(connChan))
-	{
-	return false;
-	}
-
-char buffer[ 1024 ] = { 0 } ;
-va_list list;
-
-va_start( list, Msg ) ;
-vsprintf( buffer, Msg, list ) ;
-va_end( list ) ;
-
-xClient::Notice((Network->findChannel(connChan))->getName(),"%s",buffer);
-usersIterator uIterator;
-ccUser* tempUser;
-for( uIterator = usersMap.begin();uIterator != usersMap.end();++uIterator)
-        {
-        tempUser = uIterator->second;
-	if((tempUser) && (tempUser->getLogs() ) && (tempUser->getClient()))
-                {
-                Notice(tempUser->getClient(),"%s",buffer);
-                }
-	}
-return true;
-}
-
 bool ccontrol::MsgChanLag(const char *Msg, ... ) 
 {
 if(!Network->findChannel(msgChan))
