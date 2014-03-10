@@ -1,0 +1,1 @@
+ALTER TABLE users ADD COLUMN totp_key VARCHAR(60) DEFAULT '';
