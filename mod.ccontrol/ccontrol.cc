@@ -208,8 +208,6 @@ dbConnectionTimer = atoi(conf.Require("dbinterval")->second.c_str());
 
 AnnounceNick = conf.Require("AnnounceNick")->second;
 
-listenNonOpers = atoi(conf.Require("listen_Non_Opers")->second.c_str());
-
 // Set up the oper channels
 EConfig::const_iterator ptr = conf.Find( "operchan" ) ;
 while( ptr != conf.end() && ptr->first == "operchan" )

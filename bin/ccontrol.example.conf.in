@@ -86,6 +86,3 @@ showCGIpsInLogs = 1
 
 # AnnounceNick - Nick used by the fake client to make announcements using the ANNOUNCE command
 AnnounceNick = A
-
-# Do we allow usage for non IRCOps?
-listen_Non_Opers = 0;
