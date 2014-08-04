@@ -266,7 +266,7 @@ if (command == "ACCESS")
 	}
 
 	if (level <= targetLevel)
-	if ((isFirst) && (level < 1000) && (st[1] != "*") && (targetUser != theUser))
+	//if ((isFirst) && (level < 1000) && (st[1] != "*") && (targetUser != theUser))
 	{
 		if (!bot->isForced(theChan, theUser))
 		{
@@ -336,7 +336,7 @@ if (command == "ACCESS")
 	}
 
 	if (level <= newAccess)
-	if ((isFirst) && (level < 1000) && (st[1] != "*") && (targetUser != theUser))
+	//if ((isFirst) && (level < 1000) && (st[1] != "*") && (targetUser != theUser))
 	{
 		bot->Notice(theClient,
 			bot->getResponse(theUser,

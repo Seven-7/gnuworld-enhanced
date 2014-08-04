@@ -145,8 +145,9 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 	 *  Unless they are trying to remove themself.. in which case its ok ;)
 	 */
 
-	if (((level <= targetLevel) && (targetUser != theUser) && (!isFirst)) || (((isFirst) && (targetUser != theUser)) && ((level <= targetLevel) && (level < 1000))))
-	//if (((level <= targetLevel) && (!isFirst)) || (((theUser->getID() != 1) && (theUser != targetUser)) && ((level <= targetLevel) && (level < 1000))))
+	//if (((level <= targetLevel) && (targetUser != theUser) && (!isFirst)) || (((isFirst) && (targetUser != theUser)) && ((level <= targetLevel) && (level < 1000))))
+	////if (((level <= targetLevel) && (!isFirst)) || (((theUser->getID() != 1) && (theUser != targetUser)) && ((level <= targetLevel) && (level < 1000))))
+	if ((level <= targetLevel) && (targetUser != theUser))
 	{
 		bot->Notice(theClient,
 			bot->getResponse(theUser,

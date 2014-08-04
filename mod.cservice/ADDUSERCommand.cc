@@ -141,7 +141,8 @@ if (((level < level::adduser) && (st[1] != "*")) || ((st[1] == "*") && (level < 
  */
 int targetAccess = atoi(st[3].c_str());
 
-if ((level <= targetAccess) && (theUser != targetUser) && (theUser->getID() != 1) && (level < 1000))
+//if ((level <= targetAccess) && (theUser != targetUser) && (theUser->getID() != 1) && (level < 1000))
+if (level <= targetAccess)
 	{
 	bot->Notice(theClient,
 		bot->getResponse(theUser,
@@ -149,7 +150,8 @@ if ((level <= targetAccess) && (theUser != targetUser) && (theUser->getID() != 1
 	return false;
 	}
 
-if ((targetAccess <= 0) || ((targetAccess > 999) && (theUser->getID() > 1)) || ((targetAccess > 1000) && (theUser->getID() == 1)))
+//if ((targetAccess <= 0) || ((targetAccess > 999) && (theUser->getID() > 1)) || ((targetAccess > 1000) && (theUser->getID() == 1)))
+if ((targetAccess <= 0) || (targetAccess > 999))
 	{
 	bot->Notice(theClient,
 		bot->getResponse(theUser,
