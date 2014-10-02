@@ -54,6 +54,7 @@ const sqlUser::flagType sqlUser::F_ALUMNI =		0x80 ;
 const sqlUser::flagType sqlUser::F_OPER =		0x100 ;
 const sqlUser::flagType sqlUser::F_NOADDUSER =		0x200 ;
 const sqlUser::flagType sqlUser::F_TOTP_ENABLED = 	0x400;
+const sqlUser::flagType sqlUser::F_POWER = 	0x800;
 
 const unsigned int sqlUser::EV_SUSPEND		= 1;
 const unsigned int sqlUser::EV_UNSUSPEND	= 2;

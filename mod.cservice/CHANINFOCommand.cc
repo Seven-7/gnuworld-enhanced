@@ -148,6 +148,8 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 	/* flags only visible to *1+ users */
 	if (adminAccess)
 	{
+		if ((tmpUser->getFlag(sqlUser::F_POWER)) && (theUser->getFlag(sqlUser::F_POWER)))
+			flagsSet += "POWER ";
 		if (theUser->getFlag(sqlUser::F_FRAUD))
 			flagsSet += "FRAUD ";
 		if (theUser->getFlag(sqlUser::F_NOPURGE))

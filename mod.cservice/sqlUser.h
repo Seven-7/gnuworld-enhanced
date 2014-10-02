@@ -53,6 +53,7 @@ public:
 	static const flagType F_OPER;
 	static const flagType F_NOADDUSER;
 	static const flagType F_TOTP_ENABLED;
+	static const flagType F_POWER;
 
 	/*
 	 *   User 'Event' Flags, used in the userlog table.

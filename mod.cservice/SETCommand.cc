@@ -377,6 +377,64 @@ if( st[1][0] != '#' ) // Didn't find a hash?
                  } 
          }
 #endif
+	if (option == "POWER")
+	{
+		sqlUser* targetUser = bot->getUserRecord(st[2]);
+		if (!targetUser)
+		{
+			bot->Notice(theClient,
+				bot->getResponse(theUser,
+					language::not_registered,
+					string("The user %s doesn't appear to be registered.")).c_str(),
+				st[2].c_str());
+			return true;
+		}
+		value = string_upper(st[3]);
+		int admLevel = bot->getAdminAccessLevel(theUser);
+		if (value == "ON")
+		{
+			/* only admins can use this command */
+			if ((admLevel > 0) && (theUser->getFlag(sqlUser::F_POWER)))
+			{
+				targetUser->setFlag(sqlUser::F_POWER);
+				targetUser->commit(theClient);
+				bot->Notice(theClient,"Set POWER to ON for user %s", targetUser->getUserName().c_str());
+			} else {
+				/* not an admin, return unknown command */
+				bot->Notice(theClient,
+					bot->getResponse(theUser,
+					language::invalid_option,
+					string("Invalid option.")));
+			}
+			return true;
+		}
+
+		if (value == "OFF")
+		{
+			/* only allow removal if it is set! */
+			if (((admLevel > 0) && (theUser->getFlag(sqlUser::F_POWER)))
+				&& (targetUser->getFlag(sqlUser::F_POWER)))
+			{
+				targetUser->removeFlag(sqlUser::F_POWER);
+				targetUser->commit(theClient);
+				bot->Notice(theClient,"Set POWER to OFF for user %s", targetUser->getUserName().c_str());
+			} else {
+				/* not set?  pretend it's an unknown command */
+				bot->Notice(theClient,
+					bot->getResponse(theUser,
+					language::invalid_option,
+					string("Invalid option.")));
+			}
+			return true;
+		}
+		bot->Notice(theClient,
+			bot->getResponse(theUser,
+				language::set_cmd_syntax_on_off,
+				string("value of %s must be ON or OFF")).c_str(),
+			option.c_str());
+			return true;
+	}
+
 	bot->Notice(theClient,
 		bot->getResponse(theUser,
 			language::invalid_option,
@@ -727,6 +785,7 @@ else
 		bot->logAdminMessage("%s (%s) has suspended %s",
 			theClient->getNickName().c_str(), theUser->getUserName().c_str(),
 			theChan->getName().c_str());
+		if (tmpChan) bot->deopAllOnChan(tmpChan); // Deop everyone. :)
             } else {
                 bot->writeChannelLog(theChan, theClient, sqlChannel::EV_UNSUSPEND, logmsg);
 		/* inform admin channel */

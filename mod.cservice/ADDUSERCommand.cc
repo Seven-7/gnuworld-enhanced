@@ -76,12 +76,6 @@ if (!theUser)
 	return false;
 	}
 
-/* Are we the First, the Only One, the Begining and the End? */
-bool isFirst = false;
-#ifdef USERID1_REM_SUSP_1000_ADMIN
-	if (theUser->getID() == 1) isFirst = true;
-#endif
-
 /*
  *  First, check the channel is registered.
  */
@@ -118,17 +112,8 @@ if (!targetUser)
 
 int level = bot->getEffectiveAccessLevel(theUser, theChan, true);
 
-if (!isFirst)
+if (!theUser->getFlag(sqlUser::F_POWER))
 if ((level < level::adduser) || (( st[1] == "*" ) && (level < adminlevel::adduser)))
-{
-	bot->Notice(theClient,
-		bot->getResponse(theUser,
-			language::insuf_access).c_str());
-	return false;
-}
-
-if (isFirst)
-if (((level < level::adduser) && (st[1] != "*")) || ((st[1] == "*") && (level < adminlevel::adduser) && (targetUser != theUser)))
 {
 	bot->Notice(theClient,
 		bot->getResponse(theUser,
@@ -141,7 +126,7 @@ if (((level < level::adduser) && (st[1] != "*")) || ((st[1] == "*") && (level < 
  */
 int targetAccess = atoi(st[3].c_str());
 
-//if ((level <= targetAccess) && (theUser != targetUser) && (theUser->getID() != 1) && (level < 1000))
+if (!theUser->getFlag(sqlUser::F_POWER))
 if (level <= targetAccess)
 	{
 	bot->Notice(theClient,
@@ -151,14 +136,24 @@ if (level <= targetAccess)
 	}
 
 //if ((targetAccess <= 0) || ((targetAccess > 999) && (theUser->getID() > 1)) || ((targetAccess > 1000) && (theUser->getID() == 1)))
-if ((targetAccess <= 0) || (targetAccess > 999))
-	{
+if (targetAccess <= 0)
+{
 	bot->Notice(theClient,
 		bot->getResponse(theUser,
 			language::inval_access).c_str());
 	return false;
-	}
+}
 
+//Don't allow in any case to go above 1000
+if ((!theUser->getFlag(sqlUser::F_POWER) && (targetAccess > 999)) || (theUser->getFlag(sqlUser::F_POWER) && (targetAccess > 1000)))
+{
+	bot->Notice(theClient,
+		bot->getResponse(theUser,
+			language::inval_access).c_str());
+	return false;
+}
+
+if (!theUser->getFlag(sqlUser::F_POWER))
 if ((level > 500) && (!theChan->getFlag(sqlChannel::F_SPECIAL)) && (st[1] != "*") && (targetAccess > 500))
 {
 	bot->Notice(theClient, "Access levels on regular channels cannot exceed 500 (except SPECIAL)");

@@ -140,11 +140,6 @@
  */
 #undef TOTP_AUTH_ENABLED
 
-/**
- * The first user with Id 1, is it able to suspend/remuser a * 1000?
- */
-#define USERID1_REM_SUSP_1000_ADMIN
-
 /*
  * Do you want X to show and log OPMODES?
  */
