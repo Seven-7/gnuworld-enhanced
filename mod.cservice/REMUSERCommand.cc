@@ -73,12 +73,6 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 	sqlUser* theUser = bot->isAuthed(theClient, true);
 	if (!theUser) return false;
 
-  /* Are we the First, the Only One, the Begining and the End? */
-	bool isFirst = false;
-	#ifdef USERID1_REM_SUSP_1000_ADMIN
-		if (theUser->getID() == 1) isFirst = true;
-	#endif
-	//if (isFirst) bot->Notice(theClient,"You are the first!");
  	/*
 	 *  First, check the channel is registered.
 	 */
@@ -99,6 +93,7 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 	sqlUser* targetUser = bot->getUserRecord(st[2]);
 
 	int level = bot->getEffectiveAccessLevel(theUser, theChan, true);
+	if (!theUser->getFlag(sqlUser::F_POWER))
 	if (((level < level::remuser) || ((st[1] == "*") && (level < adminlevel::remuser))) && ((targetUser) && targetUser != theUser))
 	{
 		bot->Notice(theClient,
@@ -144,9 +139,7 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 	 *  Check we aren't trying to remove someone with access higher than ours.
 	 *  Unless they are trying to remove themself.. in which case its ok ;)
 	 */
-
-	//if (((level <= targetLevel) && (targetUser != theUser) && (!isFirst)) || (((isFirst) && (targetUser != theUser)) && ((level <= targetLevel) && (level < 1000))))
-	////if (((level <= targetLevel) && (!isFirst)) || (((theUser->getID() != 1) && (theUser != targetUser)) && ((level <= targetLevel) && (level < 1000))))
+	if (!theUser->getFlag(sqlUser::F_POWER))
 	if ((level <= targetLevel) && (targetUser != theUser))
 	{
 		bot->Notice(theClient,
@@ -157,7 +150,7 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 	}
 
 
-	if (((theChan->getName() == "*") && (targetUser == theUser)) && (!isFirst))
+	if (((theChan->getName() == "*") && (targetUser == theUser)) && (!theUser->getFlag(sqlUser::F_POWER)))
 	{
 		/*bot->Notice(theClient,
                         bot->getResponse(theUser,
@@ -167,6 +160,7 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
                 return false;
 	}
 	
+	if (!theUser->getFlag(sqlUser::F_POWER))
 	if ((targetLevel == 500) && (targetUser == theUser))
 	{
 		bot->Notice(theClient,

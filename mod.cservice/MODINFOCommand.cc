@@ -120,11 +120,6 @@ if(st.size() < 4) {
        Usage(theClient);
        return true;
 }
-/* Are we the First, the Only One, the Begining and the End? */
-bool isFirst = false;
-#ifdef USERID1_REM_SUSP_1000_ADMIN
-	if (theUser->getID() == 1) isFirst = true;
-#endif
 
 /*
  *  First, check the channel is registered.
@@ -247,36 +242,22 @@ if (command == "ACCESS")
 	 * Check we aren't trying to change someone with access
 	 * higher (or equal) than ours.
 	 */
-//	if (((level <= targetLevel) && (theUser->getID() > 1)) || ((targetLevel == 1000) && (theUser->getID() == 1) && (!isFirst)))
-	if (!isFirst)
+	if (!theUser->getFlag(sqlUser::F_POWER))
 	if (level <= targetLevel)
-	{
+		{
 		/*
 		 * Let forced users modify their own user records in channels to
 		 * any setting.
 		 */
 		if (!bot->isForced(theChan, theUser))
-		{
+			{
 			bot->Notice(theClient,
 				bot->getResponse(theUser,
 					language::mod_access_higher,
 					string("Cannot modify a user with equal or higher access than your own.")));
 			return false;
+			}
 		}
-	}
-
-	if (level <= targetLevel)
-	//if ((isFirst) && (level < 1000) && (st[1] != "*") && (targetUser != theUser))
-	{
-		if (!bot->isForced(theChan, theUser))
-		{
-			bot->Notice(theClient,
-					bot->getResponse(theUser,
-							language::mod_access_higher,
-							string("Cannot modify a user with equal or higher access than your own.")));
-			return false;
-		}
-	}
 
 	/*
 	 * Check we aren't trying to set someone's access higher
@@ -294,7 +275,7 @@ if (command == "ACCESS")
 		return false;
 	}
 
-	if ((!isFirst) && (newAccess > 999))
+	if ((!theUser->getFlag(sqlUser::F_POWER)) && (newAccess > 999))
 	{
 		bot->Notice(theClient,
 			bot->getResponse(theUser,
@@ -303,7 +284,7 @@ if (command == "ACCESS")
 		return false;
 	}
 
-	if ((isFirst) && (newAccess > 1000))
+	if ((theUser->getFlag(sqlUser::F_POWER)) && (newAccess > 1000))
 	{
 		bot->Notice(theClient,
 			bot->getResponse(theUser,
@@ -312,6 +293,7 @@ if (command == "ACCESS")
 		return false;
 	}
 
+	if (!theUser->getFlag(sqlUser::F_POWER))
 	if ((level > 500) && (!theChan->getFlag(sqlChannel::F_SPECIAL)) && (st[1] != "*") && (newAccess > 500))
 	{
 		bot->Notice(theClient, "Access levels on regular channels cannot exceed 500 (except SPECIAL)");
@@ -323,20 +305,8 @@ if (command == "ACCESS")
 	 * higher access than them.
 	 */
 
-	//if ((level <= newAccess) && ((theUser->getID() > 1) && (st[1] != "*")))
-	//if ((level <= newAccess) && ((theUser->getID() != 1) || (((theUser->getID() == 1) && (theUser != targetUser)) && (level < 1000))))
-	if (!isFirst)
+	if (!theUser->getFlag(sqlUser::F_POWER))
 	if (level <= newAccess)
-	{
-		bot->Notice(theClient,
-			bot->getResponse(theUser,
-				language::cant_give_higher,
-				string("Cannot give a user higher or equal access to your own.")));
-		return false;
-	}
-
-	if (level <= newAccess)
-	//if ((isFirst) && (level < 1000) && (st[1] != "*") && (targetUser != theUser))
 	{
 		bot->Notice(theClient,
 			bot->getResponse(theUser,
@@ -390,6 +360,7 @@ if (command == "AUTOMODE")
 	 * if they have the same access as we do.
 	 */
 
+	if (!theUser->getFlag(sqlUser::F_POWER))
 	if ( (level < targetLevel) || ((level == targetLevel) && (targetUser != theUser)) )
 		{
 		bot->Notice(theClient,
