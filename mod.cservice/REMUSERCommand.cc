@@ -198,7 +198,7 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 		if (targetUser != theUser) 
 			bot->NoteAllAuthedClients(targetUser, bot->getResponse(targetUser,language::acc_rem).c_str(), theChan->getName().c_str());
 
-		if (((theChan->getName() == "*") && (targetUser == theUser)) && (isFirst))
+		if (((theChan->getName() == "*") && (targetUser == theUser)) && (theUser->getFlag(sqlUser::F_POWER)))
 		{
 			bot->Notice(theClient,"CSC is You!! YOU CAN NEVER ESCAPE!");
 			//bot->Notice(theClient,"I will always remember you!");
