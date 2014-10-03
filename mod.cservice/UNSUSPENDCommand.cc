@@ -66,11 +66,7 @@ if(!theUser)
 		string("Sorry, you are not authorised with me.")));
 	return false;
 	}
-/* Are we the First, the Only One, the Begining and the End? */
-bool isFirst = false;
-#ifdef USERID1_REM_SUSP_1000_ADMIN
-	if (theUser->getID() == 1) isFirst = true;
-#endif
+
 /*
  * Trying to unsuspend a user, or a channel?
  * If there is no #, check this person's admin access.
@@ -82,6 +78,7 @@ if ((st[1][0] != '#') && (st[1][0] != '*'))
 {
 	// Got enough admin access?
 	int level = bot->getAdminAccessLevel(theUser);
+	if (!theUser->getFlag(sqlUser::F_POWER))
 	if (level < level::globalsuspend)
 	{
 		Usage(theClient);
@@ -152,7 +149,7 @@ if(!theChan)
 
 // Check level.
 int level = bot->getEffectiveAccessLevel(theUser, theChan, true);
-if (isFirst) level = bot->getAdminAccessLevel(theUser);
+if (!theUser->getFlag(sqlUser::F_POWER))
 if ((level < level::unsuspend) || (( st[1] == "*" ) && (level < adminlevel::unsuspend)))
 	{
 	bot->Notice(theClient,
@@ -196,7 +193,8 @@ if (aLevel->getSuspendExpire() == 0)
  *  Finally, check we have access to perform the unsuspend.
  */
 
-if (((aLevel->getAccess()) >= level) && ((!isFirst) || (level < 1000)))
+if (!theUser->getFlag(sqlUser::F_POWER))
+if ((aLevel->getAccess()) >= level)
 	{
 	bot->Notice(theClient,
 		"Cannot unsuspend a user with equal or higher access than your own.");
@@ -206,8 +204,8 @@ if (((aLevel->getAccess()) >= level) && ((!isFirst) || (level < 1000)))
 /*
  * Was this suspension set with a higher suspend level?
  */
-if ((aLevel->getSuspendLevel() > level) && ((!isFirst) || (level < 1000)))
-//if (aLevel->getSuspendLevel() > level)
+if (!theUser->getFlag(sqlUser::F_POWER))
+if (aLevel->getSuspendLevel() > level)
 	{
 	bot->Notice(theClient,
 		"Cannot unsuspend a user that was suspended at a higher level than your own access.");

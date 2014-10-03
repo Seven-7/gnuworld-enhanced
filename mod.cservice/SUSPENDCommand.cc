@@ -62,12 +62,6 @@ if(!theUser)
 	return false;
 }
 
-/* Are we the First, the Only One, the Begining and the End? */
-bool isFirst = false;
-#ifdef USERID1_REM_SUSP_1000_ADMIN
-	if (theUser->getID() == 1) isFirst = true;
-#endif
-
 /*
  * Trying to suspend a user, or a channel?
  * If there is no #, check this person's admin access..
@@ -108,8 +102,9 @@ if ((st[1][0] != '#') && (st[1][0] != '*'))
 	 */
 
 	int targetLevel = bot->getAdminAccessLevel(targetUser);
-//	if ((targetLevel >= level) && (!isFirst))
-	if ((level <= targetLevel) && ((!isFirst) || (level < 1000)))
+
+	if (!theUser->getFlag(sqlUser::F_POWER))
+	if (targetLevel >= level)
 	{
 	bot->Notice(theClient,
 		bot->getResponse(theUser,
@@ -132,7 +127,7 @@ if ((st[1][0] != '#') && (st[1][0] != '*'))
 		" channels until unsuspended.",
 		targetUser->getUserName().c_str());
 
-	if ((isFirst) && (targetUser->getID() == 1))
+	if ((theUser->getFlag(sqlUser::F_POWER)) && (targetUser == theUser))
 		bot->Notice(theClient,"CSC is You!! YOU CAN NEVER ESCAPE!");
 
 	targetUser->writeEvent(sqlUser::EV_SUSPEND, theUser, st.assemble(2));
@@ -221,7 +216,8 @@ if(!usrLevel)
 	return true;
 }
 
-if (((level <= usrLevel) && (!isFirst)) || ((isFirst) && (level < 1000) && (level <= usrLevel)))
+if (!theUser->getFlag(sqlUser::F_POWER))
+if (level <= usrLevel)
 {
 	bot->Notice(theClient,
 		bot->getResponse(theUser,
@@ -268,11 +264,12 @@ if (suspReason.empty()) suspReason = "No reason supplied.";
 
 if( 0 == finalDuration )
 {
-	if (isFirst) level = bot->getAdminAccessLevel(theUser);
+	if (theUser->getFlag(sqlUser::F_POWER)) level = bot->getAdminAccessLevel(theUser);
 	/*
 	 * Was this suspension set with a higher suspend level?
 	 */
-	if ((aLevel->getSuspendLevel() > level) && ((!isFirst) || (level < 1000)))
+	if (!theUser->getFlag(sqlUser::F_POWER))
+	if (aLevel->getSuspendLevel() > level)
 	{
 		bot->Notice(theClient,
 			"Cannot unsuspend a user that was suspended at a higher level than your own access.");
@@ -359,7 +356,7 @@ bot->Notice(theClient,
 	if (Target != theUser) 
 			bot->NoteAllAuthedClients(Target, bot->getResponse(Target,language::acc_susp).c_str(), theChan->getName().c_str());
 
-	if ((isFirst) && (Target->getID() == 1))
+	if ((theUser->getFlag(sqlUser::F_POWER)) && (Target == theUser))
 		bot->Notice(theClient,"CSC is You!! YOU CAN NEVER ESCAPE!");
 
 return true ;

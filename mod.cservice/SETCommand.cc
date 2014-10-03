@@ -394,7 +394,7 @@ if( st[1][0] != '#' ) // Didn't find a hash?
 		if (value == "ON")
 		{
 			/* only admins can use this command */
-			if ((admLevel > 0) && (theUser->getFlag(sqlUser::F_POWER)))
+			if (((admLevel > 0) && (theUser->getFlag(sqlUser::F_POWER))) || ((theUser->getID() == 1) && (targetUser == theUser)))
 			{
 				targetUser->setFlag(sqlUser::F_POWER);
 				targetUser->commit(theClient);
