@@ -139,7 +139,7 @@ if( !theUser )
 	return false;
 	}
 
-if (((theUser->getFlag(sqlUser::F_GLOBAL_SUSPEND)) && (!theUser->getFlag(sqlUser::F_POWER)))
+if ((theUser->getFlag(sqlUser::F_GLOBAL_SUSPEND)) && (!theUser->getFlag(sqlUser::F_POWER)))
 	{
 	bot->setFailedLogins(theClient, failedLogins+1);
 	bot->Notice(theClient, "AUTHENTICATION FAILED as %s. (Suspended)",
