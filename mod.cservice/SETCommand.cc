@@ -254,40 +254,47 @@ if( st[1][0] != '#' ) // Didn't find a hash?
 	}
 	if (option == "NOPURGE")
 	{
-		if (value == "ON")
+		int admLevel = bot->getAdminAccessLevel(theUser);
+		if (!admLevel)
 		{
-			/* only admins can use this command */
-			int admLevel = bot->getAdminAccessLevel(theUser);
-			if (admLevel > 0)
-			{
-				theUser->setFlag(sqlUser::F_NOPURGE);
-				theUser->commit(theClient);
-				bot->Notice(theClient,"Your NOPURGE setting is now ON");
-			} else {
-				/* not an admin, return unknown command */
-				bot->Notice(theClient,
-					bot->getResponse(theUser,
-					language::invalid_option,
-					string("Invalid option."))); 
-			}
+			/* not an admin, return unknown command */
+			bot->Notice(theClient,
+				bot->getResponse(theUser,
+				language::invalid_option,
+				string("Invalid option.")));
 			return true;
 		}
-
+		sqlUser* targetUser = theUser;
+		if ((value != "ON") && (value != "OFF"))
+		{
+			targetUser = bot->getUserRecord(st[2]);
+			if (!targetUser)
+			{
+				bot->Notice(theClient,
+					bot->getResponse(theUser,
+						language::not_registered,
+						string("The user %s doesn't appear to be registered.")).c_str(),
+					st[2].c_str());
+				return true;
+			}
+			value = string_upper(st[3]);
+		}
+		if (value == "ON")
+		{
+			targetUser->setFlag(sqlUser::F_NOPURGE);
+			targetUser->commit(theClient);
+			bot->Notice(theClient,"NOPURGE setting for %s is now ON", targetUser->getUserName().c_str());
+			return true;
+		}
 		if (value == "OFF")
 		{
 			/* only allow removal if it is set! */
-			if (theUser->getFlag(sqlUser::F_NOPURGE))
-			{
-				theUser->removeFlag(sqlUser::F_NOPURGE);
-				theUser->commit(theClient);
-				bot->Notice(theClient,"Your NOPURGE setting is now OFF");
-			} else {
-				/* not set?  pretend it's an unknown command */
-				bot->Notice(theClient,
-					bot->getResponse(theUser,
-					language::invalid_option,
-					string("Invalid option.")));
-			}
+			//if (targetUser->getFlag(sqlUser::F_NOPURGE))
+			//{
+				targetUser->removeFlag(sqlUser::F_NOPURGE);
+				targetUser->commit(theClient);
+			//}
+				bot->Notice(theClient,"NOPURGE setting for %s is now OFF", targetUser->getUserName().c_str());
 			return true;
 		}
 		bot->Notice(theClient,
