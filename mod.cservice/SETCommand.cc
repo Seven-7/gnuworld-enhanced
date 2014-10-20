@@ -277,7 +277,13 @@ if( st[1][0] != '#' ) // Didn't find a hash?
 					st[2].c_str());
 				return true;
 			}
-			value = string_upper(st[3]);
+			if (st.size() < 4)
+			{
+				bot->Notice(theClient,"SYNTAX: SET NOPURGE user ON|OFF");
+				return false;
+			}
+			else
+				value = string_upper(st[3]);
 		}
 		if (value == "ON")
 		{
@@ -386,18 +392,37 @@ if( st[1][0] != '#' ) // Didn't find a hash?
 #endif
 	if (option == "POWER")
 	{
-		sqlUser* targetUser = bot->getUserRecord(st[2]);
-		if (!targetUser)
+		int admLevel = bot->getAdminAccessLevel(theUser);
+		if (!admLevel)
 		{
+			/* not an admin, return unknown command */
 			bot->Notice(theClient,
 				bot->getResponse(theUser,
-					language::not_registered,
-					string("The user %s doesn't appear to be registered.")).c_str(),
-				st[2].c_str());
+				language::invalid_option,
+				string("Invalid option.")));
 			return true;
 		}
-		value = string_upper(st[3]);
-		int admLevel = bot->getAdminAccessLevel(theUser);
+		sqlUser* targetUser = theUser;
+		if ((value != "ON") && (value != "OFF"))
+		{
+			targetUser = bot->getUserRecord(st[2]);
+			if (!targetUser)
+			{
+				bot->Notice(theClient,
+					bot->getResponse(theUser,
+						language::not_registered,
+						string("The user %s doesn't appear to be registered.")).c_str(),
+					st[2].c_str());
+				return true;
+			}
+			if (st.size() < 4)
+			{
+				bot->Notice(theClient,"SYNTAX: SET POWER user ON|OFF");
+				return false;
+			}
+			else
+				value = string_upper(st[3]);
+		}
 		if (value == "ON")
 		{
 			/* only admins can use this command */
