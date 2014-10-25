@@ -179,7 +179,7 @@ if (admLevel < level::hello)
  * Check this email address doesn't already exist in the database!
  */
 stringstream theQuery;
-theQuery	<< "SELECT email FROM users WHERE email <> 0" 
+theQuery	<< "SELECT email FROM users WHERE email IS NOT NULL" 
 		<< ends;
 if (!bot->SQLDb->Exec(theQuery, true))
 {	bot->logDebugMessage("Error on HELLO.EmailQuery");
@@ -226,7 +226,7 @@ if ((verifAnswer.size() < 4) || (verifAnswer.size() > 300)) {
 if (admLevel < level::hello)
 {
 stringstream theQuery;
-theQuery	<< "SELECT user_name,email,type,reason FROM noreg WHERE email <> 0 OR user_name <> 0" 
+theQuery	<< "SELECT user_name,email,type,reason FROM noreg WHERE email IS NOT NULL OR user_name IS NOT NULL" 
 		<< ends;
 if (!bot->SQLDb->Exec(theQuery, true))
 {	bot->logDebugMessage("Error on HELLO.NoregEmailQuery");
