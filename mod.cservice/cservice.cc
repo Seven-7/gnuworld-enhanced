@@ -3739,7 +3739,7 @@ bool cservice::isValidUser(const string& userName)
 	 * if user noreg type is 0, then it is NOREG, if type=5 then it is LOCKED, if type = 6 then user_name is referring to the locked verification answer.
 	 */
 	stringstream theQuery;
-	theQuery	<< "SELECT user_name,email,type FROM noreg WHERE user_name <> 0 OR email <> 0"
+	theQuery	<< "SELECT user_name,email,type FROM noreg WHERE user_name IS NOT NULL OR email IS NOT NULL"
 				<< ends;
 	if (!SQLDb->Exec(theQuery, true))
 	{
@@ -3949,7 +3949,7 @@ bool cservice::isValidChannel(const string& chName)
 {
 	/* Check if channelname is locked */
 	stringstream theQuery;
-	theQuery	<< "SELECT channel_name,type FROM noreg WHERE channel_name <> 0"
+	theQuery	<< "SELECT channel_name,type FROM noreg WHERE channel_name IS NOT NULL"
 				<< ends;
 	if (!SQLDb->Exec(theQuery, true))
 	{
@@ -3998,7 +3998,7 @@ bool cservice::isValidChannel(const string& chName, iClient* theClient)
 
 	/* Check if channelname is locked */
 	stringstream theQuery;
-	theQuery	<< "SELECT channel_name,type FROM noreg WHERE channel_name <> 0"
+	theQuery	<< "SELECT channel_name,type FROM noreg WHERE channel_name IS NOT NULL"
 			<< ends;
 	if (!SQLDb->Exec(theQuery, true))
 	{
