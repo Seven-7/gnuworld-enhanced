@@ -48,6 +48,8 @@ int matchcomp(char *cmask, int *minlen, int *charset, const char *mask);
 int matchexec(const char *string, const char *cmask, int minlen);
 int matchdecomp(char *mask, const char *cmask);
 int mmexec(const char *wcm, int wminlen, const char *rcm, int rminlen);
+//Given mask matches with every mask
+int matchall(const std::string&);
 
 } // namespace gnuworld
 

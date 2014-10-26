@@ -215,7 +215,7 @@ if (string_lower(st[1]) == "read")
 		unsigned int when = atoi(bot->SQLDb->GetValue(i,2));
 		unsigned int message_id = atoi(bot->SQLDb->GetValue(i,3));
 		bot->Notice(theClient, bot->getResponse(theUser, language::message_id,string("\002NOTE\002 (Message-Id: %i): Recieved from %s, %s ago: %s")).c_str(),
-			message_id, from.c_str(), bot->prettyDuration(when).c_str(), theMessage.c_str());
+			message_id, from.c_str(), prettyDuration(when).c_str(), theMessage.c_str());
 		}
 
 	}

@@ -145,8 +145,12 @@ bool IsNumeric( const std::string& ) ;
 time_t extractTime( std::string Length, unsigned int defaultUnits ) ;
 
 int atoi( const std::string& ) ;
-//Given match matches with all masks
-int matchall(const std::string&);
+
+/* Formats a timestamp into a "X Days, XX:XX:XX" from 'Now'. */
+const std::string prettyDuration( int ) ;
+
+const std::string TokenStringsParams(const char*,...);
+
 } // namespace gnuworld
 
 #endif /* __MISC__ */

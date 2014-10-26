@@ -3662,17 +3662,6 @@ bool cservice::sqlLogCommand(iClient* theClient, const char* format, ... )
 
 /* *** The Judge *** */
 
-const string cservice::TokenStringsParams(const char* format,...)
-{
-	char buf[ 1024 ] = { 0 } ;
-	va_list _list ;
-
-	va_start( _list, format ) ;
-	vsnprintf( buf, 1024, format, _list ) ;
-	va_end( _list ) ;
-	return string(buf);
-}
-
 void cservice::AddToValidResponseString(const string& resp)
 {
 	if (validResponseString == "") validResponseString = resp;
@@ -4946,30 +4935,6 @@ if(ptr != sqlUserCache.end())
 	}
 
 return flagString;
-}
-
-const string cservice::prettyDuration( int duration ) const
-{
-
-// Pretty format a 'duration' in seconds to
-// x day(s), xx:xx:xx.
-
-char tmpBuf[ 64 ] = {0};
-
-int	res = currentTime() - duration,
-	secs = res % 60,
-	mins = (res / 60) % 60,
-	hours = (res / 3600) % 24,
-	days = (res / 86400) ;
-
-sprintf(tmpBuf, "%i day%s, %02d:%02d:%02d",
-	days,
-	(days == 1 ? "" : "s"),
-	hours,
-	mins,
-	secs );
-
-return string( tmpBuf ) ;
 }
 
 bool cservice::validUserMask(const string& userMask) const

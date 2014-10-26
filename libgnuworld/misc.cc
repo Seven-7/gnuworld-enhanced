@@ -29,6 +29,8 @@
 #include	<cstdarg>
 #include	<cstring>
 
+#include	<sstream>
+
 #include	"misc.h"
 
 const char rcsId[] = "$Id: misc.cc,v 1.6 2007/12/27 20:45:15 kewlio Exp $" ;
@@ -201,19 +203,47 @@ else if(!strcasecmp(Length.substr(Length.length()-1).c_str(),"s"))
 return atoi(Length.c_str()) * Units;
 }
 
-int atoi( const std::string& val )
+int atoi( const string& val )
 {
 return ::atoi( val.c_str() ) ;
 }
 
-int matchall(const std::string& mask)
+const string prettyDuration( int duration )
 {
-        for (unsigned int i = 0; i < mask.length(); i++)
-        {
-                char c = mask[i];
-                if ((c != '*') && (c != '?') && (c != '.') && (c != '!') && (c != '@'))
-                        return 1;
-        }
-        return 0;
+	// Pretty format a 'duration' in seconds to
+	// x day(s), xx:xx:xx.
+	char tmpBuf[ 64 ] = {0};
+
+	if (duration == 0)
+	{
+		sprintf(tmpBuf, "Never");
+		return string( tmpBuf ) ;
+	}
+
+	int	res = ::time(NULL) - duration,
+		secs = res % 60,
+		mins = (res / 60) % 60,
+		hours = (res / 3600) % 24,
+		days = (res / 86400) ;
+
+	sprintf(tmpBuf, "%i day%s, %02d:%02d:%02d",
+		days,
+		(days == 1 ? "" : "s"),
+		hours,
+		mins,
+		secs );
+
+	return string( tmpBuf ) ;
+}
+
+const string TokenStringsParams(const char* format,...)
+{
+	char buf[ 1024 ] = { 0 } ;
+	va_list _list ;
+
+	va_start( _list, format ) ;
+	vsnprintf( buf, 1024, format, _list ) ;
+	va_end( _list ) ;
+	return string(buf);
 }
 } // namespace gnuworld

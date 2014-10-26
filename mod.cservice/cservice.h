@@ -253,9 +253,6 @@ public:
 	/* Fetch the user status flags. L = in cache, P = got password, U = Is authed. */
 	string userStatusFlags( const string& );
 
-	/* Formats a timestamp into a "X Days, XX:XX:XX" from 'Now'. */
-	const string prettyDuration( int ) const ;
-
 	/* Returns the current "Flood Points" this iClient has. */
  	unsigned short getFloodPoints(iClient*);
 
@@ -415,7 +412,6 @@ public:
 	incompleteChanRegsType incompleteChanRegs;
 	
 	string validResponseString;
-	const string TokenStringsParams(const char*,...);
 	void AddToValidResponseString(const string&);
 	inline const string& getCurrentValidResponse() const
 		{ return validResponseString; }

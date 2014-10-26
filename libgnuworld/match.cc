@@ -966,4 +966,14 @@ int mmexec(const char *wcm, int wminlen, const char *rcm, int rminlen)
   return 1;                     /* Auch... something left out ? Fail */
 }
 
+int matchall(const std::string& mask)
+{
+	for (unsigned int i = 0; i < mask.length(); i++)
+	{
+		char c = mask[i];
+		if ((c != '*') && (c != '?') && (c != '.') && (c != '!') && (c != '@'))
+			return 1;
+	}
+	return 0;
+}
 } // namespace gnuworld

@@ -370,7 +370,7 @@ for (unsigned int i = 0 ; i < bot->SQLDb->Tuples(); i++)
 			bot->Notice(theClient,
 				bot->getResponse(theUser,
 					language::suspend_expires_in).c_str(),
-				bot->prettyDuration(suspend_expires_f).c_str(),
+				prettyDuration(suspend_expires_f).c_str(),
 				suspendLevel
 				);
 			bot->Notice(theClient,bot->getResponse(theUser,
@@ -382,7 +382,7 @@ for (unsigned int i = 0 ; i < bot->SQLDb->Tuples(); i++)
 		bot->Notice(theClient,
 			bot->getResponse(theUser,
 					language::last_seen).c_str(),
-			bot->prettyDuration(duration).c_str()
+			prettyDuration(duration).c_str()
 		);
 
 		if(modif)
@@ -391,7 +391,7 @@ for (unsigned int i = 0 ; i < bot->SQLDb->Tuples(); i++)
 				bot->getResponse(theUser,
 					language::last_mod).c_str(),
 				bot->SQLDb->GetValue(i, 7).c_str(),
-				bot->prettyDuration(atoi(bot->SQLDb->GetValue(i,6))).c_str()
+				prettyDuration(atoi(bot->SQLDb->GetValue(i,6))).c_str()
 			);
 			}
 		}
