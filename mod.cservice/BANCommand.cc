@@ -337,7 +337,7 @@ string banTarget = st2[counter];
 elog << "ST " << counter << ": " << st2[counter] << endl;
 // *** Take Over Protection ***
 bool takeOver = false;
-if ((banTarget == "*!*@*") && (banLevel >= 75) && (flagNoTake))
+if (!matchall(banTarget) && ((banLevel >= 75) && (flagNoTake)))
 {
 	//Revenge is Ignore
 	if (theChan->getNoTake() == 1) return true;
