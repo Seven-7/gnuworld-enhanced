@@ -1998,7 +1998,6 @@ if(ptr != translationTable.end())
 return 0;
 }
 
-
 bool cservice::isOnChannel( const string& /* chanName */ ) const
 {
 return true;
