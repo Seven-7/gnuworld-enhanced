@@ -206,4 +206,14 @@ int atoi( const std::string& val )
 return ::atoi( val.c_str() ) ;
 }
 
+int matchall(const std::string& mask)
+{
+        for (unsigned int i = 0; i < mask.length(); i++)
+        {
+                char c = mask[i];
+                if ((c != '*') && (c != '?') && (c != '.') && (c != '!') && (c != '@'))
+                        return 1;
+        }
+        return 0;
+}
 } // namespace gnuworld
