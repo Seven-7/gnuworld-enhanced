@@ -540,7 +540,7 @@ if( !theChan )
 					prettyDuration(mngrlastseen).c_str());
 		if (adminAccess > 0) bot->Notice(theClient,"Real Name: %s",mngrName.c_str());
 		bot->Notice(theClient,"Description: %s",chandesc.c_str());
-		if ((status == 9) && (decision.find_first_of('<br>') != string::npos)) decision.replace(decision.find("<br>"),4,": ");		
+		if ((status == 9) && (decision.find_first_of("<br>") != string::npos)) decision.replace(decision.find("<br>"),4,": ");
 		theQuery.str("");
 		theQuery << "SELECT user_name,support,join_count FROM users,supporters WHERE channel_id="
 			 << chanID

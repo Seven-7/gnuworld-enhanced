@@ -135,7 +135,6 @@ if (level <= targetAccess)
 	return false;
 	}
 
-//if ((targetAccess <= 0) || ((targetAccess > 999) && (theUser->getID() > 1)) || ((targetAccess > 1000) && (theUser->getID() == 1)))
 if (targetAccess <= 0)
 {
 	bot->Notice(theClient,

@@ -92,7 +92,8 @@ namespace gnuworld {
   const int rehash_coder = 900;
 
   const int hello = 750;
-  const int purge = 750;
+  const int chanpurge = 750;
+  const int userpurge = 750;
   const int removeall = 750;
   const int accept = 750;
   const int reject = 750;

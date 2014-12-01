@@ -2541,22 +2541,23 @@ bool cservice::deleteUserFromTable(unsigned int userId, const string& table)
 
 bool cservice::wipeUser(unsigned int userId, bool expired)
 {
-	sqlUser* tmpUser = new (std::nothrow) sqlUser(SQLDb);
+	sqlUser* tmpUser = getUserRecord(userId);
 	assert(tmpUser != 0);
-    tmpUser->loadData(userId);
+	string removeKey;
+	//Don't expire any newly created, never logged user sooner than 10 minutes
+	if (((int)(currentTime() - tmpUser->getCreatedTS()) < 600) && (expired)) goto cacheclean;
     if (tmpUser->getFlag(sqlUser::F_NOPURGE))
     {
-    	logDebugMessage("User %s (%i) had NOPURGE flag, but Purging It anyway!",tmpUser->getUserName().c_str(),userId);
+    	//logDebugMessage("User %s (%i) had NOPURGE flag, but Purging It anyway!",tmpUser->getUserName().c_str(),userId);
+    	if (!tmpUser->getFlag(sqlUser::F_GLOBAL_SUSPEND))
+		{
+   			logDebugMessage("User %s (%i) has NOPURGE flag, so Not Purging It!",tmpUser->getUserName().c_str(),userId);
+   			goto cacheclean;
+		}
+		else
+			logDebugMessage("User %s (%i) is NOPURGE but SUSPENDED, so Purging It!",tmpUser->getUserName().c_str(),userId);
     	//return true;
     }
-
-    if (!expired) //so we wipe by force even from UserCache
-    {
-        sqlUserHashType::iterator usrItr = sqlUserCache.find(tmpUser->getUserName());
-    	if (usrItr != sqlUserCache.end())
-    		sqlUserCache.erase(tmpUser->getUserName());
-    }
-
 	deleteUserFromTable(userId,"acl");
 	deleteUserFromTable(userId,"levels");
 	deleteUserFromTable(userId,"notices");
@@ -2571,10 +2572,23 @@ bool cservice::wipeUser(unsigned int userId, bool expired)
 	deleteUserFromTable(userId,"fraud_list_data");
 	deleteUserFromTable(userId,"users_lastseen");
 	deleteUserFromTable(userId,"users");
+
 	if (expired) logAdminMessage("User %s (%s) has expired",tmpUser->getUserName().c_str(), tmpUser->getEmail().c_str());
 	else logDebugMessage("Deleted(wipeUser) %s (%i) from the database.", tmpUser->getUserName().c_str(),userId);
 
-	delete tmpUser;
+	//sqlUser* tmpUser = getUserRecord(userId) inserted in the sqlUserCache, so we clean from chache all the time
+	//if (!expired) //so we wipe by force even from UserCache
+    //{
+	cacheclean:
+        sqlUserHashType::iterator usrItr = sqlUserCache.find(tmpUser->getUserName());
+    	if (usrItr != sqlUserCache.end())
+    	{
+    		removeKey = usrItr->first;
+    		delete(usrItr->second);
+    		sqlUserCache.erase(removeKey);
+    	}
+    //}
+
 	return true;
 }
 

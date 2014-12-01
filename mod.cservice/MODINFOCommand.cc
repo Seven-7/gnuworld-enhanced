@@ -265,7 +265,6 @@ if (command == "ACCESS")
 	 */
 	int newAccess = atoi(st[4].c_str());
 
-//if ((newAccess <= 0) || ((newAccess > 999) && (theUser->getID() > 1)) || ((newAccess > 1000) && (theUser->getID() == 1)))		{
 	if (newAccess <= 0)
 	{
 		bot->Notice(theClient,
@@ -361,7 +360,7 @@ if (command == "AUTOMODE")
 	 */
 
 	if (!theUser->getFlag(sqlUser::F_POWER))
-	if ( (level < targetLevel) || ((level == targetLevel) && (targetUser != theUser)) )
+	if ((level < targetLevel) || ((level == targetLevel) && (targetUser != theUser)))
 		{
 		bot->Notice(theClient,
 			bot->getResponse(theUser,

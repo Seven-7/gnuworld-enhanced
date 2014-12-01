@@ -149,7 +149,6 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 		return false;
 	}
 
-
 	if (((theChan->getName() == "*") && (targetUser == theUser)) && (!theUser->getFlag(sqlUser::F_POWER)))
 	{
 		/*bot->Notice(theClient,
@@ -170,11 +169,9 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 		return false;
 	}
 
-
 	/*
 	 *  Now, build up the SQL query & execute it!
 	 */
-
 	theQuery << queryHeader
 		<< "channel_id = " << theChan->getID()
 		<< " AND user_id = " << targetUser->getID()

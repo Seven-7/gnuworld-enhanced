@@ -53,7 +53,7 @@ bool PURGECommand::Exec( iClient* theClient, const string& Message )
 bot->incStat("COMMANDS.PURGE");
 
 StringTokenizer st( Message ) ;
-if( st.size() < 3 )
+if( st.size() < 2 )
 	{
 	Usage(theClient);
 	return true;
@@ -70,6 +70,79 @@ if (!theUser)
 	return false;
 	}
 
+/*
+ *  Are we purging a user or a channel?
+ */
+
+// Did we find a '#' ?
+if( string::npos == st[ 1 ].find_first_of( '#' ) )
+{
+	// Nope, look by user then.
+	sqlUser* tmpUser = bot->getUserRecord(st[1]);
+
+	if (!tmpUser)
+		{
+		bot->Notice(theClient,
+			bot->getResponse(theUser,
+				language::not_registered,
+				string("The user %s doesn't appear to be registered.")).c_str(),
+			st[1].c_str());
+		return true;
+		}
+
+	int level = bot->getAdminAccessLevel(theUser);
+	if (!theUser->getFlag(sqlUser::F_POWER))
+	if (level < level::userpurge)
+	{
+		bot->Notice(theClient,
+			bot->getResponse(theUser,
+				language::insuf_access,
+				string("You have insufficient access to perform that command")));
+		return false;
+	}
+
+	int admLevel = bot->getAdminAccessLevel(tmpUser);
+	/*
+	 * Why I did these ??
+	 *
+	if (admLevel)
+	{
+		bot->Notice(theClient, "Cannot purge any user with '*' access. Try to remove it's '*' access first.");
+		return false;
+	}
+	if (tmpUser->getFlag(sqlUser::F_NOPURGE))
+	{
+		bot->Notice(theClient, "User %s has NOPURGE flag. Remove it first.", tmpUser->getUserName().c_str());
+		return false;
+	}
+	*/
+	if (!theUser->getFlag(sqlUser::F_POWER))
+	if ((level <= admLevel) && (tmpUser != theUser))
+	{
+		bot->Notice(theClient, "Cannot purge a user with equal or higher access than your own");
+		return false;
+	}
+	string userToDel = tmpUser->getUserName();
+	if (bot->wipeUser(tmpUser->getID(), false))
+	{
+		bot->logAdminMessage("%s (%s) purged user %s", theClient->getNickName().c_str(), theUser->getUserName().c_str(), userToDel.c_str());
+		bot->Notice(theClient, "Successfully purged user %s", userToDel.c_str());
+	}
+	else
+	{
+		bot->logDebugMessage("An error occured at a user purge command.");
+		bot->Notice(theClient, "An error occured while purged user. Contact coders.");
+		return false;
+	}
+
+	return true;
+}	//End of user purge
+
+if (st.size() < 3)
+{
+	Usage(theClient);
+	return true;
+}
 /*
  *  First, check the channel isn't already registered.
  */
@@ -88,9 +161,9 @@ if ((!theChan) || (st[1] == "*"))
 /*
  *  Check the user has sufficient access for this command..
  */
-
 int level = bot->getAdminAccessLevel(theUser);
-if (level < level::purge)
+if (!theUser->getFlag(sqlUser::F_POWER))
+if (level < level::chanpurge)
 	{
 	bot->Notice(theClient,
 		bot->getResponse(theUser,
@@ -102,8 +175,8 @@ if (level < level::purge)
 /*
  * Don't purge the channel if NOPURGE is set.
  */
-
-if(theChan->getFlag(sqlChannel::F_NOPURGE))
+if (!theUser->getFlag(sqlUser::F_POWER))
+if (theChan->getFlag(sqlChannel::F_NOPURGE))
 {
 	bot->Notice(theClient, "%s has NOPURGE set, so I'm not purging it.",
 		theChan->getName().c_str());
