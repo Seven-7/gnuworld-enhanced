@@ -146,6 +146,20 @@ time_t extractTime( std::string Length, unsigned int defaultUnits ) ;
 
 int atoi( const std::string& ) ;
 
+/**
+ * Extract the parts of a *valid* nick!user@hostip address
+ */
+std::string extractNick( const std::string& ) ;
+
+std::string extractUser( const std::string& ) ;
+
+std::string extractNickUser( const std::string& ) ;
+
+std::string extractHostIP( const std::string& ) ;
+
+// Check for valid hostmask.
+bool validUserMask(const std::string& );
+
 /* Formats a timestamp into a "X Days, XX:XX:XX" from 'Now'. */
 const std::string prettyDuration( int ) ;
 

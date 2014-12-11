@@ -32,6 +32,7 @@
 #include	<sstream>
 
 #include	"misc.h"
+#include	"StringTokenizer.h"
 
 const char rcsId[] = "$Id: misc.cc,v 1.6 2007/12/27 20:45:15 kewlio Exp $" ;
 
@@ -206,6 +207,76 @@ return atoi(Length.c_str()) * Units;
 int atoi( const string& val )
 {
 return ::atoi( val.c_str() ) ;
+}
+
+string extractNick(const string& NickUserHostIP)
+{
+	StringTokenizer st( NickUserHostIP, '!' ) ;
+
+	// Make sure there are exactly two tokens
+	if( st.size() != 2 )
+		return string("");
+
+	return st[0];
+}
+
+string extractUser(const string& NickUserHostIP)
+{
+	string NickUser = extractNickUser(NickUserHostIP);
+
+	StringTokenizer st( NickUser, '!' ) ;
+
+	if( st.size() != 2 )
+		return string("");
+
+	return st[1];
+}
+
+string extractNickUser(const std::string& NickUserHostIP)
+{
+	StringTokenizer st( NickUserHostIP, '@' ) ;
+
+	if( st.size() != 2 )
+		return string("");
+
+	return st[0];
+}
+
+string extractHostIP(const string& NickUserHostIP)
+{
+	StringTokenizer st( NickUserHostIP, '@' ) ;
+
+	if( st.size() != 2 )
+		return string("");
+
+	return st[1];
+}
+
+bool validUserMask(const string& userMask)
+{
+	// Check that a '@' exists
+	StringTokenizer st( userMask, '@' ) ;
+
+	if (st.size() != 2)
+	{
+		return false ;
+	}
+
+	// Check that a '!' exists
+	StringTokenizer st1( st[0], '!' ) ;
+	if (st1.size() != 2)
+	{
+		return false ;
+	}
+
+	// Be sure that the hostname is no more than 255 characters
+	if( st[ 1 ].size() > 255 )
+	{
+		return false ;
+	}
+
+	// Tests have passed
+	return true ;
 }
 
 const string prettyDuration( int duration )
