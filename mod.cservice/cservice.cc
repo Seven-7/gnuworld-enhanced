@@ -1093,7 +1093,7 @@ else if(Command == "VERSION")
 	xClient::DoCTCP(theClient, CTCP,
 		"Undernet Channel Services III ["
 		__DATE__ " " __TIME__
-		"] Release 2.0.0");
+		"] Release 2.1.5");
 	}
 else if(Command == "PROBLEM?")
 	{
