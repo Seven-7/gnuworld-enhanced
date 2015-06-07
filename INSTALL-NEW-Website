@@ -1,0 +1,85 @@
+In order to work the webpage, so far we need to use at most ubuntu 12, installs php version under 5.3.28, 
+so the maximum version of php still containing the required register_globals variable in php.ini is 5.3.27
+Anyone who knows a fix, or bypass the necessity of register_globals let me know.
+
+In root we install the dependencies:
+----Apache & php quick install---------------------------------
+sudo apt-get install apache2
+sudo apt-get install php5
+sudo apt-get install libapache2-mod-php5
+
+linux:/root# sudo apt-get install curl libcurl3 libcurl3-dev php5-curl
+linux:/root# sudo apt-get install php5-gd
+linux:/root# sudo apt-get install php5-dev php5-pgsql
+linux:/root# sudo apt-get install libpqxx-3.1 libpqxx3-dev
+
+You can always find the available libpqxx version with searching:
+
+linux:/root# sudo apt-cache search libpqxx
+
+Restarting apache:
+sudo /etc/init.d/apache2 restart
+
+We install postgresql:
+
+linux:/root# sudo apt-get install libreadline-dev
+linux:/root# sudo apt-get install bison
+linux:/root# wget http://ftp.postgresql.org/pub/source/v9.3.4/postgresql-9.3.4.tar.gz
+linux:/root# tar zxvf postgresql-9.3.4.tar.gz
+linux:/root# cd postgresql-9.3.4.tar.gz
+linux:/root/postgresql-9.3.4# ./configure
+linux:/root/postgresql-9.3.4# make; make install
+
+Now we create the databse:
+linux:/root# [sudo] mkdir /usr/local/pgsql/data
+linux:/root# chown gnuworld /usr/local/pgsql/data
+linux:/root# chgrp gnuworld /usr/local/pgsql/data
+linux:/root# su - gnuworld
+linux:/home/gnuworld$ /usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data &
+Start the database with:
+linux:/home/gnuworld$ /usr/local/pgsql/bin/postgres -D /usr/local/pgsql/data
+It worth to put that line in a crontab line: 
+crontab -e
+@reboot /usr/local/pgsql/bin/postgres -D /usr/local/pgsql/data
+So on a reboot you'll get postgres running.
+
+Warning: Don't do these if you already started and have a gnuworld installation.
+linux:/home/gnuworld$ git clone https://github.com/Seven-7/gnuworld-enhanced.git
+linux:/home/gnuworld$ cd gnuworld-enhanced/doc
+linux:/gnuworld/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/createdb --template=template0 -E=SQL_ASCII cservice
+linux:/gnuworld/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql cservice < cservice.sql
+linux:/gnuworld/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql cservice < cservice.config.sql
+linux:/gnuworld/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql cservice < languages.sql
+linux:/gnuworld/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql cservice < language_table.sql
+linux:/gnuworld/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql cservice < greeting.sql
+linux:/gnuworld/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql cservice < cservice.help.sql
+linux:/gnuworld/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql cservice < cservice.web.sql
+linux:/gnuworld/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql cservice < cservice.addme.sql
+linux:/gnuworld/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/createdb --template=template0 -E=SQL_ASCII local_db
+linux:/gnuworld/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql local_db < local_db.sql
+linux:/gnuworld/gnuworld-enhanced/doc$ cd ~
+ -- End of not repeatable part --
+
+linux:/home/gnuworld$ git clone https://github.com/Seven-7/website-gnuworld.git
+linux:/home/gnuworld$ su -
+linux:/root# cd /var/www/
+linux:/var/www# chmod 711 ~gnuworld
+linux:/var/www# chmod 711 ~gnuworld/website
+linux:/var/www# chmod 755 ~gnuworld/website/php_includes
+linux:/var/www# chmod 644 ~gnuworld/website/php_includes/config.inc
+linux:/var/www# chmod 755 ~gnuworld/website/docs/gnuworld/
+linux:/var/www# ln -s /home/gnuworld/website/docs/gnuworld live
+
+Now you can try see the webpage in the following addresses:
+
+http://localhost/live 
+http://127.0.0.1/live 
+http://yourIP/live
+
+Reanaming/replacing 'Undernet' in X's responses with your network name:
+Enter in postgresql command line:
+linux:/home/gnuworld$ /usr/local/pgsql/bin/psql cservice
+cservice=# UPDATE translations SET text=REPLACE(text, 'Undernet', 'YourNetwork');
+Quit from psql command line with \q
+cservice=# \q
+linux:/home/gnuworld$ 
