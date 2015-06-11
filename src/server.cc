@@ -2765,6 +2765,24 @@ PostEvent( EVT_ACCOUNT,
 	sourceClient ) ;
 }
 
+void xServer::SendOutFakeHost( iClient* destClient, const string& fakehost,
+	xClient* sourceClient )
+{
+#ifdef SRVX
+assert( destClient != 0 ) ;
+
+destClient->setFakeHost(fakehost);
+
+stringstream	outStream ;
+outStream	<< getCharYY()
+		<< " FA "
+		<< destClient->getCharYYXXX()
+		<< " "
+		<< fakehost ;
+Write( outStream ) ;
+#endif
+}
+
 void xServer::setBursting( bool newVal )
 {
 bursting = newVal ;

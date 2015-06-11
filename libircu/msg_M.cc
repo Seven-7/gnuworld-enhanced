@@ -75,8 +75,8 @@ CREATE_LOADER(msg_M)
 // J[K M DEMET_33 :+i
 bool msg_M::Execute( const xParameters& Param )
 {
-	elog << "Entered msg_M" << std::endl;
-	elog << Param << endl;
+	//DEBUG
+	elog << "Entered msg_M> " << Param << std::endl;
 
 if( Param.size() < 3 )
 	{
@@ -480,9 +480,15 @@ for( const char* modePtr = Param[ 2 ] ; *modePtr ; ++modePtr )
 		case 'n':
 		case 'I':
 		case 'h':
+			if( plus )	theClient->setModeH() ;
+			else		theClient->removeModeH() ;
+			break;
+		case 'f':
+			if( plus )	theClient->setModeF() ;
+			else		theClient->removeModeF() ;
+			break;
 		case 'X':
 		case 'R':
-		case 'f':
 			// Unsupported but used on networks that
 			// GNUWorld runs on.
 			// TODO?

@@ -41,7 +41,7 @@
  * Enabling this by default will not have adverse effects on gnuworld's
  * functionality, except to increase memory usage a bit.
  */
-#undef ASUKA
+#define ASUKA
 
 /**
  * SRVX

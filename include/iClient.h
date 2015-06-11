@@ -87,6 +87,9 @@ public:
 	/// MODE_HIDDEN_HOST is true if the iClient has HIDDEN_HOST (+x) set.
 	static const modeType	MODE_HIDDEN_HOST ;
 
+	/// MODE_FAKE_HOST is true if the iClient has FAKE_HOST (+f) set.
+	static const modeType	MODE_FAKE_HOST ;
+
 	/// MODE_G is true if the iCilent has user mode g set.
 	static const modeType	MODE_G ;
 
@@ -199,8 +202,19 @@ public:
 	 * Overwrite this clients "Real Host" with a "Hidden Host".
 	 */
 	inline void setHiddenHost()
-		{ insecureHost = account + hiddenHostSuffix ; }
+		{
+		if (!isModeF())
+			insecureHost = account + hiddenHostSuffix ;
+		else
+			insecureHost = getFakeHost();
+		}
 
+	inline void setSetHost()
+	{
+#ifdef ASUKA
+		insecureHost = setHost;
+#endif
+	}
 	/**
 	 * This method will set the hidden host suffix.  This value
 	 * is only modified by the xServer on startup.
@@ -260,6 +274,20 @@ public:
 	inline const std::string& getSetHost() const
 		{ return setHost ; }
 #endif
+
+	/**
+	 * This method sets user mode +r and records the account
+	 * domain for this network client.
+	 */
+	inline void setFakeHost( const std::string& _fakeHost )
+		{
+#ifdef SRVX
+		fakeHost = _fakeHost ;
+		setModeF();
+		if (isModeX())
+			insecureHost = fakeHost;
+#endif
+		}
 
 #ifdef SRVX
 	/**
@@ -408,6 +436,18 @@ public:
 		{ return getMode( MODE_HIDDEN_HOST ) ; }
 
 	/**
+	 * Return true if this client has the +f mode set, false otherwise.
+	 */
+	inline bool isModeF() const
+		{ return getMode( MODE_FAKE_HOST ) ; }
+
+	/**
+	 * +h sethost, is always a hidden host.
+	 */
+	inline bool isModeH() const
+		{ return getMode( MODE_HIDDEN_HOST ) ; }
+
+	/**
 	 * Return true if this client has the +g mode set, false otherwise.
 	 */
 	inline bool isModeG() const
@@ -482,6 +522,11 @@ public:
 		if (isModeR() && isModeX()) setHiddenHost();
 		}
 
+	inline void setModeF()
+		{
+		setMode( MODE_FAKE_HOST ) ;
+		}
+
 	/**
 	 * Set mode +r for this user.
 	 */
@@ -493,6 +538,16 @@ public:
 	 */
 	inline void setFake()
 		{ setMode( MODE_FAKE ) ; }
+
+	/**
+	 * Set mode +h for this user.
+	 */
+	inline void setModeH()
+		{
+		setMode( MODE_HIDDEN_HOST ) ;
+		if (isModeH())
+			setSetHost();
+		}
 
 	/**
 	 * Remove a user mode for this iClient.
@@ -548,6 +603,17 @@ public:
 	inline void removeModeR()
 		{ removeMode( MODE_REGISTERED ) ; }
 
+	/**
+	 * Remove user mode 'f'.
+	 */
+	inline void removeModeF()
+		{ removeMode( MODE_FAKE_HOST ) ; }
+
+	/**
+	 * Remove user mode 'h'.
+	 */
+	inline void removeModeH()
+		{ removeMode( MODE_HIDDEN_HOST ) ; }
 	/**
 	 * Return a string representation of this iClient's user
 	 * modes.

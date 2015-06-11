@@ -624,6 +624,12 @@ public:
 				xClient* = 0 ) ;
 
 	/**
+	 * Send out the 'FA' fake host handler to the network
+	 */
+	virtual void	SendOutFakeHost( iClient*, const std::string&,
+				xClient* = 0 ) ;
+
+	/**
 	 * Post a system event to the rest of the system.  Note
 	 * that this method is public, so xClients may post
 	 * events.
