@@ -468,8 +468,9 @@ if (tmpLevel > 0)
  * [Source Server] AC [Authenticated User's Numeric] [Authenticated UserName]
  * Eg: AX AC APAFD gte
  */
-
 server->UserLogin(theClient, theUser->getUserName(), bot);
+//TEST !
+//server->SendOutFakeHost(theClient, "test.fake.host.com", bot);
 
 /*
  * If the user account has been suspended, make sure they don't get
