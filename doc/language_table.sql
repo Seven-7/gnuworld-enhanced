@@ -208,7 +208,7 @@ COPY "translations" FROM stdin;
 1	197	Your suspension on %s has been cancelled.	31337	0
 1	198	You have been added to channel %s with access level %i	31337	0
 1	199	Your access on %s has been modified from %i to %i	31337	0
-1	200	Your access from %s has been removed.	31337	0
+1	200	Your access from %s has been removed by %s.	31337	0
 1	9998	Remember: Nobody from CService will ever ask you for your password, do NOT give out your password to anyone claiming to be CService.	31337	0
 \.
 
@@ -1107,7 +1107,7 @@ COPY "translations" FROM stdin;
 8	197	Suspendarea ta pe %s a fost anulat.	31337	0
 8	198	Ai fost adaugat pe canalul %s cu nivelul de acces %i	31337	0
 8	199	Nivelul tau de acces pe %s a fost modificat de la %i la %i	31337	0
-8	200	Accesul tau de pe %s a fost inlaturat.	31337	0
+8	200	Accesul tau de pe %s a fost inlaturat de catre %s.	31337	0
 8	9998	Nu Uita: Nici un reprezentant CService nu iti va cere vreodata parola, NU iti da parola de la username cuiva care spune ca este reprezentant Cservice.	31337	0
 \.
 
@@ -1656,7 +1656,7 @@ COPY "translations" FROM stdin;
 11	197	A felfuggesztesed a %s csatornan vissza lett vonva.	31337	0
 11	198	Hozza lettel adva a(z) %s csatornahoz %i joggal.	31337	0
 11	199	A jogod a %s csatornan %i -rol %i -ra(re) lett modositva.	31337	0
-11	200	A jogod a %s csatornarol el lett tavolitva.	31337	0
+11	200	A jogod a %s csatornarol el lett tavolitva %s altal.	31337	0
 11	9998	Figyelmeztetes: Soha senkinek NE add oda a jelszavad, meg akkor sem, ha CService kepviselonek mondja magat.	31337	0\.
 
 -- Turkish language definition.
