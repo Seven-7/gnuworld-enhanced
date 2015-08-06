@@ -160,6 +160,8 @@ std::string extractHostIP( const std::string& ) ;
 // Check for valid hostmask.
 bool validUserMask(const std::string& );
 
+bool validHostName(const std::string& );
+
 /* Formats a timestamp into a "X Days, XX:XX:XX" from 'Now'. */
 const std::string prettyDuration( int ) ;
 

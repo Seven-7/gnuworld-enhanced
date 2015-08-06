@@ -481,7 +481,7 @@ if( st[1][0] != '#' ) // Didn't find a hash?
 				bot->Notice(theClient, "Hostname can be maximum 128 characters long.");
 				return true;
 			}
-			if (st[2].size() < 3)
+			if ((st[2].size() < 3) || (!validHostName(st[2])))
 			{
 				bot->Notice(theClient, "Invalid hostname provided. A valid hostname has a last of 1 - 3 characters long domain, and contains at least one dot.");
 				return true;
