@@ -1,0 +1,91 @@
+This is a typical ubuntu installation.
+
+root@vps189189:~# sudo apt-get install gcc g++ cpp
+root@vps189189:~# sudo apt-get install flex
+root@vps189189:~# sudo apt-get install byacc
+root@vps189189:~# sudo apt-get install bison
+root@vps189189:~# sudo apt-get install make automake
+root@vps189189:~# sudo apt-get install git
+root@vps189189:~# sudo apt-get install libpqxx-4.0
+root@vps189189:~# sudo apt-get install libreadline6-dev
+root@vps189189:~# sudo apt-get install zlib1g-dev
+root@vps189189:~# sudo apt-get install vim
+
+Add a non-root user for postgresql, eg. 'gnuworld'
+root@vps189189:~# adduser gnuworld
+
+Installing PostgreSQL database:
+root@vps189189:~# wget http://ftp.postgresql.org/pub/source/v9.3.4/postgresql-9.3.4.tar.gz
+root@vps189189:~# tar zxvf postgresql-9.3.4.tar.gz
+root@vps189189:~# cd postgresql-9.3.4/
+root@vps189189:~/postgresql-9.3.4# ./configure [--without-readline --without-zlib]
+root@vps189189:~/postgresql-9.3.4# make && sudo make install
+root@vps189189:~/postgresql-9.3.4# cd ~
+You can use here nano if you want, I use vim editor
+root@vps189189:~# vim /etc/ld.so.conf
+Press 'a' to enter in edit mode, and insert the line:
+/usr/local/pgsql/lib
+Press ESC
+write: ':wq' or hold down Shift and press two times 'z' (Shift + ZZ)
+
+Now let's create the database directories:
+root@vps189189:~# [sudo] mkdir /usr/local/pgsql/data
+root@vps189189:~# chown gnuworld /usr/local/pgsql/data
+root@vps189189:~# chgrp gnuworld /usr/local/pgsql/data
+Starting the database itself:
+root@vps189189:~# su gnuworld
+gnuworld@vps189189:/root$ cd ~
+gnuworld@vps189189:~$ /usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data
+Success. You can now start the database server using:
+gnuworld@vps189189:~$ /usr/local/pgsql/bin/postgres -D /usr/local/pgsql/data &
+
+After this I usually open a new terminal window, to not to be bothered with database messages.
+
+Now install gnuworld-enhanced:
+gnuworld@vps189189:~$ git clone https://github.com/Seven-7/gnuworld-enhanced.git
+gnuworld@vps189189:~$ cd gnuworld-enhanced/
+gnuworld@vps189189:~/gnuworld-enhanced$ ./configure --with-extra-includes=/usr/local/include --with-extra-includes=/usr/include/postgresql/ --with-pgsql-home=/usr/local/pgsql/ --enable-modules=cservice,ccontrol,dronescan,openchanfix[,gnutest,nickserv,scanner,snoop,stats]
+Please note here that gnutest,nickserv,scanner,snoop,stats modules are experimental, unfinished, not useful, probably you should ommit modules!
+gnuworld@vps189189:~/gnuworld-enhanced$ make; make install
+
+Now create the actual databases:
+gnuworld@vps189189:~/gnuworld-enhanced$ cd doc
+gnuworld@vps189189:~/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/createdb --template=template0 -E=SQL_ASCII cservice
+gnuworld@vps189189:~/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql cservice < cservice.sql
+gnuworld@vps189189:~/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql cservice < cservice.config.sql
+gnuworld@vps189189:~/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql cservice < languages.sql
+gnuworld@vps189189:~/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql cservice < language_table.sql
+gnuworld@vps189189:~/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql cservice < greeting.sql
+gnuworld@vps189189:~/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql cservice < cservice.help.sql
+gnuworld@vps189189:~/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql cservice < cservice.web.sql
+gnuworld@vps189189:~/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql cservice < cservice.addme.sql
+gnuworld@vps189189:~/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/createdb --template=template0 -E=SQL_ASCII ccontrol
+gnuworld@vps189189:~/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql ccontrol < ccontrol.sql
+gnuworld@vps189189:~/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql ccontrol < ccontrol.help.sql
+gnuworld@vps189189:~/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql ccontrol < ccontrol.addme.sql
+gnuworld@vps189189:~/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql ccontrol < ccontrol.commands.sql
+gnuworld@vps189189:~/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/createdb --template=template0 -E=SQL_ASCII dronescan
+gnuworld@vps189189:~/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql dronescan < dronescan.sql
+gnuworld@vps189189:~/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/createdb --template=template0 -E=SQL_ASCII chanfix
+gnuworld@vps189189:~/gnuworld-enhanced/doc$ cd ../mod.openchanfix/doc/
+gnuworld@vps189189:~/gnuworld-enhanced/mod.openchanfix/doc$ /usr/local/pgsql/bin/psql chanfix < chanfix.sql
+gnuworld@vps189189:~/gnuworld-enhanced/mod.openchanfix/doc$ /usr/local/pgsql/bin/psql chanfix < chanfix.languages.sql
+gnuworld@vps189189:~/gnuworld-enhanced/mod.openchanfix/doc$ /usr/local/pgsql/bin/psql chanfix < chanfix.language.english.sql
+gnuworld@vps189189:~/gnuworld-enhanced/mod.openchanfix/doc$ /usr/local/pgsql/bin/psql chanfix < chanfix.help.sql
+gnuworld@vps189189:~/gnuworld-enhanced/mod.openchanfix/doc$ /usr/local/pgsql/bin/psql chanfix < chanfix.addme.sql
+Go to bin directory, and create the gnuworld config files:
+gnuworld@vps189189:~/gnuworld-enhanced/mod.openchanfix/doc$ cd ~/gnuworld-enhanced/bin/
+gnuworld@vps189189:~/gnuworld-enhanced/bin$ cp GNUWorld.example.conf GNUWorld.conf
+gnuworld@vps189189:~/gnuworld-enhanced/bin$ cp cservice.example.conf cservice.conf
+gnuworld@vps189189:~/gnuworld-enhanced/bin$ cp ccontrol.example.conf ccontrol.conf
+gnuworld@vps189189:~/gnuworld-enhanced/bin$ cp dronescan.example.conf dronescan.conf
+gnuworld@vps189189:~/gnuworld-enhanced/bin$ cp openchanfix.example.conf openchanfix.conf
+Edit all these files.
+And finally we can start gnuworld:
+gnuworld@vps189189:~/gnuworld-enhanced/bin$ ./gnuworld & 
+
+
+
+
+
+

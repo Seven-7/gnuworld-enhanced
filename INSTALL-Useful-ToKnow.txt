@@ -1,0 +1,12 @@
+==========================================================================
+ * Any change in a *.h file requires a complete reconfigure and remake.
+--------------------------------------------------------------------------
+   After you modified a *.h file, you should do the following steps:
+   1) Note down you actual config line fom ~/gnuworld-enhanced/config.log
+   2) make clean; make distclean
+   3) ./configure ......
+   4) make; make install
+==========================================================================
+ * Fast postgresql restart command:
+ -------------------------------------------------------------------------
+ /usr/local/pgsql/bin/pg_ctl restart -m fast -D /usr/local/pgsql/data -o -F &

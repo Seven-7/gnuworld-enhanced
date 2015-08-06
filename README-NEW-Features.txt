@@ -15,7 +15,7 @@
 
 -X- SYNTAX: UNSUSPEND <#channel> <username> [reason]
 
- -> *x* unsuspend #coder-com Seven
+ -> *x* unsuspend #coder-com Seven I forgive you this time
  -X- USER: Seven ACCESS: 499 L
  -X- CHANNEL: #coder-com -- AUTOMODE: None
  -X- UNSUSPENDED - I forgive you this time
