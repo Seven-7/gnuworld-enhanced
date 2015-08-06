@@ -387,6 +387,12 @@ BAN - will ban and kick the person for 100 days at level 500
 SUSPEND - will ban and kick and suspend for 100 days 500 level
 
 =============================================================================
+ * PURGE command can delete users too
+-----------------------------------------------------------------------------
+/msg X purge <#channel|username>
+
+If a username is provided, then will delete it.
+=============================================================================
  * Other minor enhancements
 -----------------------------------------------------------------------------
  * On Channel join (bursting channels) X looks after NOOP and NOVOICE channel flag, and deop/devoice everyone.
