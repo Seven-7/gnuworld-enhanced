@@ -494,8 +494,12 @@ assert( newBan != 0 ) ;
 newBan->setChannelID(theChan->getID());
 newBan->setBanMask(banTarget);
 if (flagNoTake)
-if (takeOver) newBan->setSetBy(""); else
-	newBan->setSetBy(theUser->getUserName());
+{
+	if (takeOver)
+		newBan->setSetBy("");
+	else
+		newBan->setSetBy(theUser->getUserName());
+}
 newBan->setSetTS(bot->currentTime());
 newBan->setLevel(banLevel);
 newBan->setExpires(banTime+bot->currentTime());
