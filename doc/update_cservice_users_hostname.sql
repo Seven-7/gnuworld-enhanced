@@ -1,0 +1,1 @@
+ALTER TABLE users ADD COLUMN hostname VARCHAR(128) DEFAULT '';

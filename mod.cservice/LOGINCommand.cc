@@ -469,8 +469,8 @@ if (tmpLevel > 0)
  * Eg: AX AC APAFD gte
  */
 server->UserLogin(theClient, theUser->getUserName(), bot);
-//TEST !
-//server->SendOutFakeHost(theClient, "test.fake.host.com", bot);
+if (!theUser->getHostName().empty())
+	server->SendOutFakeHost(theClient, theUser->getHostName().c_str(), bot);
 
 /*
  * If the user account has been suspended, make sure they don't get

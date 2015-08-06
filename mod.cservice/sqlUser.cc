@@ -84,6 +84,7 @@ sqlUser::sqlUser(dbHandle* _SQLDb)
    notes_sent(0),
    failed_logins(0),
    failed_login_ts(0),
+   hostname(),
    SQLDb( _SQLDb )
 {
 }
@@ -205,11 +206,12 @@ email = SQLDb->GetValue(row, 8);
 maxlogins = atoi(SQLDb->GetValue(row, 9));
 verifdata = SQLDb->GetValue(row, 10);
 totp_key = SQLDb->GetValue(row, 11);
+hostname = SQLDb->GetValue(row, 12);
 failed_logins = 0;
 failed_login_ts = 0;
-instantiated_ts = atoi(SQLDb->GetValue(row, 12));
-signup_ip = SQLDb->GetValue(row, 13);
-created_ts = atoi(SQLDb->GetValue(row, 14));
+instantiated_ts = atoi(SQLDb->GetValue(row, 13));
+signup_ip = SQLDb->GetValue(row, 14);
+created_ts = atoi(SQLDb->GetValue(row, 15));
 
 /* Fetch the "Last Seen" time from the users_lastseen table. */
 
@@ -242,7 +244,8 @@ queryString	<< queryHeader
 		<< "maxlogins = " << maxlogins << ", "
 		<< "last_updated = now()::abstime::int4, "
 		<< "last_updated_by = '" << escapeSQLChars(last_updated_by) << "', "
-		<< "totp_key = '" << escapeSQLChars(totp_key) << "' "
+		<< "totp_key = '" << escapeSQLChars(totp_key) << "', "
+		<< "hostname = '" << escapeSQLChars(hostname) << "' "
 		<< queryCondition << id
 		<< ends;
 
