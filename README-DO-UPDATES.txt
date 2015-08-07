@@ -7,8 +7,12 @@ If you have an existing installation, you can upgrade with the following steps:
 gnuworld@ubuntu:~/gnuworld-enhanced$ git pull
 gnuworld@ubuntu:~$ cd gnuworld-enhanced/doc
 gnuworld@ubuntu:~/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql cservice < update_cservice_users_hostname.sql
- - The usual gnuworld update steps:
-gnuworld@ubuntu:~/gnuworld-enhanced$ make clean; make; make install;
+ - This update probably requires a full reconfigure, so note down your configure line from
+~/gnuworld-enhanced/config.log
+after that, do a full reconfigure and remake
+gnuworld@ubuntu:~/gnuworld-enhanced$ make clean; make distclean
+gnuworld@ubuntu:~/gnuworld-enhanced$ ./configure ....
+gnuworld@ubuntu:~/gnuworld-enhanced$ make; make install
  ... restart gnuworld ...
 
 The command syntax for setting a hostname for a username:
