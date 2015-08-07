@@ -40,7 +40,8 @@ libircu_la_SOURCES = msg_AC.cc \
 	msg_W.cc \
 	msg_XQ.cc \
 	msg_XR.cc \
-	msg_Y.cc
+	msg_Y.cc \
+	msg_FA.cc
 
 libircu_la_CXXFLAGS = -I${top_srcdir}/include -I${top_srcdir}/libgnuworld
 libircu_la_LDFLAGS = -module -export-dynamic

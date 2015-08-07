@@ -52,4 +52,4 @@ libircu msg_NOOP WU
 libircu msg_NOOP MO
 libircu msg_NOOP 482
 libircu msg_NOOP 443
-
+libircu msg_FA FA
