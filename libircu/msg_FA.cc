@@ -75,6 +75,8 @@ if( NULL == Target )
 	return false ;
 	}
 
+Target->setFakeHost(params[2]);
+
 return true;
 }
 
