@@ -396,6 +396,9 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 		bot->Notice(theClient, "EMail: %s",
 			theUser->getEmail().c_str());
 
+		bot->Notice(theClient, "Saved hostname: %s",
+			theUser->getHostName().c_str());
+
 		if ((tmpUser != theUser) && ((tmpadminLevel > 0 || theUser->getFlag(sqlUser::F_OPER))) && (adminAccess < 800))
 		{
 			bot->Notice(theClient, "Last Hostmask: Not Available");

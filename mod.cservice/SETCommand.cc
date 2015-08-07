@@ -483,7 +483,7 @@ if( st[1][0] != '#' ) // Didn't find a hash?
 			}
 			if ((st[2].size() < 3) || (!validHostName(st[2])))
 			{
-				bot->Notice(theClient, "Invalid hostname provided. A valid hostname has a last of 1 - 3 characters long domain, and contains at least one dot.");
+				bot->Notice(theClient, "Invalid hostname provided. A valid hostname has a last of 2 - 3 characters long domain, and contains at least one dot.");
 				return true;
 			}
 			theUser->setHostName(st[2]);

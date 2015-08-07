@@ -284,6 +284,9 @@ bool validHostName(const string& hostname)
 	std::size_t atpos = hostname.find('.');
 	if (atpos == string::npos)
 		return false;
+	std::size_t len = hostname.length() - atpos;
+	if ((len < 2) || (len > 3))
+		return false;
 	return true;
 }
 
