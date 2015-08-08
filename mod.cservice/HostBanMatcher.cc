@@ -39,7 +39,7 @@ namespace gnuworld
 	{
 		string authbanmask = theClient->getNickName() + "!" + theClient->getUserName();
 		authbanmask += "@" + theClient->getAccount() + theClient->getHiddenHostSuffix();
-		if (theClient->isModeR() && !theClient->isModeX())
+		if ((theClient->isModeR() && !theClient->isModeX()) || (theClient->isModeF() && theClient->isModeX()))
 		{
 			/* client is authed, check our constructed hidden host against them */
 			if ((match(banMask, authbanmask)) == 0)
