@@ -570,7 +570,11 @@ string Channel::createUniformBan( const iClient* theClient )
 {
 	assert( theClient != 0 ) ;
 
-	string theBan = "*!*@" + theClient->getInsecureHost();
+	string theBan;
+	if (theClient->isModeX())
+		theBan = "*!*@" + theClient->getAccount() + theClient->getHiddenHostSuffix();
+	else
+		theBan = "*!*@" + theClient->getInsecureHost();
 
 	return theBan ;
 }
