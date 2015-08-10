@@ -1,4 +1,13 @@
 ==============================================================================
+ * Status * command shows currently logged in officials
+------------------------------------------------------------------------------
+/msg X status *
+
+ -X- Status of currently logged '*' officials:
+ -X- Auth: SomeUser1/SomeNick1 (1000) SomeUser2/SomeNick2 (750) SomeUser3/SomeNick31 SomeNick32 (750) SomeUser4/SomeNick4 (600)
+ 
+ Note: The original function of status * is moved to stats * 
+==============================================================================
 * Suspension of users on channels with reason
 ------------------------------------------------------------------------------
 -X- SYNTAX: SUSPEND <#channel> <username> [duration] [level] [reason]
