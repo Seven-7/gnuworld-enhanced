@@ -44,6 +44,7 @@ crontab -e
 So on a reboot you'll get postgres running.
 
 Warning: Don't do these if you already started and have a gnuworld installation.
+ -- Start --
 linux:/home/gnuworld$ git clone https://github.com/Seven-7/gnuworld-enhanced.git
 linux:/home/gnuworld$ cd gnuworld-enhanced/doc
 linux:/gnuworld/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/createdb --template=template0 -E=SQL_ASCII cservice
@@ -55,10 +56,12 @@ linux:/gnuworld/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql cservice < gree
 linux:/gnuworld/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql cservice < cservice.help.sql
 linux:/gnuworld/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql cservice < cservice.web.sql
 linux:/gnuworld/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql cservice < cservice.addme.sql
+ -- End -- of not repeatable part --
+
+local_db must be created for website! [Error code (L)]
 linux:/gnuworld/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/createdb --template=template0 -E=SQL_ASCII local_db
 linux:/gnuworld/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql local_db < local_db.sql
 linux:/gnuworld/gnuworld-enhanced/doc$ cd ~
- -- End of not repeatable part --
 
 linux:/home/gnuworld$ git clone https://github.com/Seven-7/website-gnuworld.git
 linux:/home/gnuworld$ su -
