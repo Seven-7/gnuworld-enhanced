@@ -1,4 +1,20 @@
 ==============================================================================
+ * Set (fake)hostname for users
+------------------------------------------------------------------------------
+Warning! This feature requires Nefarious2 with it's Fake host support.
+If you have an existing installation, to upgrade read README-DO-UPDATES.txt
+
+The command syntax for setting a hostname for a username:
+
+/msg X set hostname <anyhost.youwant.com>
+
+To clear your hostname use:
+
+/msg X set hostname off
+
+The set hostname will be applied instantaneously (if +x), and on every login with +x  
+insted of the default users hiddenhost suffix
+==============================================================================
  * Status * command shows currently logged in officials
 ------------------------------------------------------------------------------
 /msg X status *
