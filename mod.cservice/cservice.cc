@@ -7018,7 +7018,8 @@ string cservice::HostIsRegisteredTo(const string& theHost)
 #endif
 	return theUser;
 	}
-	theUser = SQLDb->GetValue(0,0);
+	if (SQLDb->Tuples() > 0)
+		theUser = SQLDb->GetValue(0,0);
 	return theUser;
 }
 
