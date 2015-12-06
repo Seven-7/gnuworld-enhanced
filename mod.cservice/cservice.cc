@@ -6998,6 +6998,30 @@ if( Connected && MyUplink )
 return returnMe ;
 }
 
+string cservice::HostIsRegisteredTo(const string& theHost)
+{
+	string theUser = string();
+	stringstream theQuery;
+	theQuery	<< "SELECT user_name FROM users WHERE "
+				<< "lower(users.hostname) = '"
+				<< escapeSQLChars(string_lower(theHost))
+				<< "'"
+				<< ends;
+	if (!SQLDb->Exec(theQuery, true))
+	{
+		logDebugMessage("Error on cservice::HostIsRegisteredToQuery");
+#ifdef LOG_SQL
+	//elog << "sqlQuery> " << theQuery.str().c_str() << endl;
+	elog 	<< "cservice::HostIsRegisteredToQuery> SQL Error: "
+			<< SQLDb->ErrorMessage()
+			<< endl ;
+#endif
+	return theUser;
+	}
+	theUser = SQLDb->GetValue(0,0);
+	return theUser;
+}
+
 bool cservice::Notice( const iClient* Target, const char* Message, 
 	... )
 {

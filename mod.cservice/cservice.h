@@ -717,6 +717,7 @@ public:
 #ifdef TOTP_AUTH_ENABLED
 	bool totpAuthEnabled;
 #endif
+	string HostIsRegisteredTo(const string& );
 } ;
 
 const string escapeSQLChars(const string& theString);
