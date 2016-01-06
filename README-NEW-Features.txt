@@ -15,6 +15,10 @@ To clear any nickname:
    /msg X set nick|nickname OFF
    or simply
    /msg X set nick|nickname
+   
+Also coders/admins with (levels.h -> level::nickset) access can set nickname for a target username.
+
+   /msg X set nick|nickname <targetUser> <targetNewNickname>
 
 There is a new user flag too, AUTONICK:
 
