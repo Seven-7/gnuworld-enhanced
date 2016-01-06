@@ -146,6 +146,8 @@ time_t extractTime( std::string Length, unsigned int defaultUnits ) ;
 
 int atoi( const std::string& ) ;
 
+std::string itoa(int) ;
+
 /**
  * Extract the parts of a *valid* nick!user@hostip address
  */

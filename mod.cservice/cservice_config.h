@@ -157,5 +157,10 @@
  */
 #define USE_NOTAKE
 
+/**
+ * Define this if you're using gnuworld with nefarious2 ircd
+ * and want to enable features like nick registration
+ */
+#define USING_NEFARIOUS
 
 #endif // __CSERVICE_CONFIG_H

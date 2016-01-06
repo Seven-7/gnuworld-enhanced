@@ -820,6 +820,28 @@ if(!theUser->getFlag(sqlUser::F_NONOTES))
 
 #endif
 
+if (theUser->getFlag(sqlUser::F_AUTONICK))
+{
+	iClient* tmpClient = Network->findNick(theUser->getNickName());
+	if (tmpClient)
+	{
+		if (!tmpClient->getMode(iClient::MODE_SERVICES))
+		{
+			sqlUser* tmpUser2 = bot->isAuthed(tmpClient, false);
+			if (!tmpUser2)
+			{
+				bot->generateNickName(tmpClient);
+			}
+			else if (tmpUser2->getUserName() != theUser->getUserName())
+			{
+				bot->generateNickName(tmpClient);
+			}
+		}
+	}
+	else
+		bot->Write("%s SN %s %s", bot->getCharYY().c_str(), theClient->getCharYYXXX().c_str(), theUser->getNickName().c_str());
+}
+
 return true;
 }
 

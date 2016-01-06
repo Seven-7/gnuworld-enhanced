@@ -262,6 +262,15 @@ public:
 	/* Determins if a client is in "Flooded" state, and if so Notice them. */
 	bool hasFlooded(iClient*, const string&);
 
+	/* Check if the nickname is already belongs to a sqlUser */
+	string NickIsRegisteredTo(const string&);
+
+	/* generate a not used nickname based on a starting nickname */
+	void generateNickName(iClient*);
+
+	/* Check if client's nickname belongs to him, if not generateNickName() */
+	void validateNickName(iClient*);
+
 	/* Sets the timestamp for when we first recieved a msg from this client.
 	 * within the flood period. */
 	void setLastRecieved(iClient*, time_t);

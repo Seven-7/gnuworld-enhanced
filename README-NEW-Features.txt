@@ -1,4 +1,43 @@
 ==============================================================================
+ * Nick protection through mod.cservice (nickreg/nickserv function)
+------------------------------------------------------------------------------
+Warning! This feature requires Nefarious2 with it's svsnick support.
+Warning! This feature requires to patch Nefarious2 for a proper svsnick handling. Read README-DO-UPDATES.txt!
+If you have an existing installation, to upgrade read README-DO-UPDATES.txt
+This nick protection works through an svsnick nick changing mechanism by gnuworld.
+For the cservice user structure is added a nickname field, so gnuworld takes care any nick on the network is used by the 'right person'
+by force-changing and generating an arbitrary 4 digits numbers ended nickname.
+
+Syntax: 
+   /msg X set nick|nickname <TheNick>
+   
+To clear any nickname:
+   /msg X set nick|nickname OFF
+   or simply
+   /msg X set nick|nickname
+
+There is a new user flag too, AUTONICK:
+
+/msg X set autonick <ON|OFF>
+
+If it is ON, on login the saved nickname will be set for the client.
+==============================================================================
+ * Set welcome message-notice for channel joins through X
+------------------------------------------------------------------------------
+The command syntax for setting welcome message for a channel:
+
+/msg X set #channel_name welcome <welcome_message>
+
+To clear any welcome message:
+
+/msg X set #channel_name welcome OFF
+or simply
+/msg X set #channel_name welcome
+
+Done.
+You can see the welcome message on any channel join.
+
+==============================================================================
  * Set (fake)hostname for users
 ------------------------------------------------------------------------------
 Warning! This feature requires Nefarious2 with it's Fake host support.

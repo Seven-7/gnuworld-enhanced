@@ -209,6 +209,15 @@ int atoi( const string& val )
 return ::atoi( val.c_str() ) ;
 }
 
+string itoa(int n)
+{
+	string Result;
+	std::ostringstream convert;
+	convert << n;
+	Result = convert.str();
+	return Result;
+}
+
 string extractNick(const string& NickUserHostIP)
 {
 	StringTokenizer st( NickUserHostIP, '!' ) ;

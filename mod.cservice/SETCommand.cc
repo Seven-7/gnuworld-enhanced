@@ -202,6 +202,87 @@ if( st[1][0] != '#' ) // Didn't find a hash?
 		return true;
 	}
 #endif
+#ifdef USING_NEFARIOUS
+	if (option == "AUTONICK")
+	{
+		if (value == "ON")
+		{
+			theUser->setFlag(sqlUser::F_AUTONICK);
+			theUser->commit(theClient);
+			bot->Notice(theClient,"Your AUTONICK setting is now ON.");
+			return true;
+		}
+		if (value == "OFF")
+		{
+			theUser->removeFlag(sqlUser::F_AUTONICK);
+			theUser->commit(theClient);
+			bot->Notice(theClient,"Your AUTONICK setting is now OFF.");
+			return true;
+		}
+		bot->Notice(theClient,"value of %s must be ON or OFF", option.c_str());
+		return true;
+	}
+	if ((option == "NICK") || (option == "NICKNAME"))
+	{
+		int admLevel = bot->getAdminAccessLevel(theUser);
+		string theNick = st[2];
+		bool notMe = false;
+		if ((admLevel >= level::nickset) && (st.size() > 3))
+		{
+			sqlUser* tmpUser = bot->getUserRecord(st[2]);
+			if (!tmpUser)
+			{
+				bot->Notice(theClient,
+					bot->getResponse(theUser,
+						language::not_registered,
+						string("The user %s doesn't appear to be registered.")).c_str(),
+					st[2].c_str());
+				return true;
+			}
+			theUser = tmpUser;
+			theNick = st[3];
+			value = string_upper(st[3]);
+			notMe = true;
+		}
+		if (value == "OFF")
+		{
+			theUser->removeFlag(sqlUser::F_AUTONICK);
+			theUser->setNickName("");
+			theUser->commit(theClient);
+			if (notMe)
+				bot->Notice(theClient,"Successfully cleared %s's nickname.", theUser->getUserName().c_str());
+			else
+				bot->Notice(theClient,"You have cleared your nickname.");
+			return true;
+		}
+		else
+		{
+			if (theNick.length() < 2)
+			{
+				bot->Notice(theClient,"Your nickname must be at least 2 characters long.");
+				return true;
+			}
+			if (theNick.length() > 32)
+			{
+				bot->Notice(theClient,"ERROR: Nickname too long.");
+				return true;
+			}
+			if (bot->NickIsRegisteredTo(theNick).empty())
+			{
+				if (theUser->getNickName().empty())
+					theUser->setFlag(sqlUser::F_AUTONICK);
+				theUser->setNickName(theNick);
+				theUser->commit(theClient);
+				bot->Notice(theClient,"You have successfully registered nickname %s.",theNick.c_str());
+			}
+			else
+				bot->Notice(theClient,"Sorry, that nickname is already registered.");
+			return true;
+		}
+		bot->Notice(theClient,"value of %s must be ON or OFF", option.c_str());
+		return true;
+	}
+#endif
 	if (option == "DISABLEAUTH")
 	{
 		if (value == "ON")

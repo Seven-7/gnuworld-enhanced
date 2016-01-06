@@ -198,6 +198,7 @@ CREATE TABLE users (
 	password VARCHAR (40) NOT NULL,
 	email TEXT,
 	url  VARCHAR(128),
+	nickname VARCHAR(50) DEFAULT '',
 -- Which question the user provided the answer too from the signup page.
 	question_id INT2,
 -- The answer to the question. 42?

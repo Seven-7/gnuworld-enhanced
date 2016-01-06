@@ -189,6 +189,7 @@ else
 MyUplink->RegisterEvent( EVT_KILL, this );
 MyUplink->RegisterEvent( EVT_QUIT, this );
 MyUplink->RegisterEvent( EVT_NICK, this );
+MyUplink->RegisterEvent( EVT_CHNICK, this );
 MyUplink->RegisterEvent( EVT_ACCOUNT, this );
 MyUplink->RegisterEvent( EVT_BURST_ACK, this );
 MyUplink->RegisterEvent( EVT_XQUERY, this );
@@ -788,6 +789,82 @@ else
 	} // else()
 
 return false;
+}
+
+string cservice::NickIsRegisteredTo(const string& Nick)
+{
+	stringstream theQuery;
+	theQuery	<< "SELECT user_name FROM users WHERE lower(nickname) = '"
+				<< escapeSQLChars(string_lower(Nick))
+				<< "'"
+				<< ends;
+	if (!SQLDb->Exec(theQuery, true))
+	{
+		logDebugMessage("Error on cservice::NickIsRegisteredTo::nicknameQuery");
+	#ifdef LOG_SQL
+		//elog << "sqlQuery> " << theQuery.str().c_str() << endl;
+		elog << "cservice::NickIsRegisteredTo::nicknameQuery> SQL Error: "
+			<< SQLDb->ErrorMessage()
+			<< endl ;
+	#endif
+		return string();
+	}
+	else if (SQLDb->Tuples() > 0)
+		return (string)SQLDb->GetValue(0,0);
+	return string();
+}
+
+void cservice::generateNickName(iClient* theClient)
+{
+	string genNick = theClient->getNickName();
+	string baseNick = genNick;
+	if (baseNick.length() > 25)
+		baseNick = baseNick.substr(20);
+	do
+	{
+		srand(time(0));
+		int rNum = rand() % 9000 + 1000;
+		genNick = baseNick + itoa(rNum);
+	} while (Network->findNick(genNick));
+	stringstream s;
+	s	<< getCharYY()
+		<< " SN "
+		<< theClient->getCharYYXXX()
+		<< " "
+		<< genNick
+		<< ends
+		<< endl;
+	Write( s );
+	//Write("%s SN %s %s", getCharYY().c_str(), theClient->getCharYYXXX().c_str(), genNick.c_str());
+	return ;
+}
+
+void cservice::validateNickName(iClient* theClient)
+{
+	if (theClient->getMode(iClient::MODE_SERVICES))
+		return;
+	bool isRegNick = false;
+	string ownerUser = NickIsRegisteredTo(theClient->getNickName());
+	//elog << "cservice::validateNickName " << theClient->getNickName() <<"'s owner user is '" << ownerUser << "'" << endl;
+	if (!ownerUser.empty())
+		isRegNick = true;
+
+	sqlUser* theUser = isAuthed(theClient, false);
+	if (isRegNick)
+	{
+		if (!theUser)
+		{
+			generateNickName(theClient);
+			Notice(theClient, "You don't own that nick, your nick has been changed by force.");
+			return;
+		}
+		else if ((string_lower(theUser->getNickName()) != string_lower(theClient->getNickName())))
+		{
+			generateNickName(theClient);
+			Notice(theClient, "You don't own that nick, your nick has been changed by force.");
+		}
+	}
+	return;
 }
 
 void cservice::setOutputTotal(const iClient* theClient, unsigned int count)
@@ -5467,11 +5544,32 @@ switch( theEvent )
 		}
 	case EVT_BURST_ACK:
 		{
-//		iServer* theServer = static_cast< iServer* >( data1 );
-//		if ( theServer == MyUplink->Uplink )
-//			{
-//			}
-		break;
+#ifdef USING_NEFARIOUS
+		iServer* theServer = static_cast< iServer* >( data1 );
+		if ( theServer == MyUplink->getUplink() )
+		{
+			//If WE were in burst, it means need to iterate through all the servers, and validate all the nick
+			// in short ALL the Nicknames, regardless of the server
+			xNetwork::const_clientIterator cItr = Network->clients_begin();
+			for ( ; cItr != Network->clients_end(); ++cItr)
+			{
+				iClient* tmpClient = cItr->second;
+				validateNickName(tmpClient);
+			}
+		}
+		else
+		{
+			//only the theServer's clients lists need to be validated
+			xNetwork::const_clientIterator cItr = Network->clients_begin();
+			for ( ; cItr != Network->clients_end(); ++cItr)
+			{
+				iClient* tmpClient = cItr->second;
+				if (tmpClient->getIntYY() == theServer->getIntYY())
+					validateNickName(tmpClient);
+			}
+		}
+#endif
+			break;
 		}
 	case EVT_QUIT:
 	case EVT_KILL:
@@ -5545,8 +5643,20 @@ switch( theEvent )
 					}
 			}
 
+#ifdef USING_NEFARIOUS
+		iServer* tmpServer = Network->findServer(tmpUser->getIntYY());
+		if ((!this->getUplink()->isBursting()) && (!tmpServer->isBursting()))
+			validateNickName(tmpUser);
+#endif
 		break;
 		} // case EVT_NICK
+	case EVT_CHNICK:
+	{
+#ifdef USING_NEFARIOUS
+		validateNickName(static_cast< iClient* >( data1 ));
+#endif
+		break;
+	} // case EVT_CHNICK
 	case EVT_GLINE:
 		{
                 if(!data1) //TODO: find out how we get this (Do we even ever get this?)
