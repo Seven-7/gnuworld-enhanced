@@ -242,6 +242,9 @@ namespace gnuworld
 		const int userurl_off =			202;
 		const int auth_failed_token =			203;
 		const int novoice_set =			204;
+		const int welcome_max_len =			205;
+		const int welcome_cleared =			206;
+		const int welcome_status =			207;
 		const int greeting = 				9998;
 		const int motd =					9999;
 	}

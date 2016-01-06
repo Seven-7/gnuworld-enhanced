@@ -121,6 +121,11 @@
 #define ALLOW_USERS_HELLO
 
 /**
+ * Define this if you want to enable the WELCOME feature.
+ */
+#define USE_WELCOME
+
+/**
  * Define this if you want the IP restriction to default to REJECT when no
  * entries are in the SQL table.  Default setting allows login from any IP
  * if there are no entries for the username in the SQL table.

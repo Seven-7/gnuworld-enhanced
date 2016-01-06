@@ -1532,6 +1532,54 @@ if (value == "ON") {
 	    return true;
 	}
 
+	#ifdef USE_WELCOME
+	if(option == "WELCOME")
+	{
+	   string welcome;
+	   if (st.size() > 3)
+		   welcome = st.assemble(3);
+	   if (level < level::set::welcome)
+	   {
+		   bot->Notice(theClient,
+			   bot->getResponse(theUser,
+				   language::insuf_access,
+				   string("You do not have enough access!")));
+		   return true;
+	   }
+	   if (strlen(welcome.c_str()) > 512)
+	   {
+		   bot->Notice(theClient,
+			   bot->getResponse(theUser,
+				   language::welcome_max_len,
+				   string("The WELCOME can be a maximum of 512 chars!")));
+		   return true;
+	   }
+
+	   if ((string_upper(welcome) == "OFF") || (welcome == ""))
+	   {
+		   bot->Notice(theClient,
+			   bot->getResponse(theUser,
+				   language::welcome_cleared,
+				   string("WELCOME for %s is cleared.")).c_str(),
+			   theChan->getName().c_str());
+		   theChan->setWelcome("");
+		   theChan->commit();
+	   }
+	   else
+	   {
+		   bot->Notice(theClient,
+			   bot->getResponse(theUser,
+				   language::welcome_status,
+				   string("WELCOME for %s is: %s")).c_str(),
+			   theChan->getName().c_str(),
+			   welcome.c_str());
+		   theChan->setWelcome(welcome);
+		   theChan->commit();
+	   }
+	   return true;
+	}
+	#endif
+
 	if(option == "KEYWORDS")
 	{
 	    /* Keywords are being processed as a long string. */

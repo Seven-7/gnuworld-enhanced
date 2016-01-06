@@ -112,6 +112,7 @@ sqlChannel::sqlChannel(dbHandle* _SQLDb)
    description(),
    comment(),
    keywords(),
+   welcome(),
    registered_ts(0),
    channel_ts(0),
    channel_mode(),
@@ -251,8 +252,9 @@ limit_offset = atoi(SQLDb->GetValue(row,14));
 limit_period = atoi(SQLDb->GetValue(row,15));
 limit_grace = atoi(SQLDb->GetValue(row,16));
 limit_max = atoi(SQLDb->GetValue(row,17));
-max_bans = atoi(SQLDb->GetValue(row,18));
-no_take = atoi(SQLDb->GetValue(row,19));
+welcome = SQLDb->GetValue(row,18);
+max_bans = atoi(SQLDb->GetValue(row,19));
+no_take = atoi(SQLDb->GetValue(row,20));
 }
 
 bool sqlChannel::commit()
@@ -272,6 +274,7 @@ queryString	<< queryHeader
 		<< "flood_pro = " << flood_pro << ", "
 		<< "url = '" << escapeSQLChars(url) << "', "
 		<< "keywords = '" << escapeSQLChars(keywords) << "', "
+		<< "welcome = '" << escapeSQLChars(welcome) << "', "
 		<< "registered_ts = " << registered_ts << ", "
 		<< "channel_ts = " << channel_ts << ", "
 		<< "channel_mode = '" << escapeSQLChars(channel_mode) << "', "

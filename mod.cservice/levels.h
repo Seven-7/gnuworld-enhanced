@@ -121,6 +121,7 @@ namespace gnuworld {
 
     const int desc = 450;
     const int mode = 450;
+    const int welcome = 450;
     const int notake = 500;
     const int novoice = 450;
     const int noop = 500;
