@@ -1,4 +1,27 @@
 ============================================================================
+2016.01.07  Added mod.cservice SCANCommand
+			First puropse: find owner user of a nickname
+----------------------------------------------------------------------------
+gnuworld@ubuntu:~$ cd gnuworld-enhanced
+gnuworld@ubuntu:~/gnuworld-enhanced$ git pull
+ - Check and note down your current configure line:
+gnuworld@ubuntu:~/gnuworld-enhanced$ vim config.log
+In my case:
+./configure --with-extra-includes=/usr/local/include --with-extra-includes=/usr/include/postgresql/ --with-pgsql-home=/usr/local/pgsql/ --enable-modules=cservice,ccontrol
+ - Do a full clean:
+gnuworld@ubuntu:~/gnuworld-enhanced$ make clean; make distclean
+ - Save libltdl:
+gnuworld@ubuntu:~/gnuworld-enhanced$ cp -rf libltdl/ libltdl-save
+ - Do a full autoreconf:
+gnuworld@ubuntu:~/gnuworld-enhanced$ autoreconf -Wall -i
+ - Delete libltdl/, rename back libltdl-save:
+gnuworld@ubuntu:~/gnuworld-enhanced$ rm -rf libltdl; mv libltdl-save libltdl
+ - Configure again:
+gnuworld@ubuntu:~/gnuworld-enhanced$ ./configure --with-extra-includes=/usr/local/include --with-extra-includes=/usr/include/postgresql/ --with-pgsql-home=/usr/local/pgsql/ --enable-modules=cservice,ccontrol
+gnuworld@ubuntu:~/gnuworld-enhanced$ make; make install
+ ... restart gnuworld ...
+Done.
+============================================================================
 2016.01.07  mod.cservice NEWPASS: Admins can set target users a new password
 ----------------------------------------------------------------------------
  - The usual update procedure:

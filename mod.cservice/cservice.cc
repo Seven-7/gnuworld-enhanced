@@ -262,6 +262,7 @@ RegisterCommand(new CLEARMODECommand(this, "CLEARMODE", "<#channel>", 4));
 RegisterCommand(new SUSPENDMECommand(this, "SUSPENDME", "<password>", 15));
 
 RegisterCommand(new WHITELISTCommand(this, "WHITELIST", "<ADD|REM|VIEW> <IP> [duration] [reason]", 10));
+RegisterCommand(new SCANCommand(this, "SCAN", "NICK|NICKNAME <nick>", 10));
 RegisterCommand(new SCANHOSTCommand(this, "SCANHOST", "<mask> [-all]", 10));
 RegisterCommand(new SCANUNAMECommand(this, "SCANUNAME", "<mask> [-all]", 10));
 RegisterCommand(new SCANEMAILCommand(this, "SCANEMAIL", "<mask> [-all]", 10));

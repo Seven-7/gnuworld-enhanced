@@ -1,3 +1,9 @@
+============================================================================
+ * Added mod.cservice SCANCommand
+	First puropse: find owner user of a nickname
+----------------------------------------------------------------------------
+To find an owner of a nickname:
+   /msg X scan nick|nickname <nick>
 ==============================================================================
  * mod.cservice NEWPASS: Admins can set target users a new password
 ------------------------------------------------------------------------------

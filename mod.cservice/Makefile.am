@@ -57,6 +57,7 @@ libcservice_la_SOURCES = cservice.cc \
 	REMUSERCommand.cc \
 	RENAMECommand.cc \
 	SAYCommand.cc \
+	SCANCommand.cc \
 	SCANHOSTCommand.cc \
 	SCANUNAMECommand.cc \
 	SCANEMAILCommand.cc \
