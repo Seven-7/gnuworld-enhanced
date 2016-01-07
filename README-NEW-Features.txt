@@ -1,8 +1,18 @@
 ==============================================================================
+ * mod.cservice NEWPASS: Admins can set target users a new password
+------------------------------------------------------------------------------
+Admins above access level level::newpass can set target users a new password:
+ Syntax:
+   /msg X@channels.yournetwork.org newpass <targetUser> <target New Password>
+
+Note: Changing own password remained valid as originally:
+   /msg X@channels.yournetwork.org newpass <your new password>
+==============================================================================
  * Nick protection through mod.cservice (nickreg/nickserv function)
 ------------------------------------------------------------------------------
 Warning! This feature requires Nefarious2 with it's svsnick support.
 Warning! This feature requires to patch Nefarious2 for a proper svsnick handling. Read README-DO-UPDATES.txt!
+Also USING_NEFARIOUS must be #define in mod.cservice/cservice_config.h
 If you have an existing installation, to upgrade read README-DO-UPDATES.txt
 This nick protection works through an svsnick nick changing mechanism by gnuworld.
 For the cservice user structure is added a nickname field, so gnuworld takes care any nick on the network is used by the 'right person'

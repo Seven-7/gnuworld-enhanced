@@ -32,6 +32,7 @@
 #include	"responses.h"
 #include	"networkData.h"
 #include	"cservice_config.h"
+#include	"levels.h"
 
 const char NEWPASSCommand_cc_rcsId[] = "$Id: NEWPASSCommand.cc,v 1.17 2005/11/17 22:20:57 kewlio Exp $" ;
 
@@ -71,24 +72,65 @@ if (!tmpUser)
 	return false;
 	}
 
+int admAccess = (int)bot->getAdminAccessLevel(tmpUser);
+string newpass = st.assemble(1);
+sqlUser* targetUser = tmpUser;
+//bool notMe = false;
+if ((admAccess) && (st.size() > 2))
+{
+	targetUser = bot->getUserRecord(st[1]);
+	if (targetUser)
+	{
+		if (admAccess < level::newpass)
+		{
+			bot->Notice(theClient,
+				bot->getResponse(tmpUser,
+					language::insuf_access,
+					string("You have insufficient access to perform that command.")));
+			return false;
+		}
+		newpass = st.assemble(2);
+		sqlUser::networkClientListType::iterator clientItr = targetUser->networkClientList.begin();
+		if (targetUser->networkClientList.size() > 0)
+		{
+			for ( ; clientItr != targetUser->networkClientList.end(); clientItr++)
+			{
+				iClient* tmpClient = *clientItr;
+				if ((string_lower(newpass) == string_lower(targetUser->getUserName()))
+					|| (string_lower(newpass) == string_lower(tmpClient->getNickName())))
+				{
+					bot->Notice(theClient,"The passphrase cannot be the target user's username or current nickname - syntax is: NEWPASS <targetUser> <new passphrase>");
+					return false;
+				}
+			}
+		}
+		else if ((string_lower(newpass) == string_lower(targetUser->getUserName())))
+		{
+			bot->Notice(theClient,"The passphrase cannot be the target user's username - syntax is: NEWPASS <targetUser> <new passphrase>");
+			return false;
+		}
+	}
+	else
+		targetUser = tmpUser;
+}
 /* Try and stop people using an invalid syntax.. */
-if ( (string_lower(st[1]) == string_lower(tmpUser->getUserName()))
-	  || (string_lower(st[1]) == string_lower(theClient->getNickName())) )
+if ( (string_lower(newpass) == string_lower(targetUser->getUserName()))
+	  || (string_lower(newpass) == string_lower(theClient->getNickName())) )
 	{
 	bot->Notice(theClient,
-		bot->getResponse(tmpUser,
+		bot->getResponse(targetUser,
 			language::pass_cant_be_nick,
 			string("Your passphrase cannot be your username or current nick - syntax is: NEWPASS <new passphrase>")));
 	return false;
 	}
 
-if (st.assemble(1).size() > 50)
+if (newpass.length() > 50)
 	{
 	bot->Notice(theClient, "Your passphrase cannot exceed 50 characters.");
 	return false;
 	}
 
-if (st.assemble(1).size() < 6)
+if (newpass.length() < 6)
 	{
 	bot->Notice(theClient, "Your passphrase cannot be less than 6 characters.");
 	return false;
@@ -116,7 +158,7 @@ md5	hash; // MD5 hash algorithm object.
 md5Digest digest; // MD5Digest algorithm object.
 
 // Prepend the salt to the password
-string newPass = salt + st.assemble(1);
+string newPass = salt + newpass;
 
 // Take the md5 hash of this newPass string
 hash.update( (const unsigned char *)newPass.c_str(), newPass.size() );
@@ -141,9 +183,9 @@ output << ends;
 
 // Prepend the md5 hash to the salt
 string finalPassword = salt + output.str().c_str();
-tmpUser->setPassword(finalPassword);
+targetUser->setPassword(finalPassword);
 
-if( tmpUser->commit(theClient) )
+if( targetUser->commit(theClient) )
 	{
 	bot->Notice(theClient,
 		bot->getResponse(tmpUser,

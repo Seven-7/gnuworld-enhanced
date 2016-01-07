@@ -105,6 +105,7 @@ namespace gnuworld {
   const int rename = 951;
 
   const int nickset = 951;
+  const int newpass = 951;
 
   // Debug Commands
   const int shutdown = 900;

@@ -1,4 +1,13 @@
 ============================================================================
+2016.01.07  mod.cservice NEWPASS: Admins can set target users a new password
+----------------------------------------------------------------------------
+ - The usual update procedure:
+gnuworld@ubuntu:~$ cd gnuworld-enhanced
+gnuworld@ubuntu:~/gnuworld-enhanced$ git pull
+gnuworld@ubuntu:~/gnuworld-enhanced$ make; make install
+ ... restart gnuworld ...
+Done.
+============================================================================
 2016.01.06  Nick protection through mod.cservice (nickreg/nickserv function)
 ----------------------------------------------------------------------------
 Warning! You need to patch Nefarious2 to handle correctly svsnicks!
