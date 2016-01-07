@@ -27,15 +27,6 @@ There is:
         if (cli_nextnick(cptr) < CurrentTime)
           cli_nextnick(cptr) = CurrentTime;
       }
-      /* Invalidate all bans against the user so we check them again */
-      for (member = (cli_user(cptr))->channel; member;
-	   member = member->next_channel) {
-        ClearBanValid(member);
-        ClearBanValidNick(member);
-        ClearExceptValid(member);
-        ClearExceptValidNick(member);
-      }
-    }
 Change it to:
       if (!svsnick)
       {
