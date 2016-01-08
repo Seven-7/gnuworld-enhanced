@@ -1,4 +1,13 @@
 ============================================================================
+2016.01.08 Prevent users to set 'exotic' hostnames, like with colors, etc.
+----------------------------------------------------------------------------
+If you have an existing installation, you can upgrade with the following steps:
+gnuworld@ubuntu:~$ cd gnuworld-enhanced
+gnuworld@ubuntu:~/gnuworld-enhanced$ git pull
+gnuworld@ubuntu:~/gnuworld-enhanced$ make; make install
+ ... restart gnuworld ...
+Done.
+============================================================================
 2016.01.07  Added mod.cservice SCANCommand
 			First puropse: find owner user of a nickname
 ----------------------------------------------------------------------------

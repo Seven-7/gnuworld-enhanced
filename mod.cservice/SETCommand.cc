@@ -546,6 +546,7 @@ if( st[1][0] != '#' ) // Didn't find a hash?
 			option.c_str());
 			return true;
 	}
+#ifdef USING_NEFARIOUS
 	if ((option == "HOST") || (option == "HOSTNAME"))
 	{
 		if (value == "OFF")
@@ -567,6 +568,18 @@ if( st[1][0] != '#' ) // Didn't find a hash?
 				bot->Notice(theClient, "Invalid hostname provided. A valid hostname has at least a 2 characters long domain, and contains at least one dot.");
 				return true;
 			}
+			if (string_lower(st[2]).find(string_lower(iClient::getHiddenHostSuffix())) != string::npos)
+			{
+				bot->Notice(theClient, "Using the hidden-host-suffix in your hostname is not allowed.");
+				return true;
+			}
+#ifdef VALIDATE_SET_HOSTNAME
+			if (!checkAllValidChars(st[2]))
+			{
+				bot->Notice(theClient, "Your hostname must be made of letters (A-Z, a-z) and numbers (0-9).");
+				return true;
+			}
+#endif
 			string userWithHost = bot->HostIsRegisteredTo(st[2]);
 			if (!userWithHost.empty() && (userWithHost != theUser->getUserName()))
 			{
@@ -580,6 +593,7 @@ if( st[1][0] != '#' ) // Didn't find a hash?
 		}
 		return true;
 	}
+#endif
 	bot->Notice(theClient,
 		bot->getResponse(theUser,
 			language::invalid_option,

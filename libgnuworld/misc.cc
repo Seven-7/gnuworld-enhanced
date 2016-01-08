@@ -288,13 +288,41 @@ bool validUserMask(const string& userMask)
 	return true ;
 }
 
+bool checkAllValidChars(const string& theString)
+{
+	const char validChars[]
+		= "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-";
+	for( string::const_iterator ptr = theString.begin() ;
+		ptr != theString.end() ; ++ptr )
+	{
+		/*
+		 * 62 entries in the table. 26 + 26 + 2 + 10 digits.
+		 */
+		bool found = false;
+		for (int f = 0; f < 64; f++)
+		{
+			if(*ptr == validChars[f])
+			{
+				found = true;
+			}
+		}
+		if (!found)
+			return false;
+	}
+
+	return true;
+}
+
 bool validHostName(const string& hostname)
 {
-	std::size_t atpos = hostname.find('.');
-	if (atpos == string::npos)
+	string _hostname = string_lower(hostname);
+	StringTokenizer st( _hostname, '.' ) ;
+	if (st.size() == 1)	//no dot found ...
 		return false;
-	std::size_t len = hostname.length() - atpos - 1;
-	if ((len < 2)/* || (len > 3)*/)
+	//Domains are at least 2 characters long ...
+	if (string(st[st.size()-1]).length() < 2)
+		return false;
+	if (hostname[0] == '.')	//hostname cannot start with dot
 		return false;
 	return true;
 }

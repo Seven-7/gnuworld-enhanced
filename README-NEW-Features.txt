@@ -1,3 +1,14 @@
+==============================================================================
+ * Prevent users to set 'exotic' hostnames, like with colors, etc.
+------------------------------------------------------------------------------
+You might find lame to see colored/bolded/etc. hostnames, so if you enable
+
+	#define VALIDATE_SET_HOSTNAME
+
+in mod.cservice/cservice_config.h only normal characters will be allowed.
+Also it is a possibility of confusion/abuse to allow users to set hosts
+with the network's hidden-host-suffix(eg. something.users.yournetwork.org)
+so this is not allowed from now on.
 ============================================================================
  * Added mod.cservice SCANCommand
 	First puropse: find owner user of a nickname

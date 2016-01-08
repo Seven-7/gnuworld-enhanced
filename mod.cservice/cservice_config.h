@@ -163,4 +163,10 @@
  */
 #define USING_NEFARIOUS
 
+/**
+ * Enable this if you don't want users to set 'exotic' hostnames
+ * like with colors, etc.
+ */
+#define VALIDATE_SET_HOSTNAME
+
 #endif // __CSERVICE_CONFIG_H
