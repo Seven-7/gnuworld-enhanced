@@ -2533,7 +2533,20 @@ void cservice::fixUsersLastSeen()
 		{
 		    sqlUserHashType::iterator usrItr = sqlUserCache.find(uidVector.at(i).second);
 			if (usrItr == sqlUserCache.end())
-				toFixVector.push_back(uidVector.at(i).first);
+			{
+				// Somehow the user has no creation time, so set it now, and leave alone
+				if (usrItr->second->getCreatedTS() == 0)
+				{
+					usrItr->second->setCreatedTS(currentTime());
+					usrItr->second->commit(this->getInstance());
+				}
+				else 	//only at least 1 day old users can expire
+					if ((usrItr->second->getCreatedTS() + 86400 < currentTime())
+						&& (usrItr->second->getLastSeen() == 0))
+				{
+					toFixVector.push_back(uidVector.at(i).first);
+				}
+			}
 			else logDebugMessage("User %s (%i) found in chache, not pushing to wipe",uidVector.at(i).second.c_str(),uidVector.at(i).first);
 		}
 	}
