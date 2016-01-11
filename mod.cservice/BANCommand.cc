@@ -337,6 +337,7 @@ string banTarget = st2[counter];
 elog << "ST " << counter << ": " << st2[counter] << endl;
 // *** Take Over Protection ***
 bool takeOver = false;
+if (level < 500)
 if (!matchall(banTarget) && validUserMask(banTarget) && ((banLevel >= 75) && (flagNoTake)))
 {
 	//Revenge is Ignore

@@ -107,10 +107,33 @@ bool KICKCommand::Exec( iClient* theClient, const string& Message )
 		return false;
 	}
 
+	bool flagNoTake = false;
+	#ifdef USE_NOTAKE
+	if (theChan->getFlag(sqlChannel::F_NOTAKE))
+		flagNoTake = true;
+	#endif
+
+	// *** Take Over Protection ***
+	if (level < 500)
+	if (!matchall(st[2]) && validUserMask(st[2]) && (flagNoTake))
+	{
+		//Revenge is Ignore
+		if (theChan->getNoTake() == 1) return true;
+		unsigned short banLevel = (unsigned short)level::set::notake;
+		unsigned int banExpire = 100 * 86400;
+	    string banReason = "### Take Over Triggered ###";
+		string suspendReason = "\002*** TAKE OVER ATTEMPT ***\002";
+		if (theChan->getNoTake() > 1)
+			bot->doInternalBanAndKick(theChan, theClient, banLevel, banExpire, banReason);
+		if (theChan->getNoTake() > 2)
+			bot->doInternalSuspend(theChan, theClient, banLevel, banExpire, suspendReason);
+		return true;
+	}
+	// *** End of Take Over Protection part ****
+
 	/*
 	 *  Wildcard or normal kick?
 	 */
-
 	vector <iClient*> toBoot;
 
 	if((bot->validUserMask(st[2])) && (level >= level::masskick))
