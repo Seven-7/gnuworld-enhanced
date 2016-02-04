@@ -83,6 +83,8 @@ CREATE_HANDLER(msg_N)
  * User - username
  * userhost.net - domain
  * +oiwg - modes
+ * [Cloaked Host]	- Nefarious2
+ * [Cloaked IP	]	- Nefarious2
  * DAqAoB - base64 IP
  * AFAAA - numnick
  * :Generic Client - description
@@ -120,6 +122,13 @@ if( NULL == nickUplink )
 	return false ;
 	}
 
+////DEBUG
+//for (int i = 0; i < (int)params.size(); i++)
+//{
+//	elog << "msg_N> params[" << i << "] = " << params[i] << endl;
+//}
+////DEBUG End
+
 // Default arguments, assuming
 // no modes set.
 const char* modes = "+" ;
@@ -143,6 +152,10 @@ string sethost ;
 string fakehost ;
 
 xParameters::size_type currentArgIndex = 6 ;
+bool IsCloacked = false;
+bool IsRegistered = false;
+//bool HasFakeHost = false;
+//bool HasSetHost = false;
 
 // precondition: currentArgIndex points at the next params[] index
 // to check
@@ -162,39 +175,80 @@ if( '+' == params[ currentArgIndex ][ 0 ] )
 			{
 			case 'r':
 				account = params[ currentArgIndex++ ] ;
+				IsRegistered = true;
 				break ;
 			case 'h':
 				sethost = params[ currentArgIndex++ ] ;
 				break ;
 			case 'f':
 				fakehost = params[ currentArgIndex++ ] ;
+				//HasFakeHost = true;
 				break ;
+			case 'c':
+			case 'C':
+				IsCloacked = true;
+				break;
 			default: break ;
 			} // switch( *modePtr )
 		} // for()
 	} // if( '+' )
+
+if (IsCloacked && IsRegistered)
+	account = params[ --currentArgIndex ] ;
+
 // postcondition: currentArgIndex points at the next params[] index
 // to check
-
-if( !account.empty() )
-	{
+if (!IsCloacked)
+if (!account.empty())
+{
 	StringTokenizer st( account, ':' ) ;
 	account = st[ 0 ] ;
 	if( 2 == st.size() )
-		{
+	{
 		// timestamp present
 		std::stringstream ss ;
 		ss	<< st[ 1 ] ;
 		if( !(ss >> account_ts) )
-			{
+		{
 			elog	<< "msg_N> Invalid account timestamp: "
 				<< st[ 1 ]
 				<< endl ;
 			// non-fatal error
-			}
-		} // if( 2 == st.size() )
-	} // if( !account.empty() )
+		}
+	} // if( 2 == st.size() )
+} // if( !account.empty() )
 
+iClient* newClient;
+
+// Nefarious2 with cloaked host/IP
+if (IsCloacked)
+{
+	if (IsRegistered) currentArgIndex++;
+	const char* cloackhost = params[ currentArgIndex++ ] ;
+	const char* cloackip = params[ currentArgIndex++ ] ;
+	const char* host = params[ currentArgIndex++ ] ;
+	const char* yyxxx = params[ currentArgIndex++ ] ;
+	const char* description = params [ currentArgIndex++ ] ;
+
+	newClient = new (std::nothrow) iClient(
+			nickUplink->getIntYY(),
+			yyxxx,		// numeric
+			params[ 1 ],	// nickname
+			params[ 4 ],	// username
+			host,		// base64 encoded ip
+			params[ 5 ],	// insecureHost
+			params[ 5 ],	// realInsecureHost
+			modes,		// modes (default: +)
+			account,	// account
+			account_ts,	// account timestamp
+			description,	// real name / infoline
+			atoi( params[ 3 ]), // connection time
+			cloackhost,	// Nefarious2 cloackHost
+			cloackip	// Nefarious2 cloackIP
+			) ;
+}
+else
+{
 /*
  * -3 <base64 IP>
  * -2 <numeric>
@@ -204,7 +258,7 @@ const char* host = params[ currentArgIndex++ ] ;
 const char* yyxxx = params[ currentArgIndex++ ] ;
 const char* description = params [ currentArgIndex ] ;
 
-iClient* newClient = new (std::nothrow) iClient(
+newClient = new (std::nothrow) iClient(
 		nickUplink->getIntYY(),
 		yyxxx,		// numeric
 		params[ 1 ],	// nickname
@@ -220,7 +274,15 @@ iClient* newClient = new (std::nothrow) iClient(
 		description,	// real name / infoline
 		atoi( params[ 3 ] ) // connection time
 		) ;
+}
+
 assert( newClient != 0 ) ;
+
+if (!newClient)
+{
+	elog << "msg_N> newClient == NULL , returning" << endl;
+	return false;
+}
 
 if( !Network->addClient( newClient ) )
 	{

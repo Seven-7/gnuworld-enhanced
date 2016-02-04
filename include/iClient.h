@@ -148,6 +148,27 @@ public:
 		const time_t& _connectTime ) ;
 
 	/**
+	 * Construct a new iClient given a large list of
+	 * parameters for the client's state.
+	 * Used in case of Nefarious2 cloackedHost/IP
+	 */
+	iClient( const unsigned int& _uplink,
+		const std::string& _yyxxx,
+		const std::string& _nickName,
+		const std::string& _userName,
+		const std::string& _hostBase64,
+		const std::string& _insecureHost,
+		const std::string& _realInsecureHost,
+		const std::string& _mode,
+		const std::string& _account,
+		const time_t _account_ts,
+		const std::string& _description,
+		const time_t& _connectTime,
+		const std::string& _cloackHost,
+		const std::string& _cloackIP
+		) ;
+
+	/**
 	 * Destruct the iClient.
 	 * This will call xClient::deleteCustomData() for each
 	 * xClient which is storing a data element in this iClient.
@@ -179,6 +200,18 @@ public:
 	 */
 	inline const std::string& getRealInsecureHost() const
 		{ return realInsecureHost ;}
+
+	/**
+	 * Retrieve the iClient's 'cloacked' host name.
+	 */
+	inline const std::string& getCloackHost() const
+		{ return cloackHost ;}
+
+	/**
+	 * Retrieve the iClient's 'cloacked' host name.
+	 */
+	inline const std::string& getCloackIP() const
+		{ return cloackIP ;}
 
 	/**
 	 * Retrieve a string of the form: nick!user@host for this user.
@@ -215,6 +248,7 @@ public:
 		insecureHost = setHost;
 #endif
 	}
+
 	/**
 	 * This method will set the hidden host suffix.  This value
 	 * is only modified by the xServer on startup.
@@ -727,6 +761,16 @@ protected:
 	 * exposed.
 	 */
 	std::string	realInsecureHost ;
+
+	/**
+	 * Nefarious2 Cloaked Host
+	 */
+	std::string cloackHost;
+
+	/**
+	 * Nefarious2 Cloaked IP
+	 */
+	std::string cloackIP;
 
 	/**
 	 * This client's 'real-name' field data.

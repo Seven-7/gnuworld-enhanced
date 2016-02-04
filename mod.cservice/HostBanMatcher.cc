@@ -55,6 +55,21 @@ namespace gnuworld
 		{
 			return true;
 		}
+
+		if (!theClient->getCloackHost().empty())
+		{
+			string nickusercloackedhost = theClient->getNickName() + "!" + theClient->getUserName();
+			nickusercloackedhost += "@" + theClient->getCloackHost();
+			if ((match(banMask, nickusercloackedhost)) == 0)
+				return true;
+		}
+		if (!theClient->getCloackIP().empty())
+		{
+			string nickusercloackedip = theClient->getNickName() + "!" + theClient->getUserName();
+			nickusercloackedip += "@" + theClient->getCloackIP();
+			if ((match(banMask, nickusercloackedip)) == 0)
+				return true;
+		}
 		return false;
 	} 
 }

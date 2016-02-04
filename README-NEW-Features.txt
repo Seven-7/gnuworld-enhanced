@@ -1,4 +1,9 @@
 ==============================================================================
+ * Recognizing and handling Nefarious2's cloacked IP and cloacked Host
+------------------------------------------------------------------------------
+If you set "HOST_HIDING_STYLE" greater than 1 in Nefarious2's ircd.conf
+gnuworld now will recognize the cloacked style
+==============================================================================
  * Prevent users to set 'exotic' hostnames, like with colors, etc.
 ------------------------------------------------------------------------------
 You might find lame to see colored/bolded/etc. hostnames, so if you enable

@@ -1,4 +1,14 @@
 ============================================================================
+2016.02.04 Recognizing and handling Nefarious2's cloacked IP and cloacked Host
+----------------------------------------------------------------------------
+If you have an existing installation, you can upgrade with the following steps:
+gnuworld@ubuntu:~$ cd gnuworld-enhanced
+gnuworld@ubuntu:~/gnuworld-enhanced$ git pull
+gnuworld@ubuntu:~/gnuworld-enhanced$ make; make install
+ ... restart gnuworld ...
+Done.
+Also don't forget to set "HOST_HIDING_STYLE" > 1 in Nefarious2's ircd.conf if you intend to see cloacked IPs/hosts
+============================================================================
 2016.01.08 Prevent users to set 'exotic' hostnames, like with colors, etc.
 ----------------------------------------------------------------------------
 If you have an existing installation, you can upgrade with the following steps:
