@@ -152,7 +152,7 @@ string sethost ;
 string fakehost ;
 
 xParameters::size_type currentArgIndex = 6 ;
-bool IsCloacked = false;
+bool IsCloaked = false;
 bool IsRegistered = false;
 //bool HasFakeHost = false;
 //bool HasSetHost = false;
@@ -186,19 +186,19 @@ if( '+' == params[ currentArgIndex ][ 0 ] )
 				break ;
 			case 'c':
 			case 'C':
-				IsCloacked = true;
+				IsCloaked = true;
 				break;
 			default: break ;
 			} // switch( *modePtr )
 		} // for()
 	} // if( '+' )
 
-if (IsCloacked && IsRegistered)
+if (IsCloaked && IsRegistered)
 	account = params[ --currentArgIndex ] ;
 
 // postcondition: currentArgIndex points at the next params[] index
 // to check
-if (!IsCloacked)
+if (!IsCloaked)
 if (!account.empty())
 {
 	StringTokenizer st( account, ':' ) ;
@@ -221,7 +221,7 @@ if (!account.empty())
 iClient* newClient;
 
 // Nefarious2 with cloaked host/IP
-if (IsCloacked)
+if (IsCloaked)
 {
 	if (IsRegistered) currentArgIndex++;
 	const char* cloackhost = params[ currentArgIndex++ ] ;

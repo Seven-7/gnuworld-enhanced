@@ -572,7 +572,18 @@ string Channel::createUniformBan( const iClient* theClient )
 
 	string theBan;
 	if (theClient->isModeX())
-		theBan = "*!*@" + theClient->getAccount() + theClient->getHiddenHostSuffix();
+	{
+		//Seems like Nefarious2 primarily uses the cloaked Host/IP if is present
+		if ((!theClient->getCloakIP().empty()) || (!theClient->getCloakHost().empty()))
+		{
+			if (!theClient->getCloakIP().empty())
+				theBan = "*!*@" + theClient->getAccount() + theClient->getCloakIP();
+			if (!theClient->getCloakHost().empty())
+				theBan = "*!*@" + theClient->getCloakHost();
+		}
+		else
+			theBan = "*!*@" + theClient->getAccount() + theClient->getHiddenHostSuffix();
+	}
 	else
 		theBan = "*!*@" + theClient->getInsecureHost();
 

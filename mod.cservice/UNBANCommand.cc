@@ -153,7 +153,7 @@ if( isNick )
 		return true;
 		}
 
-	banTarget = aNick->getNickUserHost();
+	banTarget = Channel::createUniformBan(aNick);
 	}
 else
 	{

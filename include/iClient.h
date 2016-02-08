@@ -202,16 +202,16 @@ public:
 		{ return realInsecureHost ;}
 
 	/**
-	 * Retrieve the iClient's 'cloacked' host name.
+	 * Retrieve the iClient's 'cloaked' host name.
 	 */
-	inline const std::string& getCloackHost() const
-		{ return cloackHost ;}
+	inline const std::string& getCloakHost() const
+		{ return cloakHost ;}
 
 	/**
-	 * Retrieve the iClient's 'cloacked' host name.
+	 * Retrieve the iClient's 'cloaked' ip.
 	 */
-	inline const std::string& getCloackIP() const
-		{ return cloackIP ;}
+	inline const std::string& getCloakIP() const
+		{ return cloakIP ;}
 
 	/**
 	 * Retrieve a string of the form: nick!user@host for this user.
@@ -765,12 +765,12 @@ protected:
 	/**
 	 * Nefarious2 Cloaked Host
 	 */
-	std::string cloackHost;
+	std::string cloakHost;
 
 	/**
 	 * Nefarious2 Cloaked IP
 	 */
-	std::string cloackIP;
+	std::string cloakIP;
 
 	/**
 	 * This client's 'real-name' field data.

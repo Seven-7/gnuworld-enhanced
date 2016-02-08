@@ -56,17 +56,17 @@ namespace gnuworld
 			return true;
 		}
 
-		if (!theClient->getCloackHost().empty())
+		if (!theClient->getCloakHost().empty())
 		{
 			string nickusercloackedhost = theClient->getNickName() + "!" + theClient->getUserName();
-			nickusercloackedhost += "@" + theClient->getCloackHost();
+			nickusercloackedhost += "@" + theClient->getCloakHost();
 			if ((match(banMask, nickusercloackedhost)) == 0)
 				return true;
 		}
-		if (!theClient->getCloackIP().empty())
+		if (!theClient->getCloakIP().empty())
 		{
 			string nickusercloackedip = theClient->getNickName() + "!" + theClient->getUserName();
-			nickusercloackedip += "@" + theClient->getCloackIP();
+			nickusercloackedip += "@" + theClient->getCloakIP();
 			if ((match(banMask, nickusercloackedip)) == 0)
 				return true;
 		}
