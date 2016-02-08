@@ -2531,23 +2531,26 @@ void cservice::fixUsersLastSeen()
 		if (SQLDb->Tuples() == 0)
 		//logDebugMessage("Found %i result(s) for userid (%i)",SQLDb->Tuples(),uidVector.at(i));
 		{
+			sqlUser* wipeUser;
 		    sqlUserHashType::iterator usrItr = sqlUserCache.find(uidVector.at(i).second);
-			if (usrItr == sqlUserCache.end())
+		    if (usrItr != sqlUserCache.end())
+		    	wipeUser = usrItr->second;
+		    else
+		    	wipeUser = getUserRecord((int)uidVector.at(i).first);
+			if (wipeUser)
 			{
 				// Somehow the user has no creation time, so set it now, and leave alone
-				if (usrItr->second->getCreatedTS() == 0)
+				if (wipeUser->getCreatedTS() == 0)
 				{
-					usrItr->second->setCreatedTS(currentTime());
-					usrItr->second->commit(this->getInstance());
+					wipeUser->setCreatedTS(currentTime());
+					wipeUser->commit(this->getInstance());
 				}
 				else 	//only at least 1 day old users can expire
-					if ((usrItr->second->getCreatedTS() + 86400 < currentTime())
-						&& (usrItr->second->getLastSeen() == 0))
-				{
-					toFixVector.push_back(uidVector.at(i).first);
-				}
+					if ((wipeUser->getCreatedTS() + 86400 < currentTime()) && (wipeUser->getLastSeen() == 0))
+					{
+						toFixVector.push_back(uidVector.at(i).first);
+					}
 			}
-			else logDebugMessage("User %s (%i) found in chache, not pushing to wipe",uidVector.at(i).second.c_str(),uidVector.at(i).first);
 		}
 	}
 	logDebugMessage("Beginning to wipe %i users:",(int)toFixVector.size());
