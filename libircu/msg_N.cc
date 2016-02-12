@@ -122,12 +122,12 @@ if( NULL == nickUplink )
 	return false ;
 	}
 
-//DEBUG
-for (int i = 0; i < (int)params.size(); i++)
-{
-	elog << "msg_N> params[" << i << "] = " << params[i] << endl;
-}
-//DEBUG End
+////DEBUG
+//for (int i = 0; i < (int)params.size(); i++)
+//{
+//	elog << "msg_N> params[" << i << "] = " << params[i] << endl;
+//}
+////DEBUG End
 
 // Default arguments, assuming
 // no modes set.
@@ -202,11 +202,8 @@ if( '+' == params[ currentArgIndex ][ 0 ] )
 		} // for()
 	} // if( '+' )
 
-if (IsCloaked && IsRegistered)
+if ((IsCloaked || HasFakeHost) && IsRegistered)
 	account = params[ --currentArgIndex ] ;
-
-//DEBUG
-elog << "msg_N> params[" << currentArgIndex << "] = account = " << params[currentArgIndex] << endl;
 
 // postcondition: currentArgIndex points at the next params[] index
 // to check
