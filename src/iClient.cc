@@ -141,7 +141,9 @@ iClient::iClient( const unsigned int& /* _uplink */,
 	const string& _description,
 	const time_t& _connectTime,
 	const std::string& _cloakHost,
-	const std::string& _cloakIP)
+	const std::string& _cloakIP,
+	const string& _setHost,
+	const string& _fakeHost)
 : NetworkTarget( _yyxxx ),
 	nickName( _nickName ),
 	userName( _userName ),
@@ -154,7 +156,9 @@ iClient::iClient( const unsigned int& /* _uplink */,
 	account( _account ),
 	account_ts( _account_ts ),
 	cloakHost(_cloakHost),
-	cloakIP(_cloakIP)
+	cloakIP(_cloakIP),
+	setHost( _setHost ),
+	fakeHost( _fakeHost )
 {
 setModes( _mode ) ;
 customDataMap = 0 ;

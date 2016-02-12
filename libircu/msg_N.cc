@@ -122,12 +122,12 @@ if( NULL == nickUplink )
 	return false ;
 	}
 
-////DEBUG
-//for (int i = 0; i < (int)params.size(); i++)
-//{
-//	elog << "msg_N> params[" << i << "] = " << params[i] << endl;
-//}
-////DEBUG End
+//DEBUG
+for (int i = 0; i < (int)params.size(); i++)
+{
+	elog << "msg_N> params[" << i << "] = " << params[i] << endl;
+}
+//DEBUG End
 
 // Default arguments, assuming
 // no modes set.
@@ -150,12 +150,16 @@ string account ;
 time_t account_ts = 0 ;
 string sethost ;
 string fakehost ;
+string cloackhost  ;
+string cloackip ;
 
 xParameters::size_type currentArgIndex = 6 ;
 bool IsCloaked = false;
 bool IsRegistered = false;
-//bool HasFakeHost = false;
-//bool HasSetHost = false;
+bool HasFakeHost = false;
+bool HasSetHost = false;
+bool HasCloakHost = false;
+bool HasCloakIP = false;
 
 // precondition: currentArgIndex points at the next params[] index
 // to check
@@ -177,16 +181,21 @@ if( '+' == params[ currentArgIndex ][ 0 ] )
 				account = params[ currentArgIndex++ ] ;
 				IsRegistered = true;
 				break ;
-			case 'h':
-				sethost = params[ currentArgIndex++ ] ;
+			case 'h': //TODO: Solve this? Will be case when this will blow in face too?
+				//sethost = params[ currentArgIndex++ ] ;
+				HasSetHost = true;
 				break ;
 			case 'f':
-				fakehost = params[ currentArgIndex++ ] ;
-				//HasFakeHost = true;
+				//fakehost = params[ currentArgIndex++ ] ;
+				HasFakeHost = true;
 				break ;
-			case 'c':
-			case 'C':
+			case 'C':	// CloakHost
 				IsCloaked = true;
+				HasCloakHost = true;
+				break;
+			case 'c':	// CloakIP
+				IsCloaked = true;
+				HasCloakIP = true;
 				break;
 			default: break ;
 			} // switch( *modePtr )
@@ -195,6 +204,9 @@ if( '+' == params[ currentArgIndex ][ 0 ] )
 
 if (IsCloaked && IsRegistered)
 	account = params[ --currentArgIndex ] ;
+
+//DEBUG
+elog << "msg_N> params[" << currentArgIndex << "] = account = " << params[currentArgIndex] << endl;
 
 // postcondition: currentArgIndex points at the next params[] index
 // to check
@@ -221,11 +233,15 @@ if (!account.empty())
 iClient* newClient;
 
 // Nefarious2 with cloaked host/IP
-if (IsCloaked)
+if ((IsCloaked) || (HasFakeHost))
 {
 	if (IsRegistered) currentArgIndex++;
-	const char* cloackhost = params[ currentArgIndex++ ] ;
-	const char* cloackip = params[ currentArgIndex++ ] ;
+	if (HasFakeHost)
+		fakehost = params[ currentArgIndex++ ] ;
+	if (HasCloakHost)
+		cloackhost = params[ currentArgIndex++ ] ;
+	if (HasCloakIP)
+		cloackip = params[ currentArgIndex++ ] ;
 	const char* host = params[ currentArgIndex++ ] ;
 	const char* yyxxx = params[ currentArgIndex++ ] ;
 	const char* description = params [ currentArgIndex++ ] ;
@@ -244,10 +260,12 @@ if (IsCloaked)
 			description,	// real name / infoline
 			atoi( params[ 3 ]), // connection time
 			cloackhost,	// Nefarious2 cloackHost
-			cloackip	// Nefarious2 cloackIP
+			cloackip,	// Nefarious2 cloackIP
+			sethost,	// asuka sethost
+			fakehost	// srvx fakehost
 			) ;
 }
-else
+else	// <= 'normal' ircu introduction
 {
 /*
  * -3 <base64 IP>

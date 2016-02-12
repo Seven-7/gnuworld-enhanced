@@ -165,7 +165,9 @@ public:
 		const std::string& _description,
 		const time_t& _connectTime,
 		const std::string& _cloackHost,
-		const std::string& _cloackIP
+		const std::string& _cloackIP,
+		const std::string& _setHost,
+		const std::string& _fakeHost
 		) ;
 
 	/**
