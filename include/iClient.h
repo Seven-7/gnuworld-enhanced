@@ -90,6 +90,12 @@ public:
 	/// MODE_FAKE_HOST is true if the iClient has FAKE_HOST (+f) set.
 	static const modeType	MODE_FAKE_HOST ;
 
+	/// MODE_CLOAK_HOST is true if the iClient has CLOAK_HOST (+C) set.
+	static const modeType	MODE_CLOAK_HOST ;
+
+	/// MODE_CLOAK_IP is true if the iClient has CLOAK_IP (+c) set.
+	static const modeType	MODE_CLOAK_IP ;
+
 	/// MODE_G is true if the iCilent has user mode g set.
 	static const modeType	MODE_G ;
 
@@ -498,6 +504,19 @@ public:
 		{ return getMode( MODE_HIDDEN_HOST ) ; }
 
 	/**
+	 * +C cloak host, is a hidden host.
+	 */
+	inline bool isModeC() const
+		{ return getMode( MODE_CLOAK_HOST ) ; }
+
+	/**
+	 * +c cloak ip, is a hidden host.
+	 */
+	inline bool isModec() const
+		{ return getMode( MODE_CLOAK_IP ) ; }
+
+
+	/**
 	 * Return true if this client has the +g mode set, false otherwise.
 	 */
 	inline bool isModeG() const
@@ -597,6 +616,22 @@ public:
 		setMode( MODE_HIDDEN_HOST ) ;
 		if (isModeH())
 			setSetHost();
+		}
+
+	/**
+	 * Set mode +C for this user.
+	 */
+	inline void setModeC()
+		{
+		setMode( MODE_CLOAK_HOST ) ;
+		}
+
+	/**
+	 * Set mode +c for this user.
+	 */
+	inline void setModec()
+		{
+		setMode( MODE_CLOAK_IP ) ;
 		}
 
 	/**
