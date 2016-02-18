@@ -137,11 +137,13 @@ am_libcservice_la_OBJECTS = libcservice_la-cservice.lo \
 	libcservice_la-CANCELCommand.lo \
 	libcservice_la-CHANINFOCommand.lo \
 	libcservice_la-CLEARMODECommand.lo \
-	libcservice_la-DEOPCommand.lo libcservice_la-DEVOICECommand.lo \
-	libcservice_la-FORCECommand.lo libcservice_la-HELPCommand.lo \
-	libcservice_la-HELLOCommand.lo libcservice_la-INVITECommand.lo \
-	libcservice_la-ISREGCommand.lo libcservice_la-JOINCommand.lo \
-	libcservice_la-KICKCommand.lo \
+	libcservice_la-DEOPCommand.lo \
+	libcservice_la-DEHALFOPCommand.lo \
+	libcservice_la-DEVOICECommand.lo \
+	libcservice_la-FORCECommand.lo libcservice_la-HALFOPCommand.lo \
+	libcservice_la-HELPCommand.lo libcservice_la-HELLOCommand.lo \
+	libcservice_la-INVITECommand.lo libcservice_la-ISREGCommand.lo \
+	libcservice_la-JOINCommand.lo libcservice_la-KICKCommand.lo \
 	libcservice_la-LBANLISTCommand.lo \
 	libcservice_la-LOGINCommand.lo \
 	libcservice_la-MODINFOCommand.lo libcservice_la-MOTDCommand.lo \
@@ -408,8 +410,10 @@ libcservice_la_SOURCES = cservice.cc \
 	CHANINFOCommand.cc \
 	CLEARMODECommand.cc \
 	DEOPCommand.cc \
+	DEHALFOPCommand.cc \
 	DEVOICECommand.cc \
 	FORCECommand.cc \
+	HALFOPCommand.cc \
 	HELPCommand.cc \
 	HELLOCommand.cc \
 	INVITECommand.cc \
@@ -571,9 +575,11 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcservice_la-CHANINFOCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcservice_la-CIDRBanMatcher.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcservice_la-CLEARMODECommand.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcservice_la-DEHALFOPCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcservice_la-DEOPCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcservice_la-DEVOICECommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcservice_la-FORCECommand.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcservice_la-HALFOPCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcservice_la-HELLOCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcservice_la-HELPCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcservice_la-HostBanMatcher.Plo@am__quote@
@@ -797,6 +803,13 @@ libcservice_la-DEOPCommand.lo: DEOPCommand.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libcservice_la_CXXFLAGS) $(CXXFLAGS) -c -o libcservice_la-DEOPCommand.lo `test -f 'DEOPCommand.cc' || echo '$(srcdir)/'`DEOPCommand.cc
 
+libcservice_la-DEHALFOPCommand.lo: DEHALFOPCommand.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libcservice_la_CXXFLAGS) $(CXXFLAGS) -MT libcservice_la-DEHALFOPCommand.lo -MD -MP -MF $(DEPDIR)/libcservice_la-DEHALFOPCommand.Tpo -c -o libcservice_la-DEHALFOPCommand.lo `test -f 'DEHALFOPCommand.cc' || echo '$(srcdir)/'`DEHALFOPCommand.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libcservice_la-DEHALFOPCommand.Tpo $(DEPDIR)/libcservice_la-DEHALFOPCommand.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='DEHALFOPCommand.cc' object='libcservice_la-DEHALFOPCommand.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libcservice_la_CXXFLAGS) $(CXXFLAGS) -c -o libcservice_la-DEHALFOPCommand.lo `test -f 'DEHALFOPCommand.cc' || echo '$(srcdir)/'`DEHALFOPCommand.cc
+
 libcservice_la-DEVOICECommand.lo: DEVOICECommand.cc
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libcservice_la_CXXFLAGS) $(CXXFLAGS) -MT libcservice_la-DEVOICECommand.lo -MD -MP -MF $(DEPDIR)/libcservice_la-DEVOICECommand.Tpo -c -o libcservice_la-DEVOICECommand.lo `test -f 'DEVOICECommand.cc' || echo '$(srcdir)/'`DEVOICECommand.cc
 @am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libcservice_la-DEVOICECommand.Tpo $(DEPDIR)/libcservice_la-DEVOICECommand.Plo
@@ -810,6 +823,13 @@ libcservice_la-FORCECommand.lo: FORCECommand.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='FORCECommand.cc' object='libcservice_la-FORCECommand.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libcservice_la_CXXFLAGS) $(CXXFLAGS) -c -o libcservice_la-FORCECommand.lo `test -f 'FORCECommand.cc' || echo '$(srcdir)/'`FORCECommand.cc
+
+libcservice_la-HALFOPCommand.lo: HALFOPCommand.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libcservice_la_CXXFLAGS) $(CXXFLAGS) -MT libcservice_la-HALFOPCommand.lo -MD -MP -MF $(DEPDIR)/libcservice_la-HALFOPCommand.Tpo -c -o libcservice_la-HALFOPCommand.lo `test -f 'HALFOPCommand.cc' || echo '$(srcdir)/'`HALFOPCommand.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libcservice_la-HALFOPCommand.Tpo $(DEPDIR)/libcservice_la-HALFOPCommand.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='HALFOPCommand.cc' object='libcservice_la-HALFOPCommand.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libcservice_la_CXXFLAGS) $(CXXFLAGS) -c -o libcservice_la-HALFOPCommand.lo `test -f 'HALFOPCommand.cc' || echo '$(srcdir)/'`HALFOPCommand.cc
 
 libcservice_la-HELPCommand.lo: HELPCommand.cc
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libcservice_la_CXXFLAGS) $(CXXFLAGS) -MT libcservice_la-HELPCommand.lo -MD -MP -MF $(DEPDIR)/libcservice_la-HELPCommand.Tpo -c -o libcservice_la-HELPCommand.lo `test -f 'HELPCommand.cc' || echo '$(srcdir)/'`HELPCommand.cc
