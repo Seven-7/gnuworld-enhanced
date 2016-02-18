@@ -679,6 +679,10 @@ void xClient::OnChannelModeO( Channel*, ChannelUser*,
 	const xServer::opVectorType& )
 {}
 
+void xClient::OnChannelModeH( Channel*, ChannelUser*,
+	const xServer::opVectorType& )
+{}
+
 void xClient::OnChannelModeV( Channel*, ChannelUser*,
 	const xServer::voiceVectorType& )
 {}
@@ -947,6 +951,189 @@ if( !OnChannel )
 	Part( theChan ) ;
 	}
  
+return true ;
+}
+
+bool xClient::HalfOp( Channel* theChan, iClient* theClient )
+{
+assert( theChan != NULL ) ;
+assert( theClient != NULL) ;
+
+if( !isConnected() )
+	{
+	return false ;
+	}
+
+ChannelUser* theUser = theChan->findUser( theClient ) ;
+if( NULL == theUser )
+	{
+	elog	<< "xClient::HalfOp> Unable to find ChannelUser: "
+		<< *theClient
+		<< endl ;
+	return false ;
+	}
+
+if( theUser->getMode( ChannelUser::MODE_H ) )
+	{
+	// User is already halfopped
+	return true ;
+	}
+
+bool OnChannel = isOnChannel( theChan ) ;
+if( !OnChannel )
+	{
+	// Join, giving ourselves ops
+	Join( theChan, string(), 0, true ) ;
+	}
+else
+	{
+	// Bot is already on the channel
+	ChannelUser* meUser = theChan->findUser( me ) ;
+	if( NULL == meUser )
+		{
+		elog	<< "xClient::HalfOp> Unable to find myself in "
+			<< "channel: "
+			<< theChan->getName()
+			<< endl ;
+		return false ;
+		}
+
+	// Make sure we have ops
+	if( !meUser->getMode( ChannelUser::MODE_O ) )
+		{
+		// The bot does NOT have ops
+		return false ;
+		}
+
+	// The bot has ops
+	}
+
+// HalfOp the user
+Write( "%s M %s +h %s %ld",
+	getCharYYXXX().c_str(),
+	theChan->getName().c_str(),
+	theClient->getCharYYXXX().c_str(),
+	theChan->getCreationTime() ) ;
+
+// Was the bot on the channel previously?
+if( !OnChannel )
+	{
+	Part( theChan ) ;
+	}
+
+xServer::opVectorType opVector ;
+opVector.push_back( xServer::opVectorType::value_type(
+	true, theUser ) ) ;
+
+MyUplink->OnChannelModeH( theChan, 0, opVector ) ;
+
+return true ;
+}
+
+bool xClient::HalfOp( Channel* theChan,
+	const std::vector< iClient* >& clientVector )
+{
+assert( theChan != NULL ) ;
+
+if( !isConnected() )
+	{
+	return false ;
+	}
+
+bool OnChannel = isOnChannel( theChan ) ;
+if( !OnChannel )
+	{
+	// Join, giving ourselves ops
+	Join( theChan, string(), 0, true ) ;
+	}
+else
+	{
+	// Bot is already on the channel
+	ChannelUser* meUser = theChan->findUser( me ) ;
+	if( NULL == meUser )
+		{
+		elog	<< "xClient::HalfOp> Unable to find myself in "
+			<< "channel: "
+			<< theChan->getName()
+			<< endl ;
+		return false ;
+		}
+
+	// Make sure we have ops
+	if( !meUser->getMode( ChannelUser::MODE_O ) )
+		{
+		// The bot does NOT have ops
+		return false ;
+		}
+
+	// The bot has ops
+	}
+
+xServer::opVectorType opVector ;
+
+for( std::vector< iClient* >::const_iterator ptr = clientVector.begin(),
+	end = clientVector.end() ; ptr != end ; ++ptr )
+	{
+	if( NULL == *ptr )
+		{
+		elog	<< "xClient::HalfOp(vector)> Found NULL "
+			<< "iClient!"
+			<< endl ;
+		continue ;
+		}
+
+	ChannelUser* theUser = theChan->findUser( *ptr ) ;
+	if( NULL == theUser )
+		{
+		elog	<< "xClient::HalfOp(vector)> Unable to find "
+			<< "client on channel: "
+			<< theChan->getName()
+			<< endl ;
+		continue ;
+		}
+
+	if( !theUser->getMode( ChannelUser::MODE_H ) )
+		{
+		// User is not already halfopped
+		opVector.push_back( xServer::opVectorType::value_type(
+			true, theUser ) ) ;
+		}
+	}
+
+string modeString ;
+string args ;
+
+for( xServer::opVectorType::const_iterator ptr = opVector.begin(),
+	end = opVector.end() ; ptr != end ; ++ptr )
+	{
+	modeString += 'h' ;
+	args += ptr->second->getCharYYXXX() + ' ' ;
+
+	if( (MAX_CHAN_MODES == modeString.size()) ||
+		((ptr + 1) == end) )
+		{
+		stringstream s ;
+		s	<< getCharYYXXX() << " M "
+			<< theChan->getName() << ' '
+			<< "+" << modeString << ' ' << args
+			<< " " << theChan->getCreationTime();
+
+		Write( s ) ;
+
+		modeString.erase( modeString.begin(), modeString.end() ) ;
+		args.erase( args.begin(), args.end() ) ;
+
+		} // if()
+
+	} // for()
+
+MyUplink->OnChannelModeH( theChan, 0, opVector ) ;
+
+if( !OnChannel )
+	{
+	Part( theChan ) ;
+	}
+
 return true ;
 }
 
@@ -1325,7 +1512,203 @@ if( !OnChannel )
  
 return true ;
 }
+
+bool xClient::DeHalfOp( Channel* theChan, iClient* theClient )
+{
+assert( theChan != NULL ) ;
+assert( theClient != NULL ) ;
+
+if( !isConnected() )
+	{
+	return false ;
+	}
+
+if( theClient->isModeK() )
+	{
+	return false ;
+	}
+
+ChannelUser* theUser = theChan->findUser( theClient ) ;
+if( NULL == theUser )
+	{
+	elog	<< "xClient::DeHalfOp> Unable to find ChannelUser: "
+		<< *theClient
+		<< endl ;
+	return false ;
+	}
+
+if( !theUser->getMode( ChannelUser::MODE_H ) )
+	{
+	// User is not halfopped
+	return true ;
+	}
+
+bool OnChannel = isOnChannel( theChan ) ;
+if( !OnChannel )
+	{
+	// Join, giving ourselves ops
+	Join( theChan, string(), 0, true ) ;
+	}
+else
+	{
+	// Bot is already on the channel
+	ChannelUser* meUser = theChan->findUser( me ) ;
+	if( NULL == meUser )
+		{
+		elog	<< "xClient::DeHalfOp> Unable to find myself in "
+			<< "channel: "
+			<< theChan->getName()
+			<< endl ;
+		return false ;
+		}
+
+	// Make sure we have ops
+	if( !meUser->getMode( ChannelUser::MODE_O ) )
+		{
+		// The bot does NOT have ops
+		return false ;
+		}
+
+	// The bot has ops
+	}
+
+Write( "%s M %s -h %s %ld",
+	getCharYYXXX().c_str(),
+	theChan->getName().c_str(),
+	theClient->getCharYYXXX().c_str(),
+	theChan->getCreationTime() ) ;
+
+if( !OnChannel )
+	{
+	Part( theChan ) ;
+	}
+
+xServer::opVectorType opVector ;
+opVector.push_back( xServer::opVectorType::value_type(
+	false, theUser ) ) ;
+
+MyUplink->OnChannelModeH( theChan, 0, opVector ) ;
+
+if( !OnChannel )
+	{
+	Part( theChan ) ;
+	}
+
+return true ;
+}
+
+bool xClient::DeHalfOp( Channel* theChan,
+	const std::vector< iClient* >& clientVector )
+{
+assert( theChan != NULL ) ;
+
+if( !isConnected() )
+	{
+	return false ;
+	}
+
+bool OnChannel = isOnChannel( theChan ) ;
+if( !OnChannel )
+	{
+	// Join, giving ourselves ops
+	Join( theChan, string(), 0, true ) ;
+	}
+else
+	{
+	// Bot is already on the channel
+	ChannelUser* meUser = theChan->findUser( me ) ;
+	if( NULL == meUser )
+		{
+		elog	<< "xClient::DeHalfOp> Unable to find myself in "
+			<< "channel: "
+			<< theChan->getName()
+			<< endl ;
+		return false ;
+		}
+
+	// Make sure we have ops
+	if( !meUser->getMode( ChannelUser::MODE_O ) )
+		{
+		// The bot does NOT have ops
+		return false ;
+		}
+
+	// The bot has ops
+	}
+
+xServer::opVectorType opVector ;
+
+for( std::vector< iClient* >::const_iterator ptr = clientVector.begin(),
+	end = clientVector.end() ; ptr != end ; ++ptr )
+	{
+	if( NULL == *ptr )
+		{
+		elog	<< "xClient::DeHalfOp(vector)> Found NULL "
+			<< "iClient!"
+			<< endl ;
+		continue ;
+		}
+
+	if( (*ptr)->isModeK() )
+		{
+		continue ;
+		}
+
+	ChannelUser* theUser = theChan->findUser( *ptr ) ;
+	if( NULL == theUser )
+		{
+		elog	<< "xClient::DeHalfOp(vector)> Unable to find "
+			<< "client on channel: "
+			<< theChan->getName()
+			<< endl ;
+		continue ;
+		}
+
+	if( theUser->getMode( ChannelUser::MODE_H ) )
+		{
+		// User is halfopped
+		opVector.push_back( xServer::opVectorType::value_type(
+			false, theUser ) ) ;
+		}
+	}
+
+string modeString ;
+string args ;
+
+for( xServer::opVectorType::const_iterator ptr = opVector.begin(),
+	end = opVector.end() ; ptr != end ; ++ptr )
+	{
+	modeString += 'h' ;
+	args += ptr->second->getCharYYXXX() + ' ' ;
+
+	if( (MAX_CHAN_MODES == modeString.size()) ||
+		((ptr + 1) == end) )
+		{
+		stringstream s ;
+		s	<< getCharYYXXX() << " M "
+			<< theChan->getName() << ' '
+			<< "-" << modeString << ' ' << args
+			<< theChan->getCreationTime() ;
+
+		Write( s ) ;
+
+		modeString.erase( modeString.begin(), modeString.end() ) ;
+		args.erase( args.begin(), args.end() ) ;
+
+		} // if()
+
+	} // for()
+
+MyUplink->OnChannelModeH( theChan, 0, opVector ) ;
+
+if( !OnChannel )
+	{
+	Part( theChan ) ;
+	}
  
+return true ;
+}
+
 bool xClient::DeVoice( Channel* theChan, iClient* theClient )
 {
 assert( theChan != 0 ) ;

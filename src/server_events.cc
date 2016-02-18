@@ -632,6 +632,48 @@ for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 }
 
 // Handle a channel mode change
+// theChan is the channel on which the mode change occurs
+// polarity is true if the mode is being set, false otherwise
+// sourceUser is the source of the mode change; this variable
+// may be NULL if a server is setting the mode
+void xServer::OnChannelModeH( Channel* theChan, ChannelUser* sourceUser,
+	const xServer::opVectorType& opVector )
+{
+theChan->onModeH( opVector ) ;
+
+// First deliver this channel event to any listeners for all channel
+// events.
+channelEventMapType::iterator allChanPtr =
+	channelEventMap.find( CHANNEL_ALL ) ;
+if( allChanPtr != channelEventMap.end() )
+	{
+	for( list< xClient* >::iterator ptr = allChanPtr->second->begin(),
+		endPtr = allChanPtr->second->end() ; ptr != endPtr ; ++ptr )
+		{
+		(*ptr)->OnChannelModeH( theChan, sourceUser, opVector ) ;
+		}
+	}
+
+// Find listeners for this specific channel
+channelEventMapType::iterator chanPtr =
+	channelEventMap.find( theChan->getName() ) ;
+if( chanPtr == channelEventMap.end() )
+	{
+	// No listeners for this channel's events
+	return ;
+	}
+
+// Iterate through the listeners for this channel's events
+// and notify each listener of the event
+list< xClient* >* listPtr = chanPtr->second ;
+for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
+	ptr != end ; ++ptr )
+	{
+	(*ptr)->OnChannelModeH( theChan, sourceUser, opVector ) ;
+	}
+}
+
+// Handle a channel mode change
 // theChan is the channel on which the mode change occured
 // polarity is true if the mode is being set, false otherwise
 // sourceUser is the source of the mode change; this variable

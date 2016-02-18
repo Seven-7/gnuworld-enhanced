@@ -182,13 +182,11 @@ if( '+' == params[ currentArgIndex ][ 0 ] )
 				account = params[ currentArgIndex++ ] ;
 				IsRegistered = true;
 				break ;
-			case 'h': //TODO: Solve this? Will be case when this will blow in face too?
-				//sethost = params[ currentArgIndex++ ] ;
+			case 'h':
 				HasSetHost = true;
 				HasExtraHost = true;
 				break ;
 			case 'f':
-				//fakehost = params[ currentArgIndex++ ] ;
 				HasFakeHost = true;
 				HasExtraHost = true;
 				break ;

@@ -318,6 +318,15 @@ public:
 
 	/**
 	 * This method is invoked when a user sets or removes
+	 * one or more channel mode (h).  Keep in mind that the
+	 * source ChannelUser may be NULL if a server is
+	 * setting the mode.
+	 */
+	virtual void OnChannelModeH( Channel*, ChannelUser*,
+			const xServer::opVectorType& ) ;
+
+	/**
+	 * This method is invoked when a user sets or removes
 	 * one or more channel mode (v).  Keep in mind that the
 	 * source ChannelUser may be NULL if a server is
 	 * setting the mode.
@@ -489,6 +498,17 @@ public:
 	virtual bool	Op( Channel*, const std::vector< iClient* >& ) ;
 
 	/**
+	 * HalfOp a user on a channel, join/part the channel if necessary.
+	 */
+	virtual bool	HalfOp( Channel*, iClient* ) ;
+
+	/**
+	 * HalfOp one or more users on a channel, join/part the channel
+	 * if necessary.
+	 */
+	virtual bool	HalfOp( Channel*, const std::vector< iClient* >& ) ;
+
+	/**
 	 * Voice a user on a channel, join/part the channel if necessary.
 	 */
 	virtual bool	Voice( Channel*, iClient* ) ;
@@ -508,6 +528,16 @@ public:
 	 * Deop a user on a channel, join/part the channel if necessary.
 	 */
 	virtual bool	DeOp( Channel*, const std::vector< iClient* >& ) ;
+
+	/**
+	 * DeHalfOp a user on a channel, join/part the channel if necessary.
+	 */
+	virtual bool	DeHalfOp( Channel*, iClient* ) ;
+
+	/**
+	 * DeHalfOp one or more users on a channel, join/part the channel
+	 */
+	virtual bool	DeHalfOp( Channel*, const std::vector< iClient* >& ) ;
 
 	/**
 	 * Devoice a user on a channel, join/part the channel if necessary.

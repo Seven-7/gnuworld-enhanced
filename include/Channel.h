@@ -533,6 +533,13 @@ protected:
 
 	/**
 	 * This method is called when one or more channel
+	 * mode (t)'s is/are set or unset.
+	 */
+	virtual void	onModeH( const std::vector<
+				std::pair< bool, ChannelUser* > >& ) ;
+
+	/**
+	 * This method is called when one or more channel
 	 * mode (v)'s is/are set or unset.
 	 */
 	virtual void	onModeV( const std::vector<

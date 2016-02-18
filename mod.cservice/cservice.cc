@@ -237,6 +237,12 @@ RegisterCommand(new CANCELCommand(this, "CANCEL", "<#channel> <YES|NO>", 8));
 
 RegisterCommand(new OPCommand(this, "OP", "<#channel> [nick] [nick] ..", 3));
 RegisterCommand(new DEOPCommand(this, "DEOP", "<#channel> [nick] [nick] ..", 3));
+#ifdef USING_NEFARIOUS
+  #ifdef USE_HALFOPS
+    RegisterCommand(new HALFOPCommand(this, "HALFOP", "<#channel> [nick] [nick] ..", 3));
+    RegisterCommand(new DEHALFOPCommand(this, "DEHALFOP", "<#channel> [nick] [nick] ..", 3));
+  #endif
+#endif
 RegisterCommand(new VOICECommand(this, "VOICE", "<#channel> [nick] [nick] ..", 3));
 RegisterCommand(new DEVOICECommand(this, "DEVOICE", "<#channel> [nick] [nick] ..", 3));
 RegisterCommand(new ADDUSERCommand(this, "ADDUSER", "<#channel> <username> <access>", 8));

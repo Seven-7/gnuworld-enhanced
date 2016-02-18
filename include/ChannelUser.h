@@ -50,6 +50,9 @@ public:
 	/// Bit representing channel user mode +o
 	static const modeType	MODE_O ;
 
+	/// Bit representing channel user mode +h
+	static const modeType	MODE_H ;
+
 	/// Bit representing channel user mode +v
 	static const modeType	MODE_V ;
 
@@ -84,6 +87,13 @@ public:
 		{ return getMode( MODE_O ) ; }
 
 	/**
+	 * Return true if this user has mode +h on this channel,
+	 * false otherwise.
+	 */
+	inline bool isModeH() const
+		{ return getMode( MODE_H ) ; }
+
+	/**
 	 * Return true if this user has mode +v on this channel,
 	 * false otherwise.
 	 */
@@ -112,6 +122,12 @@ public:
 		{ setMode( MODE_O ) ; }
 
 	/**
+	 * Set the user's mode +h state in this channel.
+	 */
+	inline void setModeH()
+		{ setMode( MODE_H ) ; }
+
+	/**
 	 * Set the user's mode +v state in this channel.
 	 */
 	inline void setModeV()
@@ -129,6 +145,12 @@ public:
 	 */
 	inline void removeModeO()
 		{ removeMode( MODE_O ) ; }
+
+	/**
+	 * Remove the user's mode +h state in this channel.
+	 */
+	inline void removeModeH()
+		{ removeMode( MODE_H ) ; }
 
 	/**
 	 * Remove the user's mode +v state in this channel.

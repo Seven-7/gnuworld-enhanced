@@ -325,6 +325,7 @@ typedef xServer::opVectorType opVectorType ;
 typedef xServer::voiceVectorType voiceVectorType ;
 
 opVectorType opVector ;
+opVectorType halfOpVector ;
 voiceVectorType voiceVector ;
 
 for( StringTokenizer::const_iterator ptr = st.begin() ; ptr != st.end() ;
@@ -445,6 +446,12 @@ for( StringTokenizer::const_iterator ptr = st.begin() ; ptr != st.end() ;
 						true, chanUser ) ) ;
 				mode_state = 1;
 				break ;
+			case 'h':
+				halfOpVector.push_back(
+					opVectorType::value_type(
+						true, chanUser ) ) ;
+				//mode_state = 1;
+				break ;
 			case 'v':
 				// Does the user already
 				// have mode 'o'?
@@ -489,6 +496,10 @@ for( StringTokenizer::const_iterator ptr = st.begin() ; ptr != st.end() ;
 if( !opVector.empty() )
 	{
 	theServer->OnChannelModeO( theChan, 0, opVector ) ;
+	}
+if( !halfOpVector.empty() )
+	{
+	theServer->OnChannelModeH( theChan, 0, halfOpVector ) ;
 	}
 if( !voiceVector.empty() )
 	{

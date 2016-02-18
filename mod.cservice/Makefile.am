@@ -27,8 +27,10 @@ libcservice_la_SOURCES = cservice.cc \
 	CHANINFOCommand.cc \
 	CLEARMODECommand.cc \
 	DEOPCommand.cc \
+	DEHALFOPCommand.cc \
 	DEVOICECommand.cc \
 	FORCECommand.cc \
+	HALFOPCommand.cc \
 	HELPCommand.cc \
 	HELLOCommand.cc \
 	INVITECommand.cc \

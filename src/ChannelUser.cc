@@ -36,8 +36,9 @@ namespace gnuworld
 using std::string ;
 
 const ChannelUser::modeType ChannelUser::MODE_O = 0x01 ;
-const ChannelUser::modeType ChannelUser::MODE_V = 0x02 ;
+const ChannelUser::modeType ChannelUser::MODE_H = 0x02 ;
 //const ChannelUser::modeType ChannelUser::ZOMBIE = 0x04 ;
+const ChannelUser::modeType ChannelUser::MODE_V = 0x04 ;
 
 ChannelUser::ChannelUser( iClient* _theClient )
  : theClient( _theClient ),
@@ -118,6 +119,10 @@ if( isOper() )
 if( isModeV() )
 	{
 	modes.push_back( "voice" ) ;
+	}
+if( isModeH() )
+	{
+	modes.push_back( "halfop" ) ;
 	}
 if( isModeO() )
 	{

@@ -164,6 +164,13 @@
 #define USING_NEFARIOUS
 
 /**
+ * Define this if you're using gnuworld with nefarious2 ircd
+ * and want to enable halfop.
+ * Note: USING_NEFARIOUS must be enabled!
+ */
+#define USE_HALFOPS
+
+/**
  * Enable this if you don't want users to set 'exotic' hostnames
  * like with colors, etc.
  */

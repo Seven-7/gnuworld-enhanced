@@ -385,6 +385,24 @@ for( opVectorType::const_iterator ptr = opVector.begin() ;
 	}
 }
 
+void Channel::onModeH( const vector< std::pair< bool, ChannelUser* > >&
+	opVector )
+{
+typedef vector< std::pair< bool, ChannelUser* > > opVectorType ;
+for( opVectorType::const_iterator ptr = opVector.begin() ;
+	ptr != opVector.end() ; ++ptr )
+	{
+	if( ptr->first )
+		{
+		ptr->second->setModeH() ;
+		}
+	else
+		{
+		ptr->second->removeModeH() ;
+		}
+	}
+}
+
 void Channel::onModeV( const vector< std::pair< bool, ChannelUser* > >&
 	voiceVector )
 {

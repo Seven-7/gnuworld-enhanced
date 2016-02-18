@@ -1,3 +1,15 @@
+==============================================================================
+2016.02.18 Added halfop support: mod.cservice HALFOPCommand and HALFDEOPCommand
+------------------------------------------------------------------------------
+If you have an existing installation, you can upgrade with the following steps:
+gnuworld@ubuntu:~$ cd gnuworld-enhanced
+gnuworld@ubuntu:~/gnuworld-enhanced$ make clean; make distclean
+ - Reconfigure again:
+gnuworld@ubuntu:~/gnuworld-enhanced$ ./configure ......
+gnuworld@ubuntu:~/gnuworld-enhanced$ make; make install
+ ... restart gnuworld ...
+Done.
+Note: If doesn't works, follow the steps like in SCANCommand, saving libltdl, and doing the autoreconf
 ============================================================================
 2016.02.04 Recognizing and handling Nefarious2's cloacked IP and cloacked Host
 ----------------------------------------------------------------------------

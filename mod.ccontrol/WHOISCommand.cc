@@ -136,12 +136,14 @@ for( iClient::const_channelIterator ptr = Target->channels_begin() ;
 	ptr != Target->channels_end() ; ++ptr )
 	{
 	curChannel = "";
-	tChannel = (*ptr)->getName();
         theChannel = (*ptr);
         theChannelUser = theChannel->findUser(Target);
         tChannel = theChannel->getName();
-        if(theChannelUser->getMode(gnuworld::ChannelUser::MODE_V)) tChannel = "+" + tChannel;
-        if(theChannelUser->getMode(gnuworld::ChannelUser::MODE_O)) tChannel = "@" + tChannel;
+        string chanUserModes = string();
+        if(theChannelUser->getMode(gnuworld::ChannelUser::MODE_V)) chanUserModes = "+";
+        if(theChannelUser->getMode(gnuworld::ChannelUser::MODE_H)) chanUserModes += "%";
+        if(theChannelUser->getMode(gnuworld::ChannelUser::MODE_O)) chanUserModes += "@";
+        tChannel = chanUserModes + tChannel;
 
 	hasCC = false;
 	for(curPlace = 0; curPlace < tChannel.size();++curPlace)

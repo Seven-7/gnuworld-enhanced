@@ -60,6 +60,9 @@ namespace gnuworld {
   const int ban = 75;
   const int unban = 75;
 
+  const int dehalfop = 75;
+  const int halfop = 75;
+
   const int deop = 100;
   const int op = 100;
   const int invite = 100;

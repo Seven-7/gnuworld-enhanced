@@ -958,6 +958,15 @@ public:
 		const opVectorType& ) ;
 
 	/**
+	 * This method is called when one or more mode 'h' changes
+	 * are set/unset on a particular channel.
+	 * Keep in mind that the source ChannelUser may be NULL
+	 * if the mode is being set/unset by a server.
+	 */
+	virtual void	OnChannelModeH( Channel*, ChannelUser*,
+		const opVectorType& ) ;
+
+	/**
 	 * This method is called when one or more mode 'v' changes
 	 * are set/unset on a particular channel.
 	 * Keep in mind that the source ChannelUser may be NULL

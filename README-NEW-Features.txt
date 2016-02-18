@@ -1,4 +1,20 @@
 ==============================================================================
+ * Added halfop support: mod.cservice HALFOPCommand and HALFDEOPCommand
+------------------------------------------------------------------------------
+To enable halfop command in mod.cservice you must
+	#define USING_NEFARIOUS
+	#define USE_HALFOPS
+in mod.cservice/cservice_config.h
+
+The syntax is very similar to op and deop.
+	/msg X halfop <#channel> [nick1 nick2 nick3]
+	/msg X haldefop <#channel> [nick1 nick2 nick3]
+	
+Warning! This feature requires Nefarious2 with it's halfop support.
+Warning! Don't forget to enable halfops in ircd.conf:
+	"HALFOPS" = "TRUE";
+If you have an existing installation, to upgrade read README-DO-UPDATES.txt
+==============================================================================
  * Recognizing and handling Nefarious2's cloacked IP and cloacked Host
 ------------------------------------------------------------------------------
 If you set "HOST_HIDING_STYLE" greater than 1 in Nefarious2's ircd.conf
