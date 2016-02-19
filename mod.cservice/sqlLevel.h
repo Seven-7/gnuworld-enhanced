@@ -44,6 +44,7 @@ public:
 	static const flagType	F_AUTOVOICE;
 	static const flagType	F_ONDB; 		// Deprecated.
 	static const flagType	F_AUTOINVITE;
+	static const flagType	F_AUTOHALFOP;
 
 	/*
 	 *  Methods to get data atrributes.

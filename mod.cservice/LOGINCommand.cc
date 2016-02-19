@@ -561,6 +561,7 @@ for (autoOpVectorType::const_iterator resultPtr = autoOpVector.begin();
 
 	/* If the autoop flag isn't set in this record */
 	if (!(resultPtr->flags & sqlLevel::F_AUTOOP) &&
+		!(resultPtr->flags & sqlLevel::F_AUTOHALFOP) &&
 		!(resultPtr->flags & sqlLevel::F_AUTOVOICE) &&
 		!(resultPtr->flags & sqlLevel::F_AUTOINVITE))
 		{
@@ -671,6 +672,13 @@ for (autoOpVectorType::const_iterator resultPtr = autoOpVector.begin();
 		if(!tmpChanUser->getMode(ChannelUser::MODE_O))
 			{
 			bot->Op(netChan, theClient);
+			}
+		}
+	else if (resultPtr->flags & sqlLevel::F_AUTOHALFOP)
+		{
+		if(!tmpChanUser->getMode(ChannelUser::MODE_H))
+			{
+			bot->HalfOp(netChan, theClient);
 			}
 		}
 	else if ((resultPtr->flags & sqlLevel::F_AUTOVOICE) && (!theChan->getFlag(sqlChannel::F_NOVOICE)))

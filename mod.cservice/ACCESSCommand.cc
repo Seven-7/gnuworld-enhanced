@@ -127,6 +127,7 @@ unsigned int maxAmount = 0;
 bool modif = false;
 bool showAll = false;
 bool aOp = false;
+bool aHalfOp = false;
 bool aVoice = false;
 bool aNone = false;
 
@@ -160,17 +161,23 @@ for( StringTokenizer::const_iterator ptr = st.begin() ; ptr != st.end() ;
 		aOp = true;
 		continue;
 		}
+	if (string_lower(*ptr) == "-halfop")
+		{
+		currentType = 5;
+		aHalfOp = true;
+		continue;
+		}
 
 	if (string_lower(*ptr) == "-voice")
 		{
-		currentType = 5;
+		currentType = 6;
 		aVoice = true;
 		continue;
 		}
 
 	if (string_lower(*ptr) == "-none")
 		{
-		currentType = 6;
+		currentType = 7;
 		aNone = true;
 		continue;
 		}
@@ -225,11 +232,15 @@ for( StringTokenizer::const_iterator ptr = st.begin() ; ptr != st.end() ;
 			{
 			break;
 			}
-		case 5: /* Automode Voice */
+		case 5: /* Automode HalfOp */
 			{
 			break;
 			}
-		case 6: /* Automode None */
+		case 6: /* Automode Voice */
+			{
+			break;
+			}
+		case 7: /* Automode None */
 			{
 			break;
 			}
@@ -329,20 +340,24 @@ for (unsigned int i = 0 ; i < bot->SQLDb->Tuples(); i++)
 		suspend_expires_f = bot->currentTime() - suspend_expires_d;
 
 		if (flag & sqlLevel::F_AUTOOP) autoMode = "OP";
+		if (flag & sqlLevel::F_AUTOHALFOP) autoMode = "HALFOP";
 		if (flag & sqlLevel::F_AUTOVOICE) autoMode = "VOICE";
 
-		if(aVoice == true || aOp == true || aNone == true)
+		if(aVoice == true || aHalfOp == true || aOp == true || aNone == true)
 			{
 			if(aNone == true)
 				{
 				if(!aVoice && (flag & sqlLevel::F_AUTOVOICE)) continue;
+				if(!aHalfOp && (flag & sqlLevel::F_AUTOHALFOP)) continue;
 				if(!aOp && (flag & sqlLevel::F_AUTOOP)) continue;
 				}
 			else
 				{
 				if(!(flag & sqlLevel::F_AUTOVOICE) &&
-			           !(flag & sqlLevel::F_AUTOOP)) continue;
+						!(flag & sqlLevel::F_AUTOHALFOP) &&
+						!(flag & sqlLevel::F_AUTOOP)) continue;
 				if(!aVoice && (flag & sqlLevel::F_AUTOVOICE)) continue;
+				if(!aHalfOp && (flag & sqlLevel::F_AUTOHALFOP)) continue;
 				if(!aOp && (flag & sqlLevel::F_AUTOOP)) continue;
 				}
 			}

@@ -55,6 +55,7 @@ const sqlLevel::flagType sqlLevel::F_FORCED =	0x04 ;
 const sqlLevel::flagType sqlLevel::F_AUTOVOICE =0x08 ;
 const sqlLevel::flagType sqlLevel::F_ONDB =	0x10 ;
 const sqlLevel::flagType sqlLevel::F_AUTOINVITE = 0x20;
+const sqlLevel::flagType sqlLevel::F_AUTOHALFOP = 0x40;
 
 sqlLevel::sqlLevel(dbHandle* _SQLDb)
  :channel_id(0),

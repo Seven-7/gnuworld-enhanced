@@ -1459,19 +1459,21 @@ if (value == "ON") {
 					setting = 0;
 				else if (value=="OP")
 					setting = 1;
-				else if (value=="VOICE")
+				else if (value=="HALFOP")
 					setting = 2;
+				else if (value=="VOICE")
+					setting = 3;
 				else
-					setting = 3;		/* dummy value to cause failure */
+					setting = 4;		/* dummy value to cause failure */
 			} else {
 				setting = atoi(value.c_str());
 			}
-			if ( (setting < 0) || (setting > 2))
+			if ( (setting < 0) || (setting > 3))
 			{
 				bot->Notice(theClient,
 					bot->getResponse(theUser,
 						language::userflags_syntax,
-						string("Invalid USERFLAGS setting. Correct values are NONE, OP or VOICE.")));
+						string("Invalid USERFLAGS setting. Correct values are NONE, OP, HALFOP or VOICE.")));
 				return false;
 			}
 
@@ -1485,7 +1487,8 @@ if (value == "ON") {
 			default:	break;
 			case 0:		value = "NONE";		break;
 			case 1:		value = "OP";		break;
-			case 2:		value = "VOICE";	break;
+			case 2:		value = "HALF";		break;
+			case 3:		value = "VOICE";	break;
 		}
 		bot->Notice(theClient,
 			bot->getResponse(theUser,

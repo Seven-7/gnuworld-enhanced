@@ -199,7 +199,8 @@ if (targetUser->getFlag(sqlUser::F_NOADDUSER))
 unsigned short targetFlags = 0;
 
 if ((theChan->getUserFlags() == 1) && (targetAccess >= level::op)) targetFlags = sqlLevel::F_AUTOOP;
-if ((theChan->getUserFlags() == 2) && (targetAccess >= level::voice)) targetFlags = sqlLevel::F_AUTOVOICE;
+if ((theChan->getUserFlags() == 2) && (targetAccess >= level::halfop)) targetFlags = sqlLevel::F_AUTOHALFOP;
+if ((theChan->getUserFlags() == 3) && (targetAccess >= level::voice)) targetFlags = sqlLevel::F_AUTOVOICE;
 
 /*
  *  Now, build up the SQL query & execute it!

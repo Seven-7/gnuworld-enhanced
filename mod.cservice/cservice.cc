@@ -6281,6 +6281,17 @@ switch( whichEvent )
 			break;
 			}
 
+		if (theLevel->getFlag(sqlLevel::F_AUTOHALFOP))
+			{
+			if (!(accessLevel >= level::halfop)) {
+				theLevel->removeFlag(sqlLevel::F_AUTOHALFOP);
+				break;
+			}
+			HalfOp(theChan, theClient);
+			break;
+			}
+
+
 		break;
 		}
 	case EVT_SERVERMODE:

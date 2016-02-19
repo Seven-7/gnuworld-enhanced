@@ -323,10 +323,14 @@ if (command == "ACCESS")
 		aLevel->setSuspendReason(string());
 	if ((aLevel->getFlag(sqlLevel::F_AUTOVOICE)) && (newAccess < level::voice)) 
 		aLevel->removeFlag(sqlLevel::F_AUTOVOICE);
+	if ((aLevel->getFlag(sqlLevel::F_AUTOHALFOP)) && (newAccess < level::halfop))
+		aLevel->removeFlag(sqlLevel::F_AUTOHALFOP);
 	if ((aLevel->getFlag(sqlLevel::F_AUTOOP)) && (newAccess < level::op)) 
 		aLevel->removeFlag(sqlLevel::F_AUTOOP);
-	if ((theChan->getUserFlags() == 2) && (newAccess >= level::voice) && (!aLevel->getFlag(sqlLevel::F_AUTOVOICE))) 
+	if ((theChan->getUserFlags() == 3) && (newAccess >= level::voice) && (!aLevel->getFlag(sqlLevel::F_AUTOVOICE)))
 		aLevel->setFlag(sqlLevel::F_AUTOVOICE);
+	if ((theChan->getUserFlags() == 2) && (newAccess >= level::halfop) && (!aLevel->getFlag(sqlLevel::F_AUTOHALFOP)))
+		aLevel->setFlag(sqlLevel::F_AUTOHALFOP);
 	if ((theChan->getUserFlags() == 1) && (newAccess >= level::op) && (!aLevel->getFlag(sqlLevel::F_AUTOOP)))  
 		aLevel->setFlag(sqlLevel::F_AUTOOP);
 
@@ -387,6 +391,7 @@ if (command == "AUTOMODE")
            }
 		sqlLevel* aLevel = bot->getLevelRecord(targetUser, theChan);
 		aLevel->removeFlag(sqlLevel::F_AUTOVOICE);
+		aLevel->removeFlag(sqlLevel::F_AUTOHALFOP);
 		aLevel->setFlag(sqlLevel::F_AUTOOP);
 //		aLevel->setLastModif(bot->currentTime());
 //		aLevel->setLastModifBy(theClient->getNickUserHost());
@@ -396,6 +401,35 @@ if (command == "AUTOMODE")
 			bot->getResponse(theUser,
 				language::automode_op,
 				string("Set AUTOMODE to OP for %s on channel %s")).c_str(),
+			targetUser->getUserName().c_str(),
+			theChan->getName().c_str());
+
+		return false;
+		}
+
+	if (string_upper(st[4]) == "HALFOP")
+		{
+	   if (targetLevel < level::halfop) {
+		bot->Notice(theClient,
+			/*bot->getResponse(theUser,
+				language::insuff_aop,*/
+				string("Target user %s on channel %s has insufficient access for an automode HALFOP")/*)*/.c_str(),
+			targetUser->getUserName().c_str(),
+			theChan->getName().c_str());
+		return false;
+           }
+		sqlLevel* aLevel = bot->getLevelRecord(targetUser, theChan);
+		aLevel->removeFlag(sqlLevel::F_AUTOVOICE);
+		aLevel->removeFlag(sqlLevel::F_AUTOOP);
+		aLevel->setFlag(sqlLevel::F_AUTOHALFOP);
+//		aLevel->setLastModif(bot->currentTime());
+//		aLevel->setLastModifBy(theClient->getNickUserHost());
+		aLevel->commit();
+
+		bot->Notice(theClient,
+			/*bot->getResponse(theUser,
+				language::automode_op,*/
+				string("Set AUTOMODE to HALFOP for %s on channel %s")/*)*/.c_str(),
 			targetUser->getUserName().c_str(),
 			theChan->getName().c_str());
 
@@ -415,6 +449,7 @@ if (command == "AUTOMODE")
            }
 		sqlLevel* aLevel = bot->getLevelRecord(targetUser, theChan);
 		aLevel->removeFlag(sqlLevel::F_AUTOOP);
+		aLevel->removeFlag(sqlLevel::F_AUTOHALFOP);
 		aLevel->setFlag(sqlLevel::F_AUTOVOICE);
 //		aLevel->setLastModif(bot->currentTime());
 //		aLevel->setLastModifBy(theClient->getNickUserHost());
@@ -433,6 +468,7 @@ if (command == "AUTOMODE")
 		{
 		sqlLevel* aLevel = bot->getLevelRecord(targetUser, theChan);
 		aLevel->removeFlag(sqlLevel::F_AUTOOP);
+		aLevel->removeFlag(sqlLevel::F_AUTOHALFOP);
 		aLevel->removeFlag(sqlLevel::F_AUTOVOICE);
 //		aLevel->setLastModif(bot->currentTime());
 //		aLevel->setLastModifBy(theClient->getNickUserHost());
