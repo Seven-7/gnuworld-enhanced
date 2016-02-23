@@ -101,10 +101,10 @@ if (!theUser)
 	}
 
 sqlChannel* theChan = bot->getChannelRecord(bot->coderChan);
-if (!theChan)
-	{
-	return true;
-	}
+//if (!theChan)
+//	{
+//	return true;
+//	}
 
 // TODO: Move all the levels to constants in levels.h
 
