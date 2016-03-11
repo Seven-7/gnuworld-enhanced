@@ -39,6 +39,11 @@ gnuworld@vps189189:~$ /usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data
 Success. You can now start the database server using:
 gnuworld@vps189189:~$ /usr/local/pgsql/bin/postgres -D /usr/local/pgsql/data &
 
+This line is useful to put in crontab, so on server reboot you get postgres running
+gnuworld@vps189189:~$ crontab -e
+At the end insert:
+@reboot /usr/local/pgsql/bin/postgres -D /usr/local/pgsql/data
+
 After this I usually open a new terminal window, to not to be bothered with database messages.
 
 Now install gnuworld-enhanced:
