@@ -22,7 +22,7 @@ sql_pass = foo
 
 nickname = X
 username = cservice
-hostname = Undernet.org
+hostname = yournetwork.org
 userdescription = For help type: /msg X help
 mode = +idk
 

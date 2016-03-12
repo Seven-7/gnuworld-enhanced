@@ -4,10 +4,10 @@
 
 uplink = 127.0.0.1
 port = 4400
-password = hub
-name = channels.undernet.org
+password = 54321
+name = channels.yournetwork.org
 description = UnderNet Services
-numeric = 52
+numeric = 51
 
 # Set this variable to yes if you want the server to attempt
 # to auto_reconnect when a connection is terminated, set
@@ -23,7 +23,7 @@ maxclients = 1023
 
 # This is the variable which defines the host suffix to be concatenated
 # onto the user's account name for host hiding.
-hidden_host_suffix = .users.undernet.org
+hidden_host_suffix = .users.yournetwork.org
 
 # command_map is the name of the file which contains the mappings
 # from module filenames (of server command handlers) to the

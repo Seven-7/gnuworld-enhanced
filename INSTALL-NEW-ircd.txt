@@ -1,0 +1,40 @@
+Example of installing ircd (Nefarious2 or ircu)
+
+root@vps189189:~# sudo apt-get update
+root@vps189189:~# sudo apt-get install gcc g++ cpp
+root@vps189189:~# sudo apt-get install flex
+root@vps189189:~# sudo apt-get install byacc
+root@vps189189:~# sudo apt-get install bison
+root@vps189189:~# sudo apt-get install make autoconf automake
+root@vps189189:~# sudo apt-get install openssl libssl-dev
+root@vps189189:~# sudo apt-get install libpcre3-dev
+root@vps189189:~# sudo apt-get install git
+root@vps189189:~# sudo apt-get install vim
+
+Let's create a user for ircd
+root@vps189189:~# adduser ircd
+root@vps189189:~# su ircd
+ircd@vps189189:~# cd ~
+ircd@vps189189:~# mkdir ircds
+
+Depending which (or both) ircd you install:
+ircd@vps189189:~# mkdir ircds/nef2-bin
+ircd@vps189189:~# mkdir ircds/ircu-bin
+ircd@vps189189:~# cd ~
+ircd@vps189189:~# git clone https://github.com/evilnet/nefarious2.git
+ircd@vps189189:~# cd nefarious2
+
+Important note: Do the patch described in gnuworld-enhanced/README-DO-UPDATES.txt at date 2016.01.06
+ 
+ircd@vps189189:~/nefarious2$ ./configure --prefix=/home/ircd/ircds/nef2-bin
+ircd@vps189189:~/nefarious2$ make; make install
+ircd@vps189189:~/nefarious2$ cd /home/ircd/ircds/nef2-bin/lib
+
+Copy from the example conf from gnuworld-enhanced doc
+ircd@vps189189:~/ircds/nef2-bin/lib$ cp /home/gnuworld/gnuworld-enhanced/doc/ircds.example.conf/ircd-nef.example.conf /home/ircd/ircds/nef2-bin
+ircd@vps189189:~/ircds/nef2-bin/lib$ mv ircd-nef.example.conf ircd.conf
+Edit the conf to your needs!
+ircd@vps189189:~/ircds/nef2-bin/lib$ vim ircd.conf
+Start the ircd:
+ircd@vps189189:~/ircds/nef2-bin/lib$ cd ../bin
+ircd@vps189189:~/ircds/nef2-bin/bin$ ./ircd &

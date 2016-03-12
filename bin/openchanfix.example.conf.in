@@ -27,7 +27,7 @@ sqlPort = 5432
 # Name of database
 sqlDB   = chanfix
 # If you don't need user/pass just put "" for option(s) below
-sqlcfUser = evilnet
+sqlcfUser = gnuworld
 sqlPass = ""
 
 # ---------------------------------------------------------------------

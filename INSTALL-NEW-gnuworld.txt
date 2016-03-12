@@ -5,6 +5,7 @@ root@vps189189:~# sudo apt-get install flex
 root@vps189189:~# sudo apt-get install byacc
 root@vps189189:~# sudo apt-get install bison
 root@vps189189:~# sudo apt-get install make automake
+root@vps189189:~# sudo apt-get install openssl libssl-dev
 root@vps189189:~# sudo apt-get install git
 root@vps189189:~# sudo apt-get install libpqxx-4.0
 root@vps189189:~# sudo apt-get install libreadline6-dev
@@ -55,6 +56,11 @@ gnuworld@vps189189:~/gnuworld-enhanced$ make; make install
 
 Now create the actual databases:
 gnuworld@vps189189:~/gnuworld-enhanced$ cd doc
+Note!: You can try to shortcat all of these with running the 
+	~/gnuworld-enhanced/doc/do-db.sh
+script! You must be in the ~/gnuworld-enhanced/doc directory!
+gnuworld@vps189189:~/gnuworld-enhanced/doc$ ./do-db.sh
+Or manually:
 gnuworld@vps189189:~/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/createdb --template=template0 -E=SQL_ASCII cservice
 gnuworld@vps189189:~/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql cservice < cservice.sql
 gnuworld@vps189189:~/gnuworld-enhanced/doc$ /usr/local/pgsql/bin/psql cservice < cservice.config.sql
@@ -78,6 +84,7 @@ gnuworld@vps189189:~/gnuworld-enhanced/mod.openchanfix/doc$ /usr/local/pgsql/bin
 gnuworld@vps189189:~/gnuworld-enhanced/mod.openchanfix/doc$ /usr/local/pgsql/bin/psql chanfix < chanfix.language.english.sql
 gnuworld@vps189189:~/gnuworld-enhanced/mod.openchanfix/doc$ /usr/local/pgsql/bin/psql chanfix < chanfix.help.sql
 gnuworld@vps189189:~/gnuworld-enhanced/mod.openchanfix/doc$ /usr/local/pgsql/bin/psql chanfix < chanfix.addme.sql
+
 Go to bin directory, and create the gnuworld config files:
 gnuworld@vps189189:~/gnuworld-enhanced/mod.openchanfix/doc$ cd ~/gnuworld-enhanced/bin/
 gnuworld@vps189189:~/gnuworld-enhanced/bin$ cp GNUWorld.example.conf GNUWorld.conf
@@ -86,11 +93,14 @@ gnuworld@vps189189:~/gnuworld-enhanced/bin$ cp ccontrol.example.conf ccontrol.co
 gnuworld@vps189189:~/gnuworld-enhanced/bin$ cp dronescan.example.conf dronescan.conf
 gnuworld@vps189189:~/gnuworld-enhanced/bin$ cp openchanfix.example.conf openchanfix.conf
 Edit all these files.
+
+In GNUWorld.conf don't forget to uncomment the modules you configured with
+
+# To use a certain module, uncomment it below.
+module = libcservice.la cservice.conf
+module = libccontrol.la ccontrol.conf
+module = libchanfix.la openchanfix.conf
+module = libdronescan.la dronescan.conf
+
 And finally we can start gnuworld:
-gnuworld@vps189189:~/gnuworld-enhanced/bin$ ./gnuworld & 
-
-
-
-
-
-
+gnuworld@vps189189:~/gnuworld-enhanced/bin$ ./gnuworld &

@@ -25,7 +25,7 @@ setAutoTopic = false
 sqlHost = 127.0.0.1
 sqlPort = 5432
 sqlDB   = dronescan
-sqlUser = dronescan
+sqlUser = gnuworld
 sqlPass = dronescan
 
 # Margins

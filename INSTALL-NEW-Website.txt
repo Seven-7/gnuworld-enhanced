@@ -65,13 +65,13 @@ linux:/gnuworld/gnuworld-enhanced/doc$ cd ~
 
 linux:/home/gnuworld$ git clone https://github.com/Seven-7/website-gnuworld.git
 linux:/home/gnuworld$ su -
-linux:/root# cd /var/www/
-linux:/var/www# chmod 711 ~gnuworld
-linux:/var/www# chmod 711 ~gnuworld/website
-linux:/var/www# chmod 755 ~gnuworld/website/php_includes
-linux:/var/www# chmod 644 ~gnuworld/website/php_includes/config.inc
-linux:/var/www# chmod 755 ~gnuworld/website/docs/gnuworld/
-linux:/var/www# ln -s /home/gnuworld/website/docs/gnuworld live
+linux:/root# cd /var/www/html
+linux:/var/www/html# chmod 711 ~gnuworld
+linux:/var/www/html# chmod 711 ~gnuworld/website-gnuworld
+linux:/var/www/html# chmod 755 ~gnuworld/website-gnuworld/php_includes
+linux:/var/www/html# chmod 644 ~gnuworld/website-gnuworld/php_includes/config.inc
+linux:/var/www/html# chmod 755 ~gnuworld/website-gnuworld/docs/gnuworld/
+linux:/var/www/html# ln -s /home/gnuworld/website-gnuworld/docs/gnuworld live
 
 Now you can try see the webpage in the following addresses:
 

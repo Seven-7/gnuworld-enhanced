@@ -15,4 +15,9 @@
 /usr/local/pgsql/bin/psql ccontrol < ccontrol.commands.sql
 /usr/local/pgsql/bin/createdb --template=template0 -E=SQL_ASCII dronescan
 /usr/local/pgsql/bin/psql dronescan < dronescan.sql
-
+/usr/local/pgsql/bin/createdb --template=template0 -E=SQL_ASCII chanfix
+/usr/local/pgsql/bin/psql chanfix < ../mod.openchanfix/doc/chanfix.sql
+/usr/local/pgsql/bin/psql chanfix < ../mod.openchanfix/doc/chanfix.languages.sql
+/usr/local/pgsql/bin/psql chanfix < ../mod.openchanfix/doc/chanfix.language.english.sql
+/usr/local/pgsql/bin/psql chanfix < ../mod.openchanfix/doc/chanfix.help.sql
+/usr/local/pgsql/bin/psql chanfix < ../mod.openchanfix/doc/chanfix.addme.sql
