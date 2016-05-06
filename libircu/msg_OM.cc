@@ -148,7 +148,7 @@ if( serverSource != 0 )
 /* XXX OPMODE FAILS HERE */
 // Find the ChannelUser of the source client
 // It is possible that the ChannelUser will be NULL, in the
-// case that a server is setting the mode(s)
+// case that a server is setting the mode(s) - AND if the user is outside of the channel! --Seven
 ChannelUser* theUser = 0 ;
 if( clientSource != 0 )
 	{
@@ -160,9 +160,12 @@ if( clientSource != 0 )
 //			<< ") Unable to find channel user: "
 //			<< clientSource->getCharYYXXX()
 //			<< endl ;
-		return false ;
+
+		// So we allow NULL ChannelUser, who is outside of the channel
+		//return false ;
 		}
-	theUser->setMadeOpMode();
+	else
+		theUser->setMadeOpMode();
 	}
 
 bool polarity = true ;
@@ -390,7 +393,8 @@ if( !banVector.empty() )
 	{
 	theServer->OnChannelModeB( theChan, theUser, banVector ) ;
 	}
-theUser->removeMadeOpMode();
+if (theUser)
+	theUser->removeMadeOpMode();
 return true ;
 }
 
