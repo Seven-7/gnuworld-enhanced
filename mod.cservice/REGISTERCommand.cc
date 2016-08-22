@@ -120,7 +120,13 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 				string("You have insufficient access to perform that command.")));
 		return false;
 	}
-
+#ifndef ALLOW_IRC_CHANREG
+	if (level == 0)
+	{
+		bot->Notice(theClient, "Channel registration via IRC is disabled. Use website instead.");
+		return false;
+	}
+#endif
 	// Admin registration case !
 	if ((level >= level::registercmd) && ((st.size() > 2) && (!hasApp)))
 	{

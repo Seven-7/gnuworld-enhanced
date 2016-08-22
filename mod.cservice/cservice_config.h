@@ -121,6 +121,12 @@
 #define ALLOW_USERS_HELLO
 
 /**
+ * Define this if you want users to start channel registration process on IRC.
+ * If it's disabled they are redirected to use website registration.
+ */
+#define ALLOW_IRC_CHANREG
+
+/**
  * Define this if you want to enable the WELCOME feature.
  */
 #define USE_WELCOME
