@@ -3542,7 +3542,7 @@ if (timer_id == pending_timerID)
 	checkObjections();
 	checkAccepts();
 	checkRewievs();
-	checkPendingCleanups();
+	cleanUpPendings();
 
 	/*
 	 * Load a list of channels in NOTIFICATION stage and send them
@@ -4897,7 +4897,7 @@ void cservice::checkRewievs()
 
 // After a time, we cleanup de databes from old application data's: pending channels, supporters, etc
 //But this is valuable *only* for channels Accepted OR Rejected !!!
-void cservice::checkPendingCleanups()
+void cservice::cleanUpPendings()
 {
 	//If PendingsExpireTime == 0 than feature is disabled
 	if (!PendingsExpireTime) return;
