@@ -182,4 +182,9 @@
  */
 #define VALIDATE_SET_HOSTNAME
 
+/**
+ * Define this if you want to enable coder-access levels in VERIFYCommand
+ */
+#define USE_CODER_LEVELS
+
 #endif // __CSERVICE_CONFIG_H
