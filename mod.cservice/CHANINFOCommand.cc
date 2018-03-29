@@ -163,6 +163,14 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 		if (theUser->getFlag(sqlUser::F_TOTP_ENABLED))
                         flagsSet += "TOTP ";
 	}
+	else if (tmpUser == theUser)
+	{
+		if (theUser->getFlag(sqlUser::F_NOPURGE))
+			flagsSet += "NOPURGE ";
+		if (theUser->getFlag(sqlUser::F_ALUMNI))
+			flagsSet += "ALUMNI ";
+	}
+
 	/* flags with variables */
 	if (langString.size() > 0)
 		flagsSet += "LANG=" + langString + " ";

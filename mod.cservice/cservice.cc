@@ -275,7 +275,7 @@ RegisterCommand(new SCANEMAILCommand(this, "SCANEMAIL", "<mask> [-all]", 10));
 RegisterCommand(new REMIGNORECommand(this, "REMIGNORE", "<mask>", 5));
 RegisterCommand(new REGISTERCommand(this, "REGISTER", "<#channel>", 8));
 RegisterCommand(new REMOVEALLCommand(this, "REMOVEALL", "<#channel>", 15));
-RegisterCommand(new PURGECommand(this, "PURGE", "<#channel> [-noop] <reason>", 8));
+RegisterCommand(new PURGECommand(this, "PURGE", "<username | #channel> [-noop] <reason>", 8));
 RegisterCommand(new ACCEPTCommand(this, "ACCEPT", "<#channel> <decision>", 8));
 RegisterCommand(new REJECTCommand(this, "REJECT", "<#channel> <decision>", 8));
 RegisterCommand(new RENAMECommand(this, "RENAME", "<old_username> <new_username>", 5));
