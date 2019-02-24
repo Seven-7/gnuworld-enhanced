@@ -521,7 +521,10 @@ void cservice::BurstChannels()
 	if (theChan->getFlag(sqlChannel::F_AUTOJOIN)) 
 		{
 		string tempModes = theChan->getChannelMode();
-		tempModes += 'R';
+		if (tempModes.empty())
+			tempModes = "+";
+		if (tempModes.find('R') == string::npos)
+			tempModes += 'R';
 		MyUplink->JoinChannel( this,
 			theChan->getName(),
 			tempModes,
