@@ -150,8 +150,8 @@ string account ;
 time_t account_ts = 0 ;
 string sethost ;
 string fakehost ;
-string cloackhost  ;
-string cloackip ;
+string cloakhost  ;
+string cloakip ;
 
 xParameters::size_type currentArgIndex = 6 ;
 bool IsRegistered = false;
@@ -239,9 +239,9 @@ if (HasExtraHost)
 	if (HasFakeHost)
 		fakehost = params[ currentArgIndex++ ] ;
 	if (HasCloakHost)
-		cloackhost = params[ currentArgIndex++ ] ;
+		cloakhost = params[ currentArgIndex++ ] ;
 	if (HasCloakIP)
-		cloackip = params[ currentArgIndex++ ] ;
+		cloakip = params[ currentArgIndex++ ] ;
 	const char* host = params[ currentArgIndex++ ] ;
 	const char* yyxxx = params[ currentArgIndex++ ] ;
 	const char* description = params [ currentArgIndex++ ] ;
@@ -259,8 +259,8 @@ if (HasExtraHost)
 			account_ts,	// account timestamp
 			description,	// real name / infoline
 			atoi( params[ 3 ]), // connection time
-			cloackhost,	// Nefarious2 cloackHost
-			cloackip,	// Nefarious2 cloackIP
+			cloakhost,	// Nefarious2 cloakHost
+			cloakip,	// Nefarious2 cloakIP
 			sethost,	// asuka sethost
 			fakehost	// srvx fakehost
 			) ;

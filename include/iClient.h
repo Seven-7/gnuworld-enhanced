@@ -102,7 +102,7 @@ public:
 	/// MODE_SERVNOTICES is true if this user is receiving server
 	/// notices.  This may not be transmitted on all networks.
 	static const modeType	MODE_SERVNOTICES ;
-	
+
 	/** MODE_FAKE is true if this user is a fake client. */
 	static const modeType MODE_FAKE;
 
@@ -156,7 +156,7 @@ public:
 	/**
 	 * Construct a new iClient given a large list of
 	 * parameters for the client's state.
-	 * Used in case of Nefarious2 cloackedHost/IP
+	 * Used in case of Nefarious2 cloakedHost/IP
 	 */
 	iClient( const unsigned int& _uplink,
 		const std::string& _yyxxx,
@@ -170,8 +170,8 @@ public:
 		const time_t _account_ts,
 		const std::string& _description,
 		const time_t& _connectTime,
-		const std::string& _cloackHost,
-		const std::string& _cloackIP,
+		const std::string& _cloakHost,
+		const std::string& _cloakIP,
 		const std::string& _setHost,
 		const std::string& _fakeHost
 		) ;

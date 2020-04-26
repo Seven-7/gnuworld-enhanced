@@ -129,7 +129,7 @@ setModes( _mode ) ;
 customDataMap = 0 ;
 }
 
-//Nefarios2 cloackedHost/IP case construction
+//Nefarios2 cloakedHost/IP case construction
 iClient::iClient( const unsigned int& /* _uplink */,
 	const string& _yyxxx,
 	const string& _nickName,

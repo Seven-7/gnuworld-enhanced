@@ -25,10 +25,10 @@ Warning! Don't forget to enable halfops in ircd.conf:
 	"HALFOPS" = "TRUE";
 If you have an existing installation, to upgrade read README-DO-UPDATES.txt
 ==============================================================================
-2016.02.04 * Recognizing and handling Nefarious2's cloacked IP and cloacked Host
+2016.02.04 * Recognizing and handling Nefarious2's cloaked IP and cloaked Host
 ------------------------------------------------------------------------------
 If you set "HOST_HIDING_STYLE" greater than 1 in Nefarious2's ircd.conf
-gnuworld now will recognize the cloacked style
+gnuworld now will recognize the cloaked style
 ==============================================================================
 2016.01.08 * Prevent users to set 'exotic' hostnames, like with colors, etc.
 ------------------------------------------------------------------------------
