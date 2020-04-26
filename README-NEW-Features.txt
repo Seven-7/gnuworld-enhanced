@@ -1,5 +1,15 @@
 ==============================================================================
- * Added halfop support: mod.cservice HALFOPCommand and HALFDEOPCommand
+2020.04.26 * SETHOST: Prevent setting some restricted/reserved hostnames
+------------------------------------------------------------------------------
+Restricted/reserved hostnames are set in cservice.conf.
+Any number of "reservedHost = " entry is allowed.
+
+To restrict admins/opers to set restricted/reserved hostnames edit
+mod.cservice/cservice_config.h
+
+#undef ADMINS_USE_RESTRICTED_SETHOSTS
+==============================================================================
+2016.02.18 * Added halfop support: mod.cservice HALFOPCommand and HALFDEOPCommand
 ------------------------------------------------------------------------------
 To enable halfop command in mod.cservice you must
 	#define USING_NEFARIOUS
@@ -15,12 +25,12 @@ Warning! Don't forget to enable halfops in ircd.conf:
 	"HALFOPS" = "TRUE";
 If you have an existing installation, to upgrade read README-DO-UPDATES.txt
 ==============================================================================
- * Recognizing and handling Nefarious2's cloacked IP and cloacked Host
+2016.02.04 * Recognizing and handling Nefarious2's cloacked IP and cloacked Host
 ------------------------------------------------------------------------------
 If you set "HOST_HIDING_STYLE" greater than 1 in Nefarious2's ircd.conf
 gnuworld now will recognize the cloacked style
 ==============================================================================
- * Prevent users to set 'exotic' hostnames, like with colors, etc.
+2016.01.08 * Prevent users to set 'exotic' hostnames, like with colors, etc.
 ------------------------------------------------------------------------------
 You might find lame to see colored/bolded/etc. hostnames, so if you enable
 
@@ -31,13 +41,13 @@ Also it is a possibility of confusion/abuse to allow users to set hosts
 with the network's hidden-host-suffix(eg. something.users.yournetwork.org)
 so this is not allowed from now on.
 ============================================================================
- * Added mod.cservice SCANCommand
+2016.01.07 * Added mod.cservice SCANCommand
 	First puropse: find owner user of a nickname
 ----------------------------------------------------------------------------
 To find an owner of a nickname:
    /msg X scan nick|nickname <nick>
 ==============================================================================
- * mod.cservice NEWPASS: Admins can set target users a new password
+2016.01.07 * mod.cservice NEWPASS: Admins can set target users a new password
 ------------------------------------------------------------------------------
 Admins above access level level::newpass can set target users a new password:
  Syntax:
@@ -46,7 +56,7 @@ Admins above access level level::newpass can set target users a new password:
 Note: Changing own password remained valid as originally:
    /msg X@channels.yournetwork.org newpass <your new password>
 ==============================================================================
- * Nick protection through mod.cservice (nickreg/nickserv function)
+2016.01.06 * Nick protection through mod.cservice (nickreg/nickserv function)
 ------------------------------------------------------------------------------
 Warning! This feature requires Nefarious2 with it's svsnick support.
 Warning! This feature requires to patch Nefarious2 for a proper svsnick handling. Read README-DO-UPDATES.txt!
@@ -74,7 +84,7 @@ There is a new user flag too, AUTONICK:
 
 If it is ON, on login the saved nickname will be set for the client.
 ==============================================================================
- * Set welcome message-notice for channel joins through X
+2016.01.06 * Set welcome message-notice for channel joins through X
 ------------------------------------------------------------------------------
 The command syntax for setting welcome message for a channel:
 
@@ -90,7 +100,7 @@ Done.
 You can see the welcome message on any channel join.
 
 ==============================================================================
- * Set (fake)hostname for users
+2015.08.06 * Set (fake)hostname for users
 ------------------------------------------------------------------------------
 Warning! This feature requires Nefarious2 with it's Fake host support.
 If you have an existing installation, to upgrade read README-DO-UPDATES.txt

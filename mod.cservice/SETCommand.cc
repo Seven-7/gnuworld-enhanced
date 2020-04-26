@@ -580,6 +580,22 @@ if( st[1][0] != '#' ) // Didn't find a hash?
 				return true;
 			}
 #endif
+			if (bot->HostIsReserved(st[2]))
+			{
+#ifdef ADMINS_USE_RESTRICTED_SETHOSTS
+				bool isAdmin = bot->getAdminAccessLevel(theUser, false) > 0;
+				bool isCoder = bot->getCoderAccessLevel(theUser) > 0;
+				bool isOper = theClient->isOper();
+				if (!isAdmin && !isCoder && !isOper)
+				{
+					bot->Notice(theClient, "Setting a reserved or restricted hostname is not allowed.");
+					return true;
+				}
+#else
+				bot->Notice(theClient, "Setting a reserved or restricted hostname is not allowed.");
+				return true;
+#endif
+			}
 			string userWithHost = bot->HostIsRegisteredTo(st[2]);
 			if (!userWithHost.empty() && (userWithHost != theUser->getUserName()))
 			{

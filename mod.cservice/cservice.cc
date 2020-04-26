@@ -406,6 +406,16 @@ commandlogPath = cserviceConfig->Require( "command_logfile" )->second ;
   totpAuthEnabled = atoi((cserviceConfig->Require( "enable_totp" )->second).c_str()) == 1; 
 #endif
 
+reservedHostsList.push_back(hostName);
+reservedHostsList.push_back("*" + iClient::getHiddenHostSuffix());
+
+EConfig::const_iterator ptr = cserviceConfig->Find("reservedHost");
+while (ptr != cserviceConfig->end() && ptr->first == "reservedHost")
+{
+	reservedHostsList.push_back(ptr->second);
+	ptr++;
+}
+
 loadConfigData();
 
 userHits = 0;
@@ -488,6 +498,7 @@ for (incompleteChanRegsType::iterator ptr = incompleteChanRegs.begin();
 	delete ptr->second;
 }
 incompleteChanRegs.clear();
+reservedHostsList.clear();
 }
 
 void cservice::BurstChannels()
@@ -7177,6 +7188,16 @@ string cservice::HostIsRegisteredTo(const string& theHost)
 	if (SQLDb->Tuples() > 0)
 		theUser = SQLDb->GetValue(0,0);
 	return theUser;
+}
+
+bool cservice::HostIsReserved(const string& theHost)
+{
+	for (reservedHostsListType::iterator itr = reservedHostsList.begin(); itr != reservedHostsList.end(); itr++)
+	{
+		if (!match((*itr), theHost))
+			return true;
+	}
+	return false;
 }
 
 bool cservice::Notice( const iClient* Target, const char* Message, 

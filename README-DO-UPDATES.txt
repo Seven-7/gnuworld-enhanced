@@ -1,4 +1,27 @@
 ==============================================================================
+2020.04.26 * SETHOST: Prevent setting some restricted/reserved hostnames
+------------------------------------------------------------------------------
+If you have an existing installation, you can upgrade with the following steps:
+gnuworld@ubuntu:~$ cd gnuworld-enhanced
+gnuworld@ubuntu:~/gnuworld-enhanced$ git pull
+gnuworld@ubuntu:~/gnuworld-enhanced$ make; make install
+ - Add the new restricted/reserved hostnames section from cservice.example.conf to your cservice.conf
+ ... restart gnuworld ...
+
+ - If you just edited/updated the restricted hostnames in cservice.conf just:
+ ... restart gnuworld ...
+Done.
+
+ - If you don't want to allow admins/opers to set restricted/reserved hosts, edit
+
+ mod.cservice/cservice_config.h
+
+#undef ADMINS_USE_RESTRICTED_SETHOSTS
+
+gnuworld@ubuntu:~/gnuworld-enhanced$ make; make install
+ ... restart gnuworld ...
+Done.
+==============================================================================
 2016.02.18 Added halfop support: mod.cservice HALFOPCommand and HALFDEOPCommand
 ------------------------------------------------------------------------------
 If you have an existing installation, you can upgrade with the following steps:

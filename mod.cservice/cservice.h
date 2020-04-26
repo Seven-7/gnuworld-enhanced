@@ -727,7 +727,12 @@ public:
 	bool totpAuthEnabled;
 #endif
 	string HostIsRegisteredTo(const string& );
-} ;
+
+	typedef std::list<string> reservedHostsListType;
+	reservedHostsListType	reservedHostsList;
+
+	bool HostIsReserved(const string& );
+};
 
 const string escapeSQLChars(const string& theString);
 const string searchSQL(const string& theString);

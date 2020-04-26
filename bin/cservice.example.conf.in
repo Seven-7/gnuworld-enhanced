@@ -300,3 +300,12 @@ notify_days = 2
 support_days = 1
 
 reviewer_id = 1
+
+#
+# Reserved/restricted hostnames.
+# Cannot set by regular users. Wildcard match is accepted.
+# The bot's hostname and hiddenhost suffix are automatically added to the list
+#
+
+reservedHost = *anyhost.com
+reservedHost = *.anyhost2.com
