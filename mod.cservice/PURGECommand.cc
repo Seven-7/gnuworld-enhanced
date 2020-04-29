@@ -117,7 +117,7 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 	}
 	*/
 	if (!theUser->getFlag(sqlUser::F_POWER))
-	if ((level <= admLevel) && (tmpUser != theUser))
+	if ((level <= admLevel)/* && (tmpUser != theUser)*/) //<- reactivate this if admin can purge it's own user
 	{
 		bot->Notice(theClient, "Cannot purge a user with equal or higher access than your own");
 		return false;
