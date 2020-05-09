@@ -109,7 +109,7 @@ bot->joinCount++;
 
 /* Whack this reop on the Q */
 bot->reopQ.insert(cservice::reopQType::value_type(theChan->getName(),
-	bot->currentTime() + 15) );
+	bot->currentTime() + 1) );
 
 return true;
 }

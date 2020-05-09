@@ -5375,7 +5375,7 @@ for( xServer::opVectorType::const_iterator ptr = theTargets.begin() ;
 				reggedChan->getName().c_str());
 			/* Add this chan to the reop queue, ready to op itself in 15 seconds. */
 			reopQ.insert(cservice::reopQType::value_type(reggedChan->getName(),
-				currentTime() + 15) );
+				currentTime() + 1) );
 			}
 		}
 	} // for()
