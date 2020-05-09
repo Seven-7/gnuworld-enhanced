@@ -431,45 +431,46 @@ if( st[1][0] != '#' ) // Didn't find a hash?
 	}
 
 #ifdef TOTP_AUTH_ENABLED
-         if (option == "TOTP")
-         {       
-                 int admin = bot->getAdminAccessLevel(theUser);
-                 if((admin > 0) || (theUser->getFlag(sqlUser::F_OPER)) || (theClient->isOper())) {
-                         if(value == "ON") {
-                                 if(theUser->getFlag(sqlUser::F_TOTP_ENABLED)) {
-                                         bot->Notice(theClient,"TOTP is already enabled for your account");
-                                         return true;
-                                 }
-                                 if(st.size() == 3) {
-                                         bot->Notice(theClient,"WARNING:  This will enable time-based OTP (one time passwords).  Once enabled, in order to login you will require a device to generate the OTP token which has the stored secret key.  If you are sure, type: /msg X set totp ON -force"); 
-                                         return true;
-                                 }
-                                 if(string_upper(st[3]) == "-FORCE") {
-                                         //Create a random hex string 168bit long
-                                         char str_key2[20];
-                                         char hex_key[41];
-                                         srand(clock()*745+time(NULL));
-                                         hex_key[0] = 0;
-                                         for(int i=0; i < 20; i++) {
-                                                 str_key2[i]=((rand() %95) + 32);
-                                                 sprintf(hex_key+(i*2),"%02x",str_key2[i] & 0xFF);
-                                         }       
-                                         char* key;
-                                         int res = oath_base32_encode(str_key2,20,&key,NULL);
-                                         if(res != OATH_OK) {
-                                                 bot->Notice(theClient,"Failed to enable TOTP authentication, please contact a cservice representitive");
-                                                 return true;
-                                         }
-                                         theUser->setTotpKey(string(key));
-                                         theUser->setFlag(sqlUser::F_TOTP_ENABLED);
-                                         if(!theUser->commit(theClient)) {
-                                                 bot->Notice(theClient,"Failed to enable TOTP authentication, please contact a cservice representitive");
-                                                 free(key);
-                                                 return true;
-                                 }
-                         }
-                 } 
-         }
+		 if (option == "TOTP")
+		 {
+				 int admin = bot->getAdminAccessLevel(theUser);
+				 if((admin > 0) || (theUser->getFlag(sqlUser::F_OPER)) || (theClient->isOper())) {
+						 if(value == "ON") {
+								 if(theUser->getFlag(sqlUser::F_TOTP_ENABLED)) {
+										 bot->Notice(theClient,"TOTP is already enabled for your account");
+										 return true;
+								 }
+								 if(st.size() == 3) {
+										 bot->Notice(theClient,"WARNING:  This will enable time-based OTP (one time passwords).  Once enabled, in order to login you will require a device to generate the OTP token which has the stored secret key.  If you are sure, type: /msg X set totp ON -force");
+										 return true;
+								 }
+								 if(string_upper(st[3]) == "-FORCE") {
+										 //Create a random hex string 168bit long
+										 char str_key2[20];
+										 char hex_key[41];
+										 srand(clock()*745+time(NULL));
+										 hex_key[0] = 0;
+										 for(int i=0; i < 20; i++) {
+												 str_key2[i]=((rand() %95) + 32);
+												 sprintf(hex_key+(i*2),"%02x",str_key2[i] & 0xFF);
+										 }
+										 char* key;
+										 int res = oath_base32_encode(str_key2,20,&key,NULL);
+										 if(res != OATH_OK) {
+												 bot->Notice(theClient,"Failed to enable TOTP authentication, please contact a cservice representitive");
+												 return true;
+										 }
+										 theUser->setTotpKey(string(key));
+										 theUser->setFlag(sqlUser::F_TOTP_ENABLED);
+										 if(!theUser->commit(theClient)) {
+												 bot->Notice(theClient,"Failed to enable TOTP authentication, please contact a cservice representitive");
+												 free(key);
+												 return true;
+										 }
+								 }
+						 }
+				 }
+		 }
 #endif
 	if (option == "POWER")
 	{

@@ -202,6 +202,12 @@ webrelay_interval = 10;
 part_idle_chan = 172800
 
 #
+# Enable/Disable totp authentication (must be enabled in mod.cservice/cservice_config.h on compliation)
+# 1 = totp enabled, 0 = totp disabled
+
+enable_totp = 0
+
+#
 # Days to expire users
 # 0 = never expire
 

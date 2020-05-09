@@ -236,6 +236,9 @@ public:
 	inline void setLastFailedLoginTS( const unsigned int& _ts )
 		{ failed_login_ts = _ts ; }
 
+	inline void setTotpKey( const std::string& _totp_key )
+		{ totp_key = _totp_key ; }
+
 	inline void setHostName( const std::string& _hostname )
 		{ hostname = _hostname ; }
 
