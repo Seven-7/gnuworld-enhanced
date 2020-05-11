@@ -34,6 +34,12 @@
 #include	"constants.h"
 #include	"cservice.h"
 #include	"cservice_config.h"
+#ifdef HAVE_LIBOATH
+extern "C"
+{
+	#include <liboath/oath.h>
+}
+#endif
 
 namespace gnuworld
 {
@@ -85,6 +91,8 @@ sqlUser::sqlUser(dbHandle* _SQLDb)
    notes_sent(0),
    failed_logins(0),
    failed_login_ts(0),
+   totp_key(),
+   totp_hex_key(),
    hostname(),
    SQLDb( _SQLDb )
 {
@@ -523,7 +531,52 @@ if( SQLDb->Exec(queryString, true ) )
 	}
 
 return ("");
+}
 
+bool sqlUser::generateTOTPKey()
+{
+	//Create a random hex string 168bit long
+	char str_key2[20];
+	char hex_key[41];
+	srand(clock()*745+time(NULL));
+	hex_key[0] = 0;
+	for(int i=0; i < 20; i++) {
+		str_key2[i]=((rand() %95) + 32);
+		sprintf(hex_key+(i*2),"%02x",str_key2[i] & 0xFF);
+	}
+	char* key;
+	int res = oath_base32_encode(str_key2, 20, &key, NULL);
+	if (res == OATH_OK)
+	{
+		totp_key = string(key);
+		totp_hex_key = string(hex_key);
+		free(key);
+		return true;
+	}
+	free(key);
+	return false;
+}
+
+OathResult::OATH_RESULT_TYPE sqlUser::validateTOTP(const string& totp)
+{
+#ifdef TOTP_AUTH_ENABLED
+	char* key;
+	size_t len;
+	int res = oath_base32_decode(getTotpKey().c_str(), getTotpKey().size(), &key, &len);
+	if (res != OATH_OK)
+	{
+		elog << "ERROR while decoding base32 (" << getTotpKey().c_str() << ") " << oath_strerror(res) << "\n";
+		free(key);
+		return OathResult::ERROR;
+	}
+	res = oath_totp_validate(key, len, time(NULL), 30, 0, 1, totp.c_str());
+	free(key);
+	if (res < 0)
+	{
+		return OathResult::INVALID_TOKEN;
+	}
+#endif
+	return OathResult::OK;
 }
 
 sqlUser::~sqlUser()

@@ -167,6 +167,8 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 	{
 		if (theUser->getFlag(sqlUser::F_NOPURGE))
 			flagsSet += "NOPURGE ";
+		if (theUser->getFlag(sqlUser::F_TOTP_ENABLED))
+			flagsSet += "TOTP ";
 		if (theUser->getFlag(sqlUser::F_ALUMNI))
 			flagsSet += "ALUMNI ";
 	}
