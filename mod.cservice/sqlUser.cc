@@ -535,6 +535,7 @@ return ("");
 
 bool sqlUser::generateTOTPKey()
 {
+#ifdef TOTP_AUTH_ENABLED
 	//Create a random hex string 168bit long
 	char str_key2[20];
 	char hex_key[41];
@@ -554,6 +555,7 @@ bool sqlUser::generateTOTPKey()
 		return true;
 	}
 	free(key);
+#endif
 	return false;
 }
 
