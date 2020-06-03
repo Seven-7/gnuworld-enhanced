@@ -70,7 +70,6 @@ libccontrol_la_SOURCES = ccontrol.cc \
 	UNSUSPENDCommand.cc \
 	USERINFOCommand.cc \
 	WHOISCommand.cc \
-	SHELLSCommand.cc \
 	ANNOUNCECommand.cc
 
 libccontrol_la_CXXFLAGS = -I$(top_srcdir)/db -I${top_srcdir}/include \

@@ -182,24 +182,8 @@ protected:
 	
 	exceptionListType		exceptionList;
 	
-	typedef list< ccShellco* >    shellcoListType;
-	
-	shellcoListType		shellcoList;
-
-	typedef list< ccShellnb* >    shellnbListType;
-	
-	shellnbListType		shellnbList;
-	
 	typedef std::list< string >    stringListType;
 	
-	typedef map<ccShellco*, int>	shellcoMapType;
-
-	shellcoMapType		shellcoMap;
-
-	typedef map<ccShellnb*, int>	shellnbMapType;
-
-	shellnbMapType		shellnbMap;
-
 	typedef map<string,long> 	clientsIpMapType;
 	
 	typedef clientsIpMapType::iterator clientsIpIterator;
@@ -641,30 +625,9 @@ public:
 
 	bool delException( iClient * , const string & );
 
-	ccShellco* getShellco( const string & );
-
-	ccShellco* getShellcobyID( const int & );
-
-	ccShellnb* getShellnb( const string & );
-
 	bool isValidCidr( const string & );
 	
 	bool isCidrMatch( const string & , const string & );
-	
-	//stringListType* getOtherCidrs( const string & );
-	std::list< string >* getOtherCidrs( const string & );
-	bool test( iClient *, const string &  );
-	bool listShellExceptions( iClient * );
-
-	bool insertShellco( iClient * , const string& , int );
-
-	bool insertShellnb( iClient * , const string & , int );
-
-	bool delShellnb( iClient * , const string & );
-
-	bool delShellco( iClient * , const string & );
-
-	bool clearShells( iClient * );
 	
 	ccFloodData *findLogin( const string & );
 
@@ -900,8 +863,6 @@ public:
 		{ return ignoreList.end() ; }
 	
 	typedef exceptionListType::iterator exceptionIterator;
-	typedef shellcoListType::iterator shellcoIterator;
-	typedef shellnbListType::iterator shellnbIterator;
 	
 	exceptionIterator exception_begin() 
 		{ return exceptionList.begin(); }
