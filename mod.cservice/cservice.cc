@@ -398,8 +398,7 @@ commandlogPath = cserviceConfig->Require( "command_logfile" )->second ;
 /* adminlogPath = cserviceConfig->Require( "admin_logfile" )->second ; */
 
 #ifdef ALLOW_HELLO
-  helloBlockPeriod = atoi( cserviceConfig->Require( 
-    "hello_block_period" )->second.c_str() ) ;
+  helloBlockPeriod = atoi(cserviceConfig->Require("hello_block_period")->second.c_str());
 #endif // ALLOW_HELLO
 
 #ifdef TOTP_AUTH_ENABLED
@@ -1297,7 +1296,7 @@ if (id[0]=='=')
 	iClient *client = Network->findNick(theNick);
 	if (client) return isAuthed(client,false);
 
-	return 0;
+	return NULL;
 	}
 /*
  *  Check if this record is already in the cache.
@@ -1348,7 +1347,7 @@ else
 	delete theUser ;
 	}
 
-return 0;
+return NULL;
 }
 
 /**
@@ -1368,11 +1367,11 @@ sqlUser* cservice::getUserRecord(int Id)
 		     << SQLDb->ErrorMessage()
 		     << endl ;
 	#endif
-		return false;
+		return NULL;
 	} else if (SQLDb->Tuples() == 0)
 	{
 		logDebugMessage("getUserRecordUserIdQuery = 0 !");
-		return 0;
+		return NULL;
 	}
 	string id = SQLDb->GetValue(0,0);
 /*
@@ -1424,7 +1423,7 @@ else
 	delete theUser ;
 	}
 
-return 0;
+return NULL;
 }
 
 void cservice::updateUserCacheUserName(sqlUser* updateUser, const string& newUserName)
@@ -2456,7 +2455,7 @@ void cservice::cacheExpireUsers()
 
 #ifdef LOG_SQL
 					elog	<< "cservice::cacheExpireUsers::sqlQuery> "
-						<< updateQuery
+						<< updateQuery.str()
 						<< endl;
 #endif
 					SQLDb->Exec(updateQuery.str());
