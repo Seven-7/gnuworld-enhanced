@@ -130,10 +130,10 @@ public:
 	 * Output any other type supported by std::ostream.
 	 */
 	template< typename T >
-	ELog& operator<<( const T& var )
+	ELog& operator<<( const T& vari )
 		{
-		if( logFile )	outFile << var ;
-		if( outStream )	*outStream << var ;
+		if( logFile )	outFile << vari ;
+		if( outStream )	*outStream << vari ;
 		return *this ;
 		}
 
