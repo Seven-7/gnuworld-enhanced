@@ -133,6 +133,7 @@ am_libccontrol_la_OBJECTS = libccontrol_la-ccontrol.lo \
 	libccontrol_la-UNMODERATECommand.lo \
 	libccontrol_la-UNSUSPENDCommand.lo \
 	libccontrol_la-USERINFOCommand.lo \
+	libccontrol_la-WHOISCommand.lo \
 	libccontrol_la-ANNOUNCECommand.lo
 libccontrol_la_OBJECTS = $(am_libccontrol_la_OBJECTS)
 libccontrol_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
