@@ -187,6 +187,26 @@ command_logfile = cs.log
 hello_block_period = 3600
 
 #
+# If this is set to 1, the password generated for the new user will be sent to the email
+# otherwise displayed directly to the user
+#
+
+hello_sendmail_enabled = 1
+
+#
+# Sending email when new user registered
+# Valid formats are: sendmail or gnumail
+#
+
+sendmail_format = gnumail
+
+#
+# The system path to the mail program
+#
+
+sendmail_path = /usr/bin/mail
+
+#
 # What is the period (in seconds) in which we will check for
 # new webrelay messages
 #

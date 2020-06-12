@@ -1,4 +1,31 @@
 ==============================================================================
+2020.06.12 * cservice HELLO now sends out a real email with the generated password
+           * cservice NEWPASS now clears TOTP authentication data as well!
+------------------------------------------------------------------------------
+The feature has to be enabled in cservice.conf:
+
+hello_sendmail_enabled = 1
+
+Currently is supported two mail program: sendmail and gnumail.
+Need to be defined which you have in your system (variable "sendmail_format"),
+also the path to it (variable "sendmail_path") in cservice.conf.
+
+For normal users NEWPASS command now can act as Password recovery in case the user is not logged in!
+(For admins no change in the behavior)
+If the user is logged in, the original new password generation mechanism applies.
+So the new syntax is:
+
+NEWPASS <new passphrase|username>
+
+So for example a user lost it's password and is NOT logged in, 
+can recover it's password by passing the username as parameter, for example:
+
+/msg x@channels.yournetwork.org NEWPASS SomeUser
+
+otherwise if IS logged in, just want to change it's password:
+
+/msg x@channels.yournetwork.org NEWPASS NewPassword
+==============================================================================
 2020.04.26 * SETHOST: Prevent setting some restricted/reserved hostnames
 ------------------------------------------------------------------------------
 Restricted/reserved hostnames are set in cservice.conf.

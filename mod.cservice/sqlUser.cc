@@ -533,6 +533,19 @@ if( SQLDb->Exec(queryString, true ) )
 return ("");
 }
 
+void sqlUser::generateRecoveryPassword()
+{
+	const char validChars[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+	setRecoveryPassword(string());
+
+	for (unsigned short int i = 0 ; i < 8 ; i++)
+	{
+		int randNo = 1 + (int)(62.0*rand()/(RAND_MAX + 1.0));
+		recovery_password += validChars[randNo];
+	}
+}
+
 bool sqlUser::generateTOTPKey()
 {
 #ifdef TOTP_AUTH_ENABLED

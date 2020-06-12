@@ -197,7 +197,10 @@ if (!bot->SQLDb->Exec(theQuery, true))
 		{
 			bot->Notice(theClient,"There is already an account registered with that email address.");
 			bot->Notice(theClient,"You can only have one account per person!");
-			bot->Notice(theClient,"If you have lost your password and require a new one, log in to webinterface and click on the New password link.");
+			if (bot->helloSendmailEnabled)
+				bot->Notice(theClient, "If you have lost your password and require a new one, request a password reset with /msg %s@%s NEWPASS <username>", bot->getNickName().c_str(), bot->getUplinkName().c_str());
+			else
+				bot->Notice(theClient,"If you have lost your password and require a new one, log in to webinterface and click on the New password link.");
 			return false;
 		}
 }
@@ -321,19 +324,41 @@ newUser->setSignupIp(xIP(theClient->getIP()).GetNumericIP());
 newUser->Insert();
 delete (newUser);
 
-bot->Notice(theClient, "I generated this password for you: \002%s\002",
-	plainpass.c_str());
-bot->Notice(theClient, "Login using \002/msg %s@%s LOGIN %s %s\002",
-	bot->getNickName().c_str(),
-	bot->getUplinkName().c_str(),
-	st[1].c_str(),
-	plainpass.c_str());
-bot->Notice(theClient, "Then change your password using \002/msg "
-	"%s@%s NEWPASS <new_password>\002",
-	bot->getNickName().c_str(),
-	bot->getUplinkName().c_str());
+if (bot->helloSendmailEnabled)
+{
+	string themail = escapeSQLChars(st[2]);
+	stringstream mailstream;
+	mailstream << "The generated password is: " << plainpass << endl;
+	mailstream << "Login via IRC using /msg " << bot->getNickName().c_str() << "@" << bot->getUplinkName().c_str() << " LOGIN " << st[1].c_str() << " " << plainpass.c_str() << endl;
+	mailstream << "Then change your password using /msg " << bot->getNickName().c_str() << "@" << bot->getUplinkName().c_str() << " NEWPASS <new_password>" << endl;
+	mailstream << std::ends;
+	if (!bot->SendMail(themail, "Your CService account", mailstream))
+	{
+		bot->Notice(theClient, "An error occurred while sending newuser email, contact a CService representative.");
+		return false;
+	}
+	else
+	{
+		bot->Notice(theClient, "Username %s created successfully.", st[1].c_str());
+		bot->Notice(theClient, "Check your email (also in junk/spam) for the generated password.");
+	}
+}
+else
+{
+	bot->Notice(theClient, "I generated this password for you: \002%s\002",
+		plainpass.c_str());
+	bot->Notice(theClient, "Login using \002/msg %s@%s LOGIN %s %s\002",
+		bot->getNickName().c_str(),
+		bot->getUplinkName().c_str(),
+		st[1].c_str(),
+		plainpass.c_str());
+	bot->Notice(theClient, "Then change your password using \002/msg "
+		"%s@%s NEWPASS <new_password>\002",
+		bot->getNickName().c_str(),
+		bot->getUplinkName().c_str());
+}
 
-//Record the IP obly if below the required level
+//Record the IP only if below the required level
 if (admLevel < level::hello)
 {
 bot->helloIPList.erase(theClient->getIP());

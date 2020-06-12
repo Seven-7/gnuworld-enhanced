@@ -66,15 +66,57 @@ if( st.size() < 2 )
  *  they aren't logged in - tell them they should be.
  */
 
-sqlUser* tmpUser = bot->isAuthed(theClient, true);
+sqlUser* tmpUser = bot->isAuthed(theClient, false);
+sqlUser* targetUser = tmpUser;
 if (!tmpUser)
+{
+	if (bot->helloSendmailEnabled)
 	{
-	return false;
+		targetUser = bot->getUserRecord(st[1]);
+		if (!targetUser)
+		{
+			bot->Notice(theClient, "I don't know who %s is.", st[1].c_str());
+			return false;
+		}
+		targetUser->generateRecoveryPassword();
+		targetUser->setInstantiatedTS(::time(NULL));
+		// Send the mail
+		stringstream mailstream;
+		mailstream << "The generated password is: " << targetUser->getRecoveryPassword().c_str() << endl;
+		mailstream << theClient->getNickUserHost().c_str() << " requested a password reset to your username at this email address." << endl;
+		mailstream << "If it wasn't you, you can safely ignore this message, your current password remains unchanged without a login with the generated password." << endl;
+		mailstream << "Login via IRC using /msg " << bot->getNickName().c_str() << "@" << bot->getUplinkName().c_str() << " LOGIN " << targetUser->getUserName().c_str() << " " << targetUser->getRecoveryPassword().c_str() << endl;
+		mailstream << "Then change your password using /msg " << bot->getNickName().c_str() << "@" << bot->getUplinkName().c_str() << " NEWPASS <new_password>" << endl;
+		mailstream << ends;
+		if (!bot->SendMail(targetUser->getEmail(), "Your CService account", mailstream))
+		{
+			bot->Notice(theClient, "An error occurred while sending newpass email, contact a CService representative.");
+			return false;
+		}
+		else
+		{
+			bot->Notice(theClient, "Password reset successful.");
+			bot->Notice(theClient, "Check your email (also in junk/spam) for the generated password.");
+			if (targetUser->getFlag(sqlUser::F_TOTP_ENABLED))
+			{
+				targetUser->clearTotpKey();
+				targetUser->clearTotpHexKey();
+				targetUser->removeFlag(sqlUser::F_TOTP_ENABLED);
+				if (!targetUser->commit(theClient))
+				{
+					bot->Notice(theClient, "Failed to disable TOTP authentication, please contact a CService representative.");
+					return false;
+				}
+				bot->Notice(theClient, "\002 *** Your TOTP authentication data is also cleared! ***\002");
+			}
+			return true;
+		}
 	}
+}
 
 int admAccess = (int)bot->getAdminAccessLevel(tmpUser);
 string newpass = st.assemble(1);
-sqlUser* targetUser = tmpUser;
+
 //bool notMe = false;
 if ((admAccess) && (st.size() > 2))
 {
@@ -183,22 +225,32 @@ output << ends;
 
 // Prepend the md5 hash to the salt
 string finalPassword = salt + output.str().c_str();
+
 targetUser->setPassword(finalPassword);
 
-if( targetUser->commit(theClient) )
-	{
+bool hasTotp = false;
+if (targetUser->getFlag(sqlUser::F_TOTP_ENABLED))
+{
+	hasTotp = true;
+	targetUser->clearTotpKey();
+	targetUser->clearTotpHexKey();
+	targetUser->removeFlag(sqlUser::F_TOTP_ENABLED);
+}
+
+if (targetUser->commit(theClient))
+{
 	bot->Notice(theClient,
 		bot->getResponse(tmpUser,
 			language::pass_changed,
 			string("Password successfully changed.")));
-	}
+	if (hasTotp)
+		bot->Notice(theClient, "\002 *** Your TOTP authentication data is also cleared! ***\002");
+}
 else
-	{
+{
 	// TODO
-	bot->Notice( theClient,
-		"NEWPASS: Unable to commit to database" ) ;
-	}
-
+	bot->Notice(theClient, "NEWPASS: Unable to commit to database") ;
+}
 return true;
 
 #endif

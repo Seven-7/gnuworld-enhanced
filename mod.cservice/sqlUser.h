@@ -89,6 +89,9 @@ public:
 	inline const std::string&	getPassword() const
 		{ return password ; }
 
+	inline const std::string&	getRecoveryPassword() const
+		{ return recovery_password ; }
+
 	inline const std::string&	getUrl() const
 		{ return url ; }
 
@@ -184,6 +187,9 @@ public:
 	inline void setPassword( const std::string& _password )
 		{ password = _password; }
 
+	inline void setRecoveryPassword( const std::string& _recovery_password )
+		{ recovery_password = _recovery_password; }
+
 	inline void setUrl( const std::string& _url )
 		{ url = _url; }
 
@@ -276,6 +282,7 @@ public:
 	void setAllMembers( int );
 	void writeEvent( unsigned short, sqlUser*, const std::string& );
 	const std::string getLastEvent( unsigned short, unsigned int&);
+	void generateRecoveryPassword();
 	bool generateTOTPKey();
 	OathResult::OATH_RESULT_TYPE validateTOTP(const std::string& );
 
@@ -290,6 +297,7 @@ protected:
 	unsigned int	id ;
 	std::string	user_name ;
 	std::string	password ;
+	std::string recovery_password;
 	time_t		last_seen ;
 	std::string	url ;
 	std::string	nickname ;
@@ -316,7 +324,7 @@ protected:
 	std::string	hostname;
 
 	dbHandle*	SQLDb;
-} ;
+};
 
 } // namespace gnuworld
 

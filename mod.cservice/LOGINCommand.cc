@@ -165,7 +165,8 @@ unsigned int failed_login_rate = bot->getConfigVar("FAILED_LOGINS_RATE")->asInt(
 /* if it's not configured, default to every 15 minutes */
 if (failed_login_rate==0)
 	failed_login_rate = 900;
-if (!bot->isPasswordRight(theUser, st.assemble(2,pass_end)))
+if ((!bot->isPasswordRight(theUser, st.assemble(2,pass_end)))
+		&& (theUser->getRecoveryPassword() != st.assemble(2,pass_end)))
 	{
 	bot->setFailedLogins(theClient, failedLogins+1);
 	bot->Notice(theClient,
@@ -844,6 +845,18 @@ if (theUser->getFlag(sqlUser::F_AUTONICK))
 	else
 		bot->Write("%s SN %s %s", bot->getCharYY().c_str(), theClient->getCharYYXXX().c_str(), theUser->getNickName().c_str());
 }
+
+// If we have a login with recovery password, replace the actual password with the recovery password
+if (theUser->getRecoveryPassword() == st.assemble(2, pass_end))
+{
+	string cryptpass = bot->CryptPass(theUser->getRecoveryPassword().c_str());
+	theUser->setPassword(cryptpass.c_str());
+	theUser->setRecoveryPassword(string());
+	theUser->commit(theClient);
+}
+
+// If successful login reached, the recovery password has to be cleared all the time
+theUser->setRecoveryPassword(string());
 
 return true;
 }

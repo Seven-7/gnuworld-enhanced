@@ -721,7 +721,12 @@ public:
 	typedef std::map< int, time_t > helloIPListType ;
 	helloIPListType	helloIPList ;
 	unsigned int helloBlockPeriod ;
+	bool helloSendmailEnabled;
 #endif // ALLOW_HELLO
+
+	string sendmailFormat;
+	string sendmailPath;
+	bool SendMail(const string& address, const string& subject, const std::stringstream& mailtext);
 
 #ifdef TOTP_AUTH_ENABLED
 	bool totpAuthEnabled;

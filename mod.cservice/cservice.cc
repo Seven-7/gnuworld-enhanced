@@ -259,7 +259,7 @@ RegisterCommand(new UNSUSPENDCommand(this, "UNSUSPEND", "<#channel> <username> [
 RegisterCommand(new BANCommand(this, "BAN", "<#channel> <nick | *!*user@*.host> [duration] [level] [reason]", 5));
 RegisterCommand(new UNBANCommand(this, "UNBAN", "<#channel> <*!*user@*.host>", 5));
 RegisterCommand(new LBANLISTCommand(this, "LBANLIST", "<#channel> <banmask>", 5));
-RegisterCommand(new NEWPASSCommand(this, "NEWPASS", "<new passphrase>", 8));
+RegisterCommand(new NEWPASSCommand(this, "NEWPASS", "<new passphrase|username>", 8));
 RegisterCommand(new JOINCommand(this, "JOIN", "<#channel>", 8));
 RegisterCommand(new PARTCommand(this, "PART", "<#channel>", 8));
 RegisterCommand(new OPERJOINCommand(this, "OPERJOIN", "<#channel>", 8));
@@ -399,7 +399,11 @@ commandlogPath = cserviceConfig->Require( "command_logfile" )->second ;
 
 #ifdef ALLOW_HELLO
   helloBlockPeriod = atoi(cserviceConfig->Require("hello_block_period")->second.c_str());
+  helloSendmailEnabled = atoi((cserviceConfig->Require("hello_sendmail_enabled")->second).c_str()) == 1;
 #endif // ALLOW_HELLO
+
+  sendmailFormat = cserviceConfig->Require("sendmail_format")->second;
+  sendmailPath = cserviceConfig->Require("sendmail_path")->second;
 
 #ifdef TOTP_AUTH_ENABLED
   totpAuthEnabled = atoi((cserviceConfig->Require( "enable_totp" )->second).c_str()) == 1; 
@@ -8378,6 +8382,39 @@ for( size_t ii = 0; ii < MD5_DIGEST_LENGTH; ii++ )
 output << ends;
 
 return string( salt + output.str()  );
+}
+
+bool cservice::SendMail(const string& address, const string& subject, const stringstream& mailtext)
+{
+	std::ofstream TMail;
+	TMail.open("mailbody.txt", std::ios::out);
+	if (!TMail)
+	{
+		//Notice(theClient, "An error occurred while sending email, contact a CService representative.");
+		logDebugMessage(" *** ERROR while sending email");
+		return false;
+	}
+	TMail << mailtext.str().c_str();
+	TMail.close();
+	stringstream mailcommand;
+	if (this->sendmailFormat == "gnumail")
+	{
+		mailcommand << this->sendmailPath.c_str() << " -s " << "\"" << subject.c_str() << "\" " << address.c_str() << " < mailbody.txt" << endl << ends;
+	}
+	else if (this->sendmailFormat == "sendmail")
+	{
+		mailcommand << this->sendmailPath.c_str() << " " << address.c_str() << endl << "Subject: " << subject.c_str() << endl << " < mailbody.txt" << endl << ends;
+	}
+	else
+	{
+		//Notice(theClient, "An error occurred while sending email, contact a CService representative.");
+		logDebugMessage(" *** ERROR: helloSendmailFormat has invalid value in cservice.conf");
+		elog << " *** ERROR: helloSendmailFormat has invalid value in cservice.conf" << endl << ends;
+		return false;
+	}
+	elog << "mailcommand = '" << mailcommand.str() << endl << ends;
+	system(mailcommand.str().c_str());
+	return true;
 }
 
 bool cservice::addGline( csGline* TempGline)
