@@ -112,6 +112,11 @@ if (!tmpUser)
 			return true;
 		}
 	}
+	else
+	{
+		bot->Notice(theClient, "Sorry, You must be logged in to use this command.");
+		return false;
+	}
 }
 
 int admAccess = (int)bot->getAdminAccessLevel(tmpUser);
