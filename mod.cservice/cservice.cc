@@ -8390,7 +8390,6 @@ bool cservice::SendMail(const string& address, const string& subject, const stri
 	TMail.open("mailbody.txt", std::ios::out);
 	if (!TMail)
 	{
-		//Notice(theClient, "An error occurred while sending email, contact a CService representative.");
 		logDebugMessage(" *** ERROR while sending email");
 		return false;
 	}
@@ -8407,7 +8406,6 @@ bool cservice::SendMail(const string& address, const string& subject, const stri
 	}
 	else
 	{
-		//Notice(theClient, "An error occurred while sending email, contact a CService representative.");
 		logDebugMessage(" *** ERROR: helloSendmailFormat has invalid value in cservice.conf");
 		elog << " *** ERROR: helloSendmailFormat has invalid value in cservice.conf" << endl << ends;
 		return false;

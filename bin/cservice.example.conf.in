@@ -191,7 +191,7 @@ hello_block_period = 3600
 # otherwise displayed directly to the user
 #
 
-hello_sendmail_enabled = 1
+hello_sendmail_enabled = 0
 
 #
 # Sending email when new user registered
