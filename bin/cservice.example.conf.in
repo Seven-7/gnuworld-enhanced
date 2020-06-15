@@ -189,22 +189,16 @@ hello_block_period = 3600
 #
 # If this is set to 1, the password generated for the new user will be sent to the email
 # otherwise displayed directly to the user
-#
+# ** IMPORTANT: mailutils or mailx package must be installed on your system
 
 hello_sendmail_enabled = 0
 
 #
 # Sending email when new user registered
-# Valid formats are: sendmail or gnumail
+# Define here the "from address"
 #
 
-sendmail_format = gnumail
-
-#
-# The system path to the mail program
-#
-
-sendmail_path = /usr/bin/mail
+sendmail_from = cservice@yournetwork.org
 
 #
 # What is the period (in seconds) in which we will check for

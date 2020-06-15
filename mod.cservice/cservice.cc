@@ -402,8 +402,7 @@ commandlogPath = cserviceConfig->Require( "command_logfile" )->second ;
   helloSendmailEnabled = atoi((cserviceConfig->Require("hello_sendmail_enabled")->second).c_str()) == 1;
 #endif // ALLOW_HELLO
 
-  sendmailFormat = cserviceConfig->Require("sendmail_format")->second;
-  sendmailPath = cserviceConfig->Require("sendmail_path")->second;
+  sendmailFrom = cserviceConfig->Require("sendmail_from")->second;
 
 #ifdef TOTP_AUTH_ENABLED
   totpAuthEnabled = atoi((cserviceConfig->Require( "enable_totp" )->second).c_str()) == 1; 
@@ -8396,21 +8395,9 @@ bool cservice::SendMail(const string& address, const string& subject, const stri
 	TMail << mailtext.str().c_str();
 	TMail.close();
 	stringstream mailcommand;
-	if (this->sendmailFormat == "gnumail")
-	{
-		mailcommand << this->sendmailPath.c_str() << " -s " << "\"" << subject.c_str() << "\" " << address.c_str() << " < mailbody.txt" << endl << ends;
-	}
-	else if (this->sendmailFormat == "sendmail")
-	{
-		mailcommand << this->sendmailPath.c_str() << " " << address.c_str() << endl << "Subject: " << subject.c_str() << endl << " < mailbody.txt" << endl << ends;
-	}
-	else
-	{
-		logDebugMessage(" *** ERROR: helloSendmailFormat has invalid value in cservice.conf");
-		elog << " *** ERROR: helloSendmailFormat has invalid value in cservice.conf" << endl << ends;
-		return false;
-	}
+	mailcommand << "mail -s " << "\"" << subject.c_str() << "\" -r \"" << this->sendmailFrom.c_str() << "\" " << address.c_str() << " < mailbody.txt" << endl << ends;
 	elog << "mailcommand = '" << mailcommand.str() << endl << ends;
+	//Devnote: alternate way of sending mail: echo "Mail body text here" | mail -s "Subject" -r "from@address" email@address.com
 	system(mailcommand.str().c_str());
 	return true;
 }

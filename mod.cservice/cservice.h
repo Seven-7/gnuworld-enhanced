@@ -724,8 +724,7 @@ public:
 	bool helloSendmailEnabled;
 #endif // ALLOW_HELLO
 
-	string sendmailFormat;
-	string sendmailPath;
+	string sendmailFrom;
 	bool SendMail(const string& address, const string& subject, const std::stringstream& mailtext);
 
 #ifdef TOTP_AUTH_ENABLED

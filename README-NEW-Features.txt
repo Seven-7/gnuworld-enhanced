@@ -6,9 +6,7 @@ The feature has to be enabled in cservice.conf:
 
 hello_sendmail_enabled = 1
 
-Currently is supported two mail program: sendmail and gnumail.
-Need to be defined which you have in your system (variable "sendmail_format"),
-also the path to it (variable "sendmail_path") in cservice.conf.
+ ** IMPORTANT: mailutils or mailx package must be installed on your system!
 
 For normal users NEWPASS command now can act as Password recovery in case the user is not logged in!
 (For admins no change in the behavior)
