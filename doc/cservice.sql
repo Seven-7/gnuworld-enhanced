@@ -564,7 +564,8 @@ END;
 
 -- Trigger to call the function upon insert to users.
 
-CREATE TRIGGER t_new_user AFTER INSERT ON users FOR EACH ROW EXECUTE PROCEDURE new_user();
+-- This trigger is disabled since 2020.06.26 with update of 'Newly created users has no last_seen, and expire sooner (one hour)'
+-- CREATE TRIGGER t_new_user AFTER INSERT ON users FOR EACH ROW EXECUTE PROCEDURE new_user();
 
 -- Functions to automatically generate "Deletion Stubs" for removed records, so CMaster
 -- can pick up on these and clear its cache.

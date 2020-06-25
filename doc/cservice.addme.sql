@@ -24,8 +24,8 @@ VALUES ('#coder-com',1,now()::abstime::int4,31337,now()::abstime::int4);
 INSERT into users (user_name,password,language_id,last_updated,created_ts) 
 VALUES ('Admin','07d976a29bdb3ff42e19c102852151b28097bbad',1,now()::abstime::int4,now()::abstime::int4);
 
---INSERT into users_lastseen (user_id,last_seen,last_updated) 
---VALUES (1,now()::abstime::int4,now()::abstime::int4);
+INSERT into users_lastseen (user_id,last_seen,last_updated)
+VALUES (1,now()::abstime::int4,now()::abstime::int4);
 
 INSERT into levels (channel_id,user_id,access,last_updated)
 VALUES (1,1,1000,now()::abstime::int4);

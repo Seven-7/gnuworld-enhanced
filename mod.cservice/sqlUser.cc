@@ -385,7 +385,7 @@ if( SQLDb->Exec(queryString, true ) )
 
 	if(SQLDb->Tuples() < 1)
 		{
-		return (false);
+		return 0;
 		}
 
 	last_seen = atoi(SQLDb->GetValue(0, 0));

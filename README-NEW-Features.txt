@@ -1,4 +1,17 @@
 ==============================================================================
+2020.06.26 * FIX/UPDATE: Newly created users are created with no last_seen data
+             so without login within one day they expire.
+------------------------------------------------------------------------------
+Beside the usual update procedure, you must enter into postgresql command line:
+
+/usr/local/pgsql/bin/psql cservice
+
+and execute the command:
+
+cservice=# DROP TRIGGER t_new_user ON users;
+
+In case of new installation this step is not necessary!
+==============================================================================
 2020.06.12 * cservice HELLO now sends out a real email with the generated password
            * cservice NEWPASS now clears TOTP authentication data as well!
 ------------------------------------------------------------------------------
