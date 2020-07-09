@@ -2162,7 +2162,7 @@ chanStatus      << "* Channel Status for "
 		<< netChan->getName() << ": "
 		<< netChan->banList_size()
                 << " bans -- Restrictive Modes: +"
-		<< chanModes
+		<< chanModes.str()
                 ;
 
 SendTo(theClient, chanStatus.str().c_str());
