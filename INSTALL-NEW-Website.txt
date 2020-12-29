@@ -1,3 +1,11 @@
+!!!WARNING!!! I DON'T provide any support for the webpage installation, bugfix, modification, asking me for any kind of question/support will result in automatic ignore !!!
+
+!!!WARNING!!! I DON'T provide any support for the webpage installation, bugfix, modification, asking me for any kind of question/support will result in automatic ignore !!!
+
+!!!WARNING!!! I DON'T provide any support for the webpage installation, bugfix, modification, asking me for any kind of question/support will result in automatic ignore !!!
+
+This document is outdated, use it at your own risk. 
+
 In order to work the webpage, so far we need to use at most ubuntu 12, installs php version under 5.3.28, 
 so the maximum version of php still containing the required register_globals variable in php.ini is 5.3.27
 Anyone who knows a fix, or bypass the necessity of register_globals let me know.
