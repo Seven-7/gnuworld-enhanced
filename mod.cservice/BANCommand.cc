@@ -501,6 +501,8 @@ if (flagNoTake)
 	else
 		newBan->setSetBy(theUser->getUserName());
 }
+else
+	newBan->setSetBy(theUser->getUserName());
 newBan->setSetTS(bot->currentTime());
 newBan->setLevel(banLevel);
 newBan->setExpires(banTime+bot->currentTime());
