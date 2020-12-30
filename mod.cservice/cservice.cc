@@ -4332,7 +4332,7 @@ bool cservice::sqlRegisterChannel(iClient* theClient, sqlUser* mngrUsr, const st
         {
                 return false;
         }
-
+        newChan->commit();
         /*
          * Create the new manager.
          */
