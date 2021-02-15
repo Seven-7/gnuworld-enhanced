@@ -4149,7 +4149,8 @@ bool cservice::sqlRegisterChannel(iClient* theClient, sqlUser* mngrUsr, const st
         newChan->setName(chanName);
         newChan->setChannelTS(channel_ts);
         newChan->setRegisteredTS(currentTime());
-        newChan->setChannelMode("+tn");
+        newChan->setChannelMode("+tnR");
+    	newChan->setFlag(sqlChannel::F_AUTOJOIN);
         newChan->setLastUsed(currentTime());
 
         sqlUser* theUser = isAuthed(theClient, false);
@@ -4245,7 +4246,7 @@ bool cservice::sqlRegisterChannel(iClient* theClient, sqlUser* mngrUsr, const st
         {
                 return false;
         }
-
+        newChan->commit();
         /*
          * Create the new manager.
          */
@@ -4290,6 +4291,10 @@ bool cservice::sqlRegisterChannel(iClient* theClient, sqlUser* mngrUsr, const st
         	getUplink()->Mode(NULL, tmpChan, string("+R"), channelTS );
         getUplink()->RegisterChannelEvent(chanName.c_str(),this);
         writeChannelLog(newChan, theClient, sqlChannel::EV_REGISTER, "to " + mngrUsr->getUserName());
+
+    	Join(newChan->getName(), string("+tnR"), newChan->getChannelTS(), true);
+    	newChan->setInChan(true);
+    	joinCount++;
 
         //Send a welcome notice to the channel
         if (!welcomeNewChanMessage.empty())

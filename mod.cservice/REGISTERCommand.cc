@@ -190,7 +190,6 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 		{
 			//sqlChannel* newChan = bot->getChannelRecord(st[1]);
 			theChan = bot->getChannelRecord(st[1]);
-			bot->writeChannelLog(theChan, theClient, sqlChannel::EV_REGISTER, "to " + tmpUser->getUserName());
 			bot->logAdminMessage("%s (%s) has registered %s to %s", theClient->getNickName().c_str(),
 					theUser->getUserName().c_str(), st[1].c_str(), tmpUser->getUserName().c_str());
 
@@ -303,7 +302,6 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 			if (bot->sqlRegisterChannel(bot->getInstance(), theUser, st[1].c_str()))
 			{
 				sqlChannel* newChan = bot->getChannelRecord(st[1]);
-				bot->writeChannelLog(newChan, bot->getInstance(), sqlChannel::EV_REGISTER, "to " + theUser->getUserName());
 				bot->logAdminMessage("%s (%s) has registered %s to %s", bot->getNickName().c_str(),
 						bot->getInstance()->getNickUserHost().c_str(), st[1].c_str(), theUser->getUserName().c_str());
 
