@@ -505,6 +505,11 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 				bot->Notice(theClient,"Invalid supporter %s (%s)", suppUser->getUserName().c_str(), bot->getCurrentValidResponse().c_str());
 				return false;
 			}
+			if (suppUser == theUser)
+			{
+				bot->Notice(theClient, "You cannot enumerate yourself as a supporter.");
+				return false;
+			}
 			if (!bot->isValidSupporter(suppUserName))
 				if (!bot->validResponseString.empty())
 				{
