@@ -146,6 +146,8 @@ public:
 	virtual bool Notice( const iClient* Target,
 		const char* Message, ... ) ;
 	virtual bool Notice( const iClient* Target, const string& ) ;
+	virtual bool Notice( const std::string& Channel,
+		const char* Message, ... ) ;
 	virtual void OnWhois( iClient* sourceClient,
 			iClient* targetClient );
 
@@ -416,6 +418,10 @@ public:
 	unsigned int NotifyDays;
 	unsigned int SupportDays;
 	unsigned int ReviewerId;
+
+	/* Welcome messages for newly registered channels */
+	string welcomeNewChanMessage;
+	string welcomeNewChanTopic;
 
 	typedef map <int, sqlIncompleteChannel*> incompleteChanRegsType;
 	incompleteChanRegsType incompleteChanRegs;

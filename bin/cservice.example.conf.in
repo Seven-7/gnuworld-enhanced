@@ -321,6 +321,17 @@ support_days = 1
 
 reviewer_id = 1
 
+# A welcome message for a newly accepted channel
+# For empty use '' and it means disabled
+
+welcome_newchan_message = Congratulations! Channel %s has been registered!
+
+# A welcome topic for a newly accepted channel
+# For empty use '' and it means disabled. Applies only on empty channel topic.
+# TOPIC_TRACK must be #define in \include\gnuworld_config.h
+
+welcome_newchan_topic = *** Congratulations! Your channel application has been accepted! ***
+
 #
 # Reserved/restricted hostnames.
 # Cannot set by regular users. Wildcard match is accepted.

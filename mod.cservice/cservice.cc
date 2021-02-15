@@ -392,6 +392,9 @@ NotifyDays = atoi((cserviceConfig->Require( "notify_days" )->second).c_str());
 SupportDays = atoi((cserviceConfig->Require( "support_days" )->second).c_str());
 ReviewerId = atoi((cserviceConfig->Require( "reviewer_id" )->second).c_str());
 
+welcomeNewChanMessage = cserviceConfig->Require("welcome_newchan_message")->second ;
+welcomeNewChanTopic = cserviceConfig->Require("welcome_newchan_topic")->second ;
+
 #ifdef USE_COMMAND_LOG
 commandlogPath = cserviceConfig->Require( "command_logfile" )->second ;
 #endif
@@ -4374,9 +4377,21 @@ bool cservice::sqlRegisterChannel(iClient* theClient, sqlUser* mngrUsr, const st
         string channelTS = tmpTS.str();
 
         if (tmpChan)
-                getUplink()->Mode(NULL, tmpChan, string("+R"), channelTS );
+        	getUplink()->Mode(NULL, tmpChan, string("+R"), channelTS );
         getUplink()->RegisterChannelEvent(chanName.c_str(),this);
         writeChannelLog(newChan, theClient, sqlChannel::EV_REGISTER, "to " + mngrUsr->getUserName());
+
+        //Send a welcome notice to the channel
+        if (!welcomeNewChanMessage.empty())
+        	Notice(newChan->getName(), TokenStringsParams(welcomeNewChanMessage.c_str(), newChan->getName().c_str()).c_str());
+
+        //Set a welcome topic of the new channel, only if the actual topic is empty
+	#ifdef TOPIC_TRACK
+        if (!welcomeNewChanTopic.empty())
+        	if (tmpChan && tmpChan->getTopic().empty())
+        		Topic(tmpChan, welcomeNewChanTopic);
+	#endif
+
         return true;
 }
 
@@ -7165,6 +7180,11 @@ if( Connected && MyUplink )
 		buffer ) ;
 	}
 return returnMe ;
+}
+
+bool cservice::Notice(const string& Channel, const char* Message, ...)
+{
+	return xClient::Notice(Channel, Message);
 }
 
 string cservice::HostIsRegisteredTo(const string& theHost)
