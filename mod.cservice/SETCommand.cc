@@ -1489,9 +1489,8 @@ if (value == "ON") {
 	    	theChan->setFlag(sqlChannel::F_AUTOJOIN);
 			theChan->setInChan(true);
 			bot->Join(theChan->getName(), "+R",
-				theChan->getChannelTS(), false);
+				theChan->getChannelTS(), true);
 			bot->joinCount++;
-			bot->reopQ.insert(cservice::reopQType::value_type(theChan->getName(), bot->currentTime() + 1) );
 		/*if (tmpChan)
 			{
 			if(theChan->getFlag(sqlChannel::F_NOOP)) bot->deopAllOnChan(tmpChan);

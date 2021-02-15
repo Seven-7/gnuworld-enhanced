@@ -3020,97 +3020,8 @@ for (unsigned int i=0; i<delChanList.size(); i++)
 } 
    delChanList.clear(); 
    logDebugMessage("Removed %i channels from the database",purgeCount); 
-} 
-
-/**
- * This member function checks the reop buffer for any
- * pending reop's, performing them if neccessary.
- */
-void cservice::performReops()
-{
-/* TODO: Rewrite this bit? --Gte */
-
-if( reopQ.empty() )
-	{
-	return;
-	}
-
-reopQType::iterator ptr = reopQ.begin();
-while ( ptr != reopQ.end() )
-{
-if (ptr->second <= currentTime())
-	{
-	Channel* tmpChan = Network->findChannel(ptr->first);
-	if (tmpChan)
-		{
-		ChannelUser* tmpChanUser;
-		tmpChanUser = tmpChan->findUser(me);
-
-		/* Don't op ourself if we're already opped.. */
-		if (tmpChanUser && !tmpChanUser->getMode(ChannelUser::MODE_O))
-			{
-			stringstream s;
-			s	<< MyUplink->getCharYY()
-				<< " M "
-				<< tmpChan->getName()
-				<< " +o "
-				<< getCharYYXXX()
-				<< " "
-				<< tmpChan->getCreationTime()
-				<< ends;
-
-			Write( s );
-
-			/*
-			 *  Update the channel state.
-			 */
-
-			tmpChanUser->setMode(ChannelUser::MODE_O);
-
-			#ifdef LOG_DEBUG
-				elog	<< "cservice::OnTimer> REOP "
-					<< tmpChan->getName()
-					<< endl;
-			#endif
-			}
-
-			/*
-			 *  If STRICTOP or NOOP is set, do the 'right thing.
-			 */
-			//logDebugMessage("Doing the 'right thing");
-			sqlChannel* theChan = getChannelRecord(tmpChan->getName());
-			if (theChan)
-			{
-				if(theChan->getFlag(sqlChannel::F_NOOP))
-					{
-					deopAllOnChan(tmpChan);
-					}
-				if(theChan->getFlag(sqlChannel::F_STRICTOP))
-					{
-					deopAllUnAuthedOnChan(tmpChan);
-					}
-				if(theChan->getFlag(sqlChannel::F_NOVOICE))
-					{
-					deVoiceAllOnChan(tmpChan);
-					}
-				/*
-				 * Send default modes.
-				 */
-				if (theChan->getChannelMode() != "")
-					{
-						/* use the xServer::Mode code to set these modes */
-						MyUplink->Mode(this, tmpChan, theChan->getChannelMode().c_str(), std::string() );
-					}
-			}
-
-		} /* If channel exists */
-		reopQ.erase(ptr++->first);	/* erase pointer, also increment it */
-	} else {
-		++ptr;
-	}
-} /* While */
-
 }
+
 
 /**
  * Check the database to see if anything has changed.
@@ -3435,7 +3346,6 @@ if (timer_id == limit_timerID)
 if (timer_id == dBconnection_timerID)
 	{
 	checkDbConnectionStatus();
-	performReops();
 
 	/* Refresh Timers */
 	time_t theTime = time(NULL) + connectCheckFreq;
@@ -5390,9 +5300,7 @@ for( xServer::opVectorType::const_iterator ptr = theTargets.begin() ;
 			{
 			logAdminMessage("I've been DEOPped on %s!",
 				reggedChan->getName().c_str());
-			/* Add this chan to the reop queue, ready to op itself in 15 seconds. */
-			reopQ.insert(cservice::reopQType::value_type(reggedChan->getName(),
-				currentTime() + 1) );
+			xClient::Op(theChan, me);
 			}
 		}
 	} // for()

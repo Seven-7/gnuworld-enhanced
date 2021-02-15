@@ -565,10 +565,6 @@ public:
 
 	time_t currentTime() const ;
 
-	/* Queue to hold pending reops */
-	typedef map < string, time_t > reopQType;
-	reopQType reopQ;
-
 	/* List of channels in 'pending' registration state. */
 	typedef map < string, sqlPendingChannel*, noCaseCompare >
 		pendingChannelListType;
@@ -628,10 +624,6 @@ public:
 	void ExpireUsers();
 	void DeleteChannel(sqlChannel*);
 	void ExpireChannels();
-	/*
-	 * Process any pending reop requests by the bot.
-	 */
-	void performReops();
 
 	/*
 	 * Process any Postgres notification requests,
