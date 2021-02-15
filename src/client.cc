@@ -602,6 +602,55 @@ if( isConnected() && Message && Message[ 0 ] != 0 )
 return false ;
 }
 
+bool xClient::NoticeChannelOps( const Channel* theChan, const char* Message, ... )
+{
+	assert( theChan != 0 ) ;
+
+	if( isConnected() && Message && Message[ 0 ] != 0 )
+	{
+		char buffer[ 1024 ] ;
+		memset( buffer, 0, 1024 ) ;
+		va_list list;
+
+		va_start(list, Message);
+		vsnprintf(buffer, 1024, Message, list);
+		va_end(list);
+
+		if (!MyUplink->Write("%s WC %s :%s\r\n",
+				getCharYYXXX().c_str(),
+				theChan->getName().c_str(),
+				buffer))
+			return false;
+	}
+	return true ;
+}
+
+bool xClient::NoticeChannelOps( const string& chanName, const char* Message, ... )
+{
+	Channel* theChan = Network->findChannel(chanName) ;
+	if (0 == theChan)
+	{
+		return false ;
+	}
+	if( isConnected() && Message && Message[ 0 ] != 0 )
+	{
+		char buffer[ 1024 ] ;
+		memset( buffer, 0, 1024 ) ;
+		va_list list;
+
+		va_start(list, Message);
+		vsnprintf(buffer, 1024, Message, list);
+		va_end(list);
+
+		if (!MyUplink->Write("%s WC %s :%s\r\n",
+				getCharYYXXX().c_str(),
+				theChan->getName().c_str(),
+				buffer))
+			return false;
+	}
+	return true ;
+}
+
 bool xClient::Message( const Channel* theChan, const char* Message, ... )
 {
 assert( theChan != 0 ) ;

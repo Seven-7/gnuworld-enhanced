@@ -768,6 +768,18 @@ public:
 	virtual bool Notice( const Channel*, const std::string& ) ;
 
 	/**
+	 * Notice channel operators with given message.
+	 */
+	virtual bool NoticeChannelOps( const Channel* theChan,
+		const char* Message, ... ) ;
+
+	/**
+	 * Notice channel operators with given message.
+	 */
+	virtual bool NoticeChannelOps( const std::string& chanName,
+		const char* Message, ... ) ;
+
+	/**
 	 * Have this bot send a global wallops message.
 	 */
 	virtual bool Wallops( const std::string& ) ;
