@@ -3103,6 +3103,7 @@ for (unsigned int i = 0 ; i < SQLDb->Tuples(); i++)
         channel_ts = tmpChan ? tmpChan->getCreationTime() : ::time(NULL);
 
         newChan->setChannelTS(channel_ts);
+        newChan->commit();
 
         stringstream tmpTS;
         tmpTS << channel_ts;
