@@ -3098,19 +3098,18 @@ for (unsigned int i = 0 ; i < SQLDb->Tuples(); i++)
 
 		newChan->setAllMembers(i);
 
+        time_t channel_ts = 0;
         Channel* tmpChan = Network->findChannel(newChan->getName());
-        if (tmpChan) //compare channelTS ...
-        {
-			if (tmpChan->getCreationTime() < newChan->getChannelTS())
-				newChan->setChannelTS(tmpChan->getCreationTime());
-        }
+        channel_ts = tmpChan ? tmpChan->getCreationTime() : ::time(NULL);
 
-        // TODO: surely there is a better conversion
+        newChan->setChannelTS(channel_ts);
+
         stringstream tmpTS;
-        tmpTS << newChan->getChannelTS();
+        tmpTS << channel_ts;
         string channelTS = tmpTS.str();
 
-        getUplink()->Mode(NULL, tmpChan, string("+R"), channelTS);
+        if (tmpChan)
+			getUplink()->Mode(NULL, tmpChan, string("+R"), channelTS);
 
 		sqlChannelCache.insert(sqlChannelHashType::value_type(newChan->getName(), newChan));
 		sqlChannelIDCache.insert(sqlChannelIDHashType::value_type(newChan->getID(), newChan));
@@ -3121,23 +3120,18 @@ for (unsigned int i = 0 ; i < SQLDb->Tuples(); i++)
 			Join(newChan->getName(), string("+tnR"), newChan->getChannelTS(), true);
 			newChan->setInChan(true);
 			joinCount++;
-
-			//Send a welcome notice to the channel
-			if (!welcomeNewChanMessage.empty())
-				Notice(newChan->getName(), TokenStringsParams(welcomeNewChanMessage.c_str(), newChan->getName().c_str()).c_str());
+		}
+		//Send a welcome notice to the channel
+		if (!welcomeNewChanMessage.empty())
+			Notice(newChan->getName(), TokenStringsParams(welcomeNewChanMessage.c_str(), newChan->getName().c_str()).c_str());
 
 			//Set a welcome topic of the new channel, only if the actual topic is empty
-		#ifdef TOPIC_TRACK
-			if (!welcomeNewChanTopic.empty())
-				if (tmpChan && tmpChan->getTopic().empty())
-					Topic(tmpChan, welcomeNewChanTopic);
-				else
-					doAutoTopic(newChan);
-		#else
-			doAutoTopic(newChan);
-		#endif
+	#ifdef TOPIC_TRACK
+		if (!welcomeNewChanTopic.empty())
+			if (tmpChan && tmpChan->getTopic().empty())
+				Topic(tmpChan, welcomeNewChanTopic);
+	#endif
 
-		}
 		logDebugMessage("[DB-UPDATE]: Found new channel: %s", newChan->getName().c_str());
 		newchans++;
 		}
