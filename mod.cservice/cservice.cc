@@ -3103,6 +3103,8 @@ for (unsigned int i = 0 ; i < SQLDb->Tuples(); i++)
         channel_ts = tmpChan ? tmpChan->getCreationTime() : ::time(NULL);
 
         newChan->setChannelTS(channel_ts);
+        newChan->setFlag(sqlChannel::F_AUTOJOIN);
+        newChan->setLastUsed(currentTime());
         newChan->commit();
 
         stringstream tmpTS;
@@ -3116,12 +3118,10 @@ for (unsigned int i = 0 ; i < SQLDb->Tuples(); i++)
 		sqlChannelIDCache.insert(sqlChannelIDHashType::value_type(newChan->getID(), newChan));
 		MyUplink->RegisterChannelEvent(newChan->getName(), this);
 
-		if (newChan->getFlag(sqlChannel::F_AUTOJOIN))
-		{
-			Join(newChan->getName(), string("+tnR"), newChan->getChannelTS(), true);
-			newChan->setInChan(true);
-			joinCount++;
-		}
+		Join(newChan->getName(), string("+tnR"), newChan->getChannelTS(), true);
+		newChan->setInChan(true);
+		joinCount++;
+
 		//Send a welcome notice to the channel
 		if (!welcomeNewChanMessage.empty())
 			Notice(newChan->getName(), TokenStringsParams(welcomeNewChanMessage.c_str(), newChan->getName().c_str()).c_str());
