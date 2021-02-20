@@ -179,7 +179,7 @@ CREATE TABLE bans (
 	set_ts INT4,
 	level INT2,
 	expires INT4,					-- Expiration timestamp.
-	reason VARCHAR (128),
+	reason VARCHAR (300),
 	last_updated INT4 NOT NULL,
 	deleted INT2 DEFAULT '0',
 
@@ -248,6 +248,15 @@ CREATE TABLE users_lastseen (
 	last_ip VARCHAR( 256 ),
 	last_updated INT4 NOT NULL,
 	PRIMARY KEY (user_id)
+);
+
+CREATE TABLE user_sec_history (
+        user_id INT4 NOT NULL,
+        user_name TEXT NOT NULL,
+        command TEXT NOT NULL,
+        ip VARCHAR( 256 ) NOT NULL,
+        hostmask VARCHAR( 256 ) NOT NULL,
+        timestamp INT4 NOT NULL
 );
 
 CREATE TABLE levels (
@@ -346,6 +355,7 @@ CREATE TABLE supporters (
 -- ? - Not answered yet.
 -- Y - Supports this channel.
 -- N - Doesn't support this channel.
+	noticed CHAR NOT NULL DEFAULT 'N',
 	reason TEXT,
 -- Reason for not supporting it if required.
 	join_count INT4 DEFAULT '0',
@@ -385,6 +395,7 @@ CREATE TABLE pending (
 	description TEXT,
 	reviewed CHAR NOT NULL DEFAULT 'N',
 	reviewed_by_id INT4 CONSTRAINT pending_review_ref REFERENCES users (id),
+	first_init CHAR NOT NULL DEFAULT 'N',
 	PRIMARY KEY(channel_id)
 );
 
@@ -648,14 +659,19 @@ CREATE INDEX adminlog_i_idx ON adminlog(issue_by);
 
 
 CREATE TABLE ip_restrict (
-	id 	SERIAL,
-	user_id	int4 NOT NULL,
-	allowmask 	varchar(255) NOT NULL,
-	allowrange1 	int4 NOT NULL,
-	allowrange2 	int4 NOT NULL,
-	added 	int4 NOT NULL,
-	added_by 	int4 NOT NULL,
-	type 	int4 NOT NULL
+	id              SERIAL,
+	user_id         int4 NOT NULL,
+	allowmask       varchar(255) NOT NULL,
+	allowrange1     int4 NOT NULL,
+	allowrange2     int4 NOT NULL,
+	added           int4 NOT NULL,
+	added_by        int4 NOT NULL,
+	type            int4 NOT NULL DEFAULT 0,
+	value           inet NOT NULL,
+	last_updated    int4 NOT NULL DEFAULT now()::abstime::int4,
+	last_used       int4 NOT NULL DEFAULT 0,
+	expiry          int4 NOT NULL,
+	description     VARCHAR(255)
 );
 
 CREATE INDEX ip_restrict_idx ON ip_restrict(user_id,type);

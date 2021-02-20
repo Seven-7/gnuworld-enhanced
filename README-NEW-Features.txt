@@ -1,4 +1,9 @@
 ==============================================================================
+2021.02.20 * Added -new suffixed web sql database files to use with the official webpage
+             Original files are kept for optional use with the original-old-webpage
+------------------------------------------------------------------------------
+Advanced database migration, or complete rebuilt of the database required
+==============================================================================
 2020.06.26 * FIX/UPDATE: Newly created users are created with no last_seen data
              so without login within one day they expire.
 ------------------------------------------------------------------------------
